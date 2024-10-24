@@ -454,8 +454,10 @@ const main = async () => {
     const defaultShader = new Shader();
     const objects = [];
     let selected = -1;
+    let beingDragged = false;
     let moveCamera = false;
     var moveCameraIndicator = document.getElementById("moveCameraIndicator");
+    let xMouseLast, yMouseLast;
 
     objects.push(generateCube());
     objects[0].translate(-3.0,3.0);
@@ -678,6 +680,39 @@ const main = async () => {
                     break;
             }
         }
+    });
+
+    //Mouse drag listeners
+    canvas.addEventListener('mousedown', function(event) {
+        if(moveCamera) {
+            beingDragged = true;
+            //transform browser coordinates to 0-1 coordiante system
+            xMouseLast = (event.clientX - canvas.offsetLeft) / canvas.clientWidth;
+            yMouseLast = (event.clientY - canvas.offsetTop) / canvas.clientHeight;
+            console.log(xMouseLast);
+            console.log(yMouseLast);
+        }
+    });
+
+    canvas.addEventListener('mousemove', function(event) {
+        if(moveCamera && beingDragged) {
+            //calculate vector after normalizing coordinates
+            const movementX = (event.clientX - canvas.offsetLeft) / canvas.clientWidth - xMouseLast;
+            const movementY = (event.clientY - canvas.offsetTop) / canvas.clientHeight - yMouseLast;
+            
+            //apply movement and scale size relative to camera z position
+            global.translateCamera(movementX*-global.camera.eye[2],movementY*global.camera.eye[2]);
+            
+            //update point
+            xMouseLast += movementX;
+            yMouseLast += movementY;
+        }
+    });
+    //so that even if the mouse gets out of the canvas, the movement is stopped
+    window.addEventListener('mouseup', function(event) {
+        beingDragged = false;
+        console.log(xMouseLast);
+        console.log(yMouseLast);
     });
 
 
