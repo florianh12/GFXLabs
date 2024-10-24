@@ -455,6 +455,7 @@ const main = async () => {
     const objects = [];
     let selected = -1;
     let moveCamera = false;
+    var moveCameraIndicator = document.getElementById("moveCameraIndicator");
 
     objects.push(generateCube());
     objects[0].translate(-3.0,3.0);
@@ -673,6 +674,8 @@ const main = async () => {
                     break;
                 case ' ':
                     moveCamera = !moveCamera;
+                    moveCameraIndicator.textContent = moveCamera;
+                    break;
             }
         }
     });
