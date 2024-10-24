@@ -1,1 +1,0 @@
-Install glmatrix by cloning it from github and ging into the main directory and doing: npm i gl-matrix
