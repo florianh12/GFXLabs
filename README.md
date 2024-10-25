@@ -21,6 +21,7 @@ However local tanslation was implemente correctly after rotating input coordinat
 
 ## Tested environments
 - Ubuntu Linux with python webserver and Mozilla Firefox 131.0.3
+- Windows 11 with python webserver (slightly edited command: python3 -m http.server --bind localhost) Firefox 131.0.3
 
 ## Additional and general remarks
 It would be possible to implement global tansformations differently by swapping the order of local and global transformation matrices in the shader, which has an effect on global scaling and rotating, effects on local coordinate system translations not tested.
