@@ -144,11 +144,15 @@ export class Shape {
     }
 
     translate(x = 0.0, y = 0.0, z = 0.0){
+        //rotate x,y,z coordinates with local coordinate system
+        const adaptedCoordinates = glm.vec4.fromValues(x,y,z,1.0);
+        glm.vec4.transformMat4(adaptedCoordinates,adaptedCoordinates,this.rotationMatrix);
+        
         //actual translation
         glm.mat4.translate(
             this.translationMatrix,
             this.translationMatrix,
-            glm.vec3.fromValues(x,y,z));
+            glm.vec3.fromValues(adaptedCoordinates[0],adaptedCoordinates[1],adaptedCoordinates[2]));
 
         //applys changes
         this.updateModelMatrix();

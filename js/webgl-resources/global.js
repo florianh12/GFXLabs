@@ -66,11 +66,11 @@ export class Global {
 
         const coordianteSystemVertices = [
             0.0,0.0,0.0,
-            1.0,0.0,0.0,
+            10.0,0.0,0.0,
             0.0,0.0,0.0,
-            0.0,1.0,0.0,
+            0.0,10.0,0.0,
             0.0,0.0,0.0,
-            0.0,0.0,1.0,
+            0.0,0.0,10.0,
         ];
 
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(coordianteSystemVertices), gl.STATIC_DRAW);
