@@ -1,4 +1,4 @@
-import * as webglUtils from './webgl-utils.js';
+import * as webglUtils from './webgl-helper-functions.js';
 
 export class Shader {
     filename = 'default';

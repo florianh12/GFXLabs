@@ -1,5 +1,5 @@
 
-import { generateCube, generatePyramid } from './webgl-resources/webgl-utils.js';
+import { generateCube, generatePyramid } from './webgl-resources/webgl-helper-functions.js';
 import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
