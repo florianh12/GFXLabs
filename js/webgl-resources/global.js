@@ -100,11 +100,19 @@ export class Global {
     }
 
     translate(x = 0.0, y = 0.0, z = 0.0){
+        //rotate x,y,z coordinates to counter rotation of coordinate system 
+        const adaptedCoordinates = glm.vec4.fromValues(x,y,z,1.0);
+        const invertRotationMatrix = glm.mat4.create();
+        //use inverse rotation matrix to counter axis rotation
+        glm.mat4.invert(invertRotationMatrix,this.rotationMatrix);
+        //actually apply rotation to coordinates
+        glm.vec4.transformMat4(adaptedCoordinates,adaptedCoordinates,invertRotationMatrix);
+        
         //actual translation
         glm.mat4.translate(
             this.translationMatrix,
             this.translationMatrix,
-            glm.vec3.fromValues(x,y,z));
+            glm.vec3.fromValues(adaptedCoordinates[0],adaptedCoordinates[1],adaptedCoordinates[2]));
 
         //applys changes
         this.updateGlobalTransformationMatrix();
@@ -158,15 +166,15 @@ export class Global {
         //combine rotation and scaling into globalTransformationMatrix
         glm.mat4.multiply(
             this.globalTransformationMatrix,
-            this.rotationMatrix,
-            this.scalingMatrix
+            this.scalingMatrix,
+            this.rotationMatrix
         );
 
         //adds translation
         glm.mat4.multiply(
             this.globalTransformationMatrix,
-            this.translationMatrix,
-            this.globalTransformationMatrix
+            this.globalTransformationMatrix,
+            this.translationMatrix
         );
     }
 
@@ -183,10 +191,11 @@ export class Global {
     drawGlobalCoordinateSystem(gl,shader) {
         const identityMatrix = glm.mat4.create();
 
-        //remove transformations from coordinate system by setting transformation matrices to identity matrices
         gl.uniformMatrix4fv(shader.uViewMatrixLocation, false, this.camera.viewMatrix);
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
         gl.uniformMatrix4fv(shader.uGlobalTransformationMatrixLocation, false, identityMatrix);
+
+        //set local transformations to identity
         gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, identityMatrix);
 
         //select corret buffers
@@ -195,7 +204,7 @@ export class Global {
         //actual drawcall
         gl.drawArrays(gl.LINES,0,6);
 
-        //reset matrices for global transformations
-        this.applyMatrices(gl,shader);
+        //Reset matrices
+        this.applyMatrices(gl, shader);
     }
 }
