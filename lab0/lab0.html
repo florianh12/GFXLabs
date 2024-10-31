@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lab 0</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="google" content="notranslate" />
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Lab 0 - Triangle</h1>
+        <canvas id="c"></canvas>
+
+        <!--parts of the (boilderplate) code were copied from: https://webgl2fundamentals.org/webgl/lessons/webgl-fundamentals.html#toc-->
+        <!--Also, the color gradient solution was inspired by ChatGPT, but altered to create a more interesting gradient-->
+        <!--I decided to keep the mix function in the shader (even though it would have worked without it as well) because I found it interesting--> 
+        <script id="shader-vs" type="x-shader/x-vertex">
+            #version 300 es
+    
+            // an attribute is an input (in) to a vertex shader.
+            // It will receive data from a buffer
+            in vec4 a_position;
+            // output to fragment shader
+            out vec4 v_position;
+    
+            // all shaders have a main function
+            void main() {
+            
+            // sets output to input
+            v_position = a_position;
+            // gl_Position is a special variable a vertex shader
+            // is responsible for setting
+            gl_Position = a_position;
+            }
+        </script>
+
+        <script src="webgl-utils.js"></script>
+
+        <script id="shader-fs" type="x-shader/x-fragment">
+            #version 300 es
+    
+            // fragment shaders don't have a default precision so we need
+            // to pick one. highp is a good default. It means "high precision"
+            precision highp float;
+            
+            // input from vertex shader (position in clipspace)
+            in vec4 v_position;
+            // output for the fragment shader
+            out vec4 outColor;
+    
+            void main() {
+            
+            float a = (v_position.x + 1.0) * 0.5; // normalize clipspace [0.0,1.0]
+            float y = (v_position.y + 1.0) * 0.5;
+            // creates a gradient fron the three edges of the triangle, based on the position in the clipspace
+            outColor = mix(vec4(1.0, 0.0, y, 0.4), vec4(1.0, 1.0, y, 0.4), a);
+            }
+        </script>
+
+        <script>
+            "use strict";
+    
+            var vertexShaderSource = document.querySelector("#shader-vs").textContent.trim();
+            var fragmentShaderSource = document.querySelector("#shader-fs").textContent.trim();;
+
+            function main() {
+                    
+                // Get A WebGL context
+                var canvas = document.querySelector("#c");
+                var gl = canvas.getContext("webgl2");
+                if (!gl) {
+                    return;
+                }
+                
+                function onResize(entries) {
+                    let dpr = window.devicePixelRatio;
+
+                    for (const entry of entries) {
+                        let width;
+                        let height;
+                        if (entry.devicePixelContentBoxSize) {
+                            canvas.width = entry.devicePixelContentBoxSize[0].inlineSize;
+                            canvas.height = entry.devicePixelContentBoxSize[0].blockSize;
+                        }
+                    }
+                    // Redraws the Triangle after updating webgl pixels (e.g. after zooming)
+                    draw();
+                }
+
+                const resizeObserver = new ResizeObserver(onResize);
+                resizeObserver.observe(canvas, {box: 'device-pixel-content-box'});
+                
+                // create program using vertex and fragment shader
+                var program = makeProgamFromSources(gl,vertexShaderSource,fragmentShaderSource);
+        
+                // look up where the vertex data needs to go.
+                var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+        
+                // Create a buffer and put three 2d clip space points in it
+                var positionBuffer = gl.createBuffer();
+        
+                // Bind it to ARRAY_BUFFER (think of it as ARRAY_BUFFER = positionBuffer)
+                gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        
+                var positions = [
+                    -0.7, -0.7,
+                    0, 0.8,
+                    0.7, -0.7,
+                ];
+                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+        
+                // Create a vertex array object (attribute state)
+                var vao = gl.createVertexArray();
+        
+                // and make it the one we're currently working with
+                gl.bindVertexArray(vao);
+        
+                // Turn on the attribute
+                gl.enableVertexAttribArray(positionAttributeLocation);
+        
+                // Tell the attribute how to get data out of positionBuffer (ARRAY_BUFFER)
+                var size = 2;          // 2 components per iteration
+                var type = gl.FLOAT;   // 32bit floats
+                var normalize = false; 
+                var stride = 0;        // 0 = move forward size * sizeof(type) each iteration to get the next position
+                var offset = 0;        // start at the beginning of the buffer
+                gl.vertexAttribPointer(
+                    positionAttributeLocation, size, type, normalize, stride, offset);
+                
+                // enables transparency and sets transparency function
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+                function draw() {
+                    // sets webgl pixels based on canvas width
+                    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+                    // Clear the canvas and set background color
+                    gl.clearColor(0, 0, 0, 1.0);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+
+                    // Tell it to use our program (pair of shaders)
+                    gl.useProgram(program);
+
+                    // Bind the attribute/buffer set we want.
+                    gl.bindVertexArray(vao);
+
+                    // draw
+                    var primitiveType = gl.TRIANGLES;
+                    var offset = 0;
+                    var count = 3;
+                    gl.drawArrays(primitiveType, offset, count);
+                }
+            }
+    
+            main();
+    
+        </script>
+    </body>
+</html>
