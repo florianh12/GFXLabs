@@ -1,4 +1,5 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
+import { Shader } from './shader.js';
 
 class Camera {
     //needs to be reset to 0.0,0.0,8.0 and 0.0,0.0,-1.0
@@ -32,8 +33,14 @@ export class Global {
     scalingMatrix = glm.mat4.create();
     rotationMatrix = glm.mat4.create();
     translationMatrix = glm.mat4.create();
-    globalTransformationMatrix = glm.mat4.create();
+    globalModelViewMatrix = glm.mat4.create();
+    diffuse_only = false;
     vao = -1;
+    count = 0;
+
+    constructor() {
+        this.updateGlobalModelViewMatrix();
+    }
 
     initProjectionMatrix(clientWidth,clientHeight) {
         glm.mat4.perspective(
@@ -115,7 +122,7 @@ export class Global {
             glm.vec3.fromValues(adaptedCoordinates[0],adaptedCoordinates[1],adaptedCoordinates[2]));
 
         //applys changes
-        this.updateGlobalTransformationMatrix();
+        this.updateGlobalModelViewMatrix();
     }
 
     rotate(axis,degree) {
@@ -148,7 +155,7 @@ export class Global {
             rotationAxisVector);
 
         // recalculate matrix passed to shader
-        this.updateGlobalTransformationMatrix();
+        this.updateGlobalModelViewMatrix();
     }
 
     scale(x = 1.0, y = 1.0, z = 1.0) {
@@ -159,52 +166,95 @@ export class Global {
             glm.vec3.fromValues(x,y,z));
 
         // recalculate matrix passed to shader
-        this.updateGlobalTransformationMatrix();
+        this.updateGlobalModelViewMatrix();
     }
 
-    updateGlobalTransformationMatrix() {
-        //combine rotation and scaling into globalTransformationMatrix
+    updateGlobalModelViewMatrix() {
+        //combine camera and scaling into globalModelViewMatrix
         glm.mat4.multiply(
-            this.globalTransformationMatrix,
-            this.scalingMatrix,
-            this.rotationMatrix
+            this.globalModelViewMatrix,
+            glm.mat4.create(),
+            this.camera.viewMatrix
         );
+
+        glm.mat4.mul(
+            this.globalModelViewMatrix,
+            this.globalModelViewMatrix,
+            this.scalingMatrix
+        )
+
+        //add rotation
+        glm.mat4.mul(
+            this.globalModelViewMatrix,
+            this.globalModelViewMatrix,
+            this.rotationMatrix
+        )
 
         //adds translation
         glm.mat4.multiply(
-            this.globalTransformationMatrix,
-            this.globalTransformationMatrix,
+            this.globalModelViewMatrix,
+            this.globalModelViewMatrix,
             this.translationMatrix
         );
     }
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {mat4} modelMatrix 
+     */
+    applyUniforms(gl, shader, modelMatrix) {
+        const modelViewMatrix = glm.mat4.create();
 
-    applyMatrices(gl, shader) {
-        gl.uniformMatrix4fv(shader.uViewMatrixLocation, false, this.camera.viewMatrix);
+        //calculate actual ModelViewMatrix with shape modelMatrix
+        glm.mat4.mul(modelViewMatrix,this.globalModelViewMatrix,modelMatrix);
+        if(this.count < 1) {
+            console.log(modelMatrix);
+            console.log(this.camera.viewMatrix);
+            console.log(modelViewMatrix);
+            this.count = 1;
+        }
+        const normalMatrix = glm.mat3.normalFromMat4(glm.mat3.create(),modelViewMatrix);
+
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
-        gl.uniformMatrix4fv(shader.uGlobalTransformationMatrixLocation, false, this.globalTransformationMatrix);
+        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
+        gl.uniformMatrix3fv(shader.uNormalMatrixLocation, false, normalMatrix);
+
+        if(this.diffuse_only) {
+            gl.uniform1i(shader.uAmbientLocation, false);
+            gl.uniform1i(shader.uDiffuseLocation, true);
+            gl.uniform1i(shader.uSpecularLocation, false);
+        } else {
+            gl.uniform1i(shader.uAmbientLocation, true);
+            gl.uniform1i(shader.uDiffuseLocation, true);
+            gl.uniform1i(shader.uSpecularLocation, true);
+        }
     }
 
     translateCamera(x = 0.0, y = 0.0, z = 0.0) {
         this.camera.translate(x,y,z);
+        this.updateGlobalModelViewMatrix();
     }
 
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     */
     drawGlobalCoordinateSystem(gl,shader) {
-        const identityMatrix = glm.mat4.create();
 
-        gl.uniformMatrix4fv(shader.uViewMatrixLocation, false, this.camera.viewMatrix);
+        const normalMatrix = glm.mat3.normalFromMat4(glm.mat3.create(),this.camera.viewMatrix);
+
+        console.log(normalMatrix);
+        
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
-        gl.uniformMatrix4fv(shader.uGlobalTransformationMatrixLocation, false, identityMatrix);
-
-        //set local transformations to identity
-        gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, identityMatrix);
-
+        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, this.camera.viewMatrix);
+        gl.uniformMatrix3fv(shader.uNormalMatrixLocation, false, normalMatrix);
         //select corret buffers
         gl.bindVertexArray(this.vao);
 
         //actual drawcall
         gl.drawArrays(gl.LINES,0,6);
 
-        //Reset matrices
-        this.applyMatrices(gl, shader);
     }
 }

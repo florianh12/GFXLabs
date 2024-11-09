@@ -1,4 +1,6 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
+import { Global } from './global.js';
+import { Shader } from './shader.js';
 
 export class Shape {
     vao = -1;
@@ -218,19 +220,31 @@ export class Shape {
         this.updateModelMatrix();
     }
 
-    draw(gl, shader) {
-        gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, this.modelMatrix);
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
+    draw(gl, shader, global) {
+        global.applyUniforms(gl,shader,this.modelMatrix);
 
         gl.bindVertexArray(this.vao);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
     //only call this function after draw if the object is selected
-    drawCoordianteSystem(gl, shader) {
+    drawCoordianteSystem(gl, shader, global) {
 
-        //just in case it's not set reset modelMatrix
-        gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, this.modelMatrix);
+        //just in case it's not set reset matrices
+        global.applyUniforms(gl,shader,this.modelMatrix);
         
         gl.bindVertexArray(this.coordinateSystemVAO);
         

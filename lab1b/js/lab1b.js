@@ -19,7 +19,7 @@ import { LightSource } from './webgl-resources/lightsource.js';
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
-    const defaultShader = new Shader("gouraud_spec");
+    const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
     const light = new LightSource(u,u,10.0);
     const objects = [];
@@ -254,6 +254,12 @@ const main = async () => {
                     moveCamera = !moveCamera;
                     moveCameraIndicator.textContent = moveCamera;
                     break;
+                case 'w':
+                    global.diffuse_only = true;
+                    break;
+                case 'e':
+                    global.diffuse_only = false;
+                    break;
             }
         }
     });
@@ -349,16 +355,14 @@ const main = async () => {
         
         light.set(gl, defaultShader);
 
-        global.applyMatrices(gl,defaultShader);
-
         if(selected == 0) {
             global.drawGlobalCoordinateSystem(gl,defaultShader);
         }
 
         for (var i = 0; i < objects.length; i++) {
-            objects[i].draw(gl, defaultShader);
+            objects[i].draw(gl, defaultShader, global);
             if(selected > 0 && i == (selected-1)) {
-                objects[i].drawCoordianteSystem(gl,defaultShader);
+                objects[i].drawCoordianteSystem(gl,defaultShader, global);
             }
         }
 
