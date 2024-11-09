@@ -6,11 +6,13 @@ export class OBJParser {
     vertices = [];
     colors = [];
     indices = [];
+    normals = [];
 
     reset() {
         this.min = [0.0,0.0,0.0];
         this.max = [0.0,0.0,0.0];
         this.vertices = [];
+        this.normals = [];
         this.colors = [];
         this.indices = [];
     }   
@@ -35,8 +37,13 @@ export class OBJParser {
                 } else {
                     throw Error("Too many objects in file");
                 }
-            } else if( fileData[i][0] == 'v' && fileData[i][1] == ' ') {
-                this.parseVertex(fileData[i]);
+            } else if( fileData[i][0] == 'v') {
+                if(fileData[i][1] == ' ') {
+                    this.parseVertex(fileData[i]);
+                } else if (fileData[i][1] == 'n') {
+                    this.parseNormal(fileData[i]);
+                }
+                
             } else if(fileData[i][0] == 'f') {
                 this.parseFace(fileData[i]);
             }
@@ -44,7 +51,7 @@ export class OBJParser {
         
         this.processVertices(normalize);
 
-        return new Shape(this.vertices,this.colors,this.indices);
+        return new Shape(this.vertices,this.normals,this.colors,this.indices);
     }
 
     parseVertex(line) {
@@ -65,6 +72,17 @@ export class OBJParser {
 
         this.vertices.push(...vertex);
         this.colors.push(...[0.0,1.0,1.0,1.0]);
+    }
+
+    parseNormal(line) {
+        line = line.split(' ');
+
+        const normal = [
+            parseFloat(line[1]),
+            parseFloat(line[2]),
+            parseFloat(line[3])];
+
+        this.normals.push(...normal);
     }
 
     parseFace(line) {

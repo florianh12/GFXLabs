@@ -4,18 +4,21 @@ export class Shape {
     vao = -1;
     coordinateSystemVAO = -1;
     vertices = -1;
+    normals = -1;
     colors = -1;
     indices = -1;
     scalingMatrix = -1;
     rotationMatrix = -1;
     translationMatrix = -1;
     modelMatrix = glm.mat4.create();
+    
 
-    constructor(vertices, colors, indices, 
+    constructor(vertices, normals, colors, indices,
         scalingMatrix = glm.mat4.create(), 
         rotationMatrix = glm.mat4.create(),
         translationMatrix = glm.mat4.create()) {
         this.vertices = vertices;
+        this.normals = normals;
         this.colors = colors;
         this.indices = indices;
         this.scalingMatrix = scalingMatrix;
@@ -30,6 +33,7 @@ export class Shape {
         this.initializeVAO(gl);
         this.bufferVertexData(gl, shader);
         this.bufferColorData(gl, shader);
+        this.bufferNormalsData(gl, shader);
         this.bufferIndices(gl);
         this.bufferCoordinateSystem(gl,shader);
     }
@@ -53,7 +57,19 @@ export class Shape {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices),gl.STATIC_DRAW);
 
         gl.vertexAttribPointer(shader.aPositionLocation,3/*components amount*/,gl.FLOAT,false/*normalize*/,0/*stride*/,0/*offset*/);
-    } 
+    }
+    
+    bufferNormalsData(gl, shader) {
+        const aVertexNormalBuffer = gl.createBuffer();
+
+        gl.enableVertexAttribArray(shader.aVertexNormalLocation);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, aVertexNormalBuffer);
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices),gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(shader.aVertexNormalLocation,3/*components amount*/,gl.FLOAT,false/*normalize*/,0/*stride*/,0/*offset*/);
+    }
 
     bufferColorData(gl, shader) {
         const aColorBuffer = gl.createBuffer();

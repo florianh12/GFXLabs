@@ -4,6 +4,7 @@ import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
+import { LightSource } from './webgl-resources/lightsource.js';
 
 
 
@@ -18,8 +19,9 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
-    const defaultShader = new Shader();
+    const defaultShader = new Shader("gouraud_Spec");
     const parser = new OBJParser();
+    const light = new LightSource(u,u,10.0);
     const objects = [];
     let selected = -1;
     let beingDragged = false;
@@ -29,30 +31,30 @@ const main = async () => {
     var objFileButton = document.getElementById("objFileButton");
     var fileSource = document.getElementById("fileSource");
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere.obj'));
     objects[0].translate(-3.0,3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
     objects[1].translate(u,3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
     objects[2].translate(3.0,3.0);
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[3].translate(-3.0);
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[5].translate(3.0);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
+    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
     objects[6].translate(-3.0,-3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere.obj'));
     objects[7].translate(u,-3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
     objects[8].translate(3.0,-3.0);
 
 
@@ -335,7 +337,7 @@ const main = async () => {
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         // Clear the canvas and set background color
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.clearColor(0.5, 0.5, 0.5, 1.0);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         gl.enable(gl.DEPTH_TEST);
@@ -345,6 +347,8 @@ const main = async () => {
 
         gl.useProgram(defaultShader.program);
         
+        light.set(gl, defaultShader);
+
         global.applyMatrices(gl,defaultShader);
 
         if(selected == 0) {
