@@ -19,7 +19,7 @@ import { LightSource } from './webgl-resources/lightsource.js';
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
-    const defaultShader = new Shader("gouraud_Spec");
+    const defaultShader = new Shader("gouraud_spec");
     const parser = new OBJParser();
     const light = new LightSource(u,u,10.0);
     const objects = [];

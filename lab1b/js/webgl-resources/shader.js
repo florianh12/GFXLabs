@@ -35,9 +35,9 @@ export class Shader {
         
         this.uProjectionMatrixLocation = gl.getUniformLocation(this.program, 'u_projection_matrix');
 
-        this.uGlobalTransformationMatrixLocation = gl.getUniformLocation(this.program, 'u_global_transformation_matrix');
+        this.uModelViewMatrixLocation = gl.getUniformLocation(this.program, 'u_model_view_matrix');
 
-        this.uLocalTransformationMatrixLocation = gl.getUniformLocation(this.program, 'u_local_transformation_matrix');
+        this.uNormalMatrixLocation = gl.getUniformLocation(this.program, 'u_normal_matrix');
 
         this.uLightPositionLocation = gl.getUniformLocation(this.program, 'u_light_position');
 
