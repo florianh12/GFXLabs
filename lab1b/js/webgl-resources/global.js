@@ -208,12 +208,7 @@ export class Global {
 
         //calculate actual ModelViewMatrix with shape modelMatrix
         glm.mat4.mul(modelViewMatrix,this.globalModelViewMatrix,modelMatrix);
-        if(this.count < 1) {
-            console.log(modelMatrix);
-            console.log(this.camera.viewMatrix);
-            console.log(modelViewMatrix);
-            this.count = 1;
-        }
+        
         const normalMatrix = glm.mat3.normalFromMat4(glm.mat3.create(),modelViewMatrix);
 
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
@@ -245,7 +240,6 @@ export class Global {
 
         const normalMatrix = glm.mat3.normalFromMat4(glm.mat3.create(),this.camera.viewMatrix);
 
-        console.log(normalMatrix);
         
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
         gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, this.camera.viewMatrix);

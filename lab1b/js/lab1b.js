@@ -21,13 +21,15 @@ const main = async () => {
     const global = new Global();
     const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
-    const light = new LightSource(u,u,10.0);
+    const light = new LightSource(u,10.0);
     const objects = [];
     let selected = -1;
     let beingDragged = false;
     let moveCamera = false;
+    let moveLight = false;
     let xMouseLast, yMouseLast;
     var moveCameraIndicator = document.getElementById("moveCameraIndicator");
+    var moveLightIndicator = document.getElementById("moveLightIndicator");
     var objFileButton = document.getElementById("objFileButton");
     var fileSource = document.getElementById("fileSource");
 
@@ -187,6 +189,8 @@ const main = async () => {
                 case 'ArrowRight':
                     if(moveCamera) {
                         global.translateCamera(0.1);
+                    } else if (moveLight) {
+                        light.translate(0.1,u,u,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(0.1);
@@ -198,6 +202,8 @@ const main = async () => {
                 case 'ArrowLeft':
                     if(moveCamera) {
                         global.translateCamera(-0.1);
+                    } else if (moveLight) {
+                        light.translate(-0.1,u,u,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(-0.1);
@@ -209,6 +215,8 @@ const main = async () => {
                 case 'ArrowUp':
                     if(moveCamera) {
                         global.translateCamera(u,0.1);
+                    } else if (moveLight) {
+                        light.translate(u,0.1,u,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,0.1);
@@ -220,6 +228,8 @@ const main = async () => {
                 case 'ArrowDown':
                     if(moveCamera) {
                         global.translateCamera(u,-0.1);
+                    } else if (moveLight) {
+                        light.translate(u,-0.1,u,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,-0.1);
@@ -231,6 +241,8 @@ const main = async () => {
                 case ',':
                     if(moveCamera) {
                         global.translateCamera(u,u,0.1);
+                    } else if (moveLight) {
+                        light.translate(u,u,0.1,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,0.1);
@@ -242,6 +254,8 @@ const main = async () => {
                 case '.':
                     if(moveCamera) {
                         global.translateCamera(u,u,-0.1);
+                    } else if (moveLight) {
+                        light.translate(u,u,-0.1,gl,defaultShader);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,-0.1);
@@ -260,6 +274,15 @@ const main = async () => {
                 case 'e':
                     global.diffuse_only = false;
                     break;
+                case 'L':
+                    moveLight = !moveLight;moveLightIndicator.textContent = moveLight;
+
+                    if (moveLight) {
+                        moveCamera = false;
+                        moveCameraIndicator.textContent = moveCamera;
+                    }
+                    break;
+                     
             }
         }
     });
