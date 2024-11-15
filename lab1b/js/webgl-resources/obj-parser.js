@@ -114,14 +114,13 @@ export class OBJParser {
             this.rawVertices[i + 2] /= this.maxDistance;
         }
     }
-
+    //simple alternative to generateIndicesFromMap
     combine() {
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
             this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
             this.indices.push(i);
             this.colors.push(...[0.0,1.0,1.0,1.0]);
-            //this.colors.push(...[0.0,1.0,1.0,1.0]);
         }
     }
 
@@ -129,13 +128,14 @@ export class OBJParser {
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
             if (!this.vertexMap.has(indicesString)) {
+                this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
+                this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
+                this.colors.push(...[0.0,1.0,1.0,1.0]);
+                this.indices.push(this.vertexMap.size);
                 this.vertexMap.set(indicesString,this.vertexMap.size);
+            } else {
+                this.indices.push(this.vertexMap.get(indicesString));
             }
-            //this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
-            //this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
-            //this.indices.push(i);
-            //this.colors.push(...[0.0,1.0,1.0,1.0]);
-            //this.colors.push(...[0.0,1.0,1.0,1.0]);
         }
     }
 
@@ -169,7 +169,6 @@ export class OBJParser {
 
         this.normalize();
 
-        this.combine();
         this.generateIndicesFromMap();
         console.log(this.rawVertices,this.rawVertexIndices,this.rawNormals,this.rawNormalIndices);
         console.log("After modification",this.vertices.length,this.normals.length,this.colors.length,this.indices.length,this.vertexMap.size)
