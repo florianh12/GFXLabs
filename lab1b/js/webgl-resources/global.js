@@ -1,6 +1,44 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
 import { Shader } from './shader.js';
 
+
+class LightSource {
+    position = glm.vec3.create();
+    ambient = glm.vec4.fromValues(0.2, 0.2, 0.2, 1.0);
+    diffuse = glm.vec4.fromValues(1.0,1.0,1.0,1.0);
+    specular = glm.vec4.fromValues(1.0,1.0,1.0,1.0);
+
+    constructor(x = 0.0, y = 0.0, z = 0.0) {
+        
+        this.updateLightPosition(x,y,z);
+    }
+    /**
+     * 
+     * @param {Number} x 
+     * @param {Number} y 
+     * @param {Number} z 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     */
+    translate(x = 0.0, y = 0.0, z = 0.0) {
+        this.updateLightPosition(this.position[0]+x,this.position[1]+y,this.position[2]+z);
+    }
+
+    updateLightPosition(x = 0.0, y = 0.0, z = 0.0) {
+        this.position = glm.vec4.fromValues(x,y,z,1.0);
+
+        console.log(this.position);
+
+        //const lightViewMatrix = glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(0.0,0.0,0.0),this.position,glm.vec3.fromValues(0.0,1.0,0.0));
+        // console.log("Matrix",lightViewMatrix);
+
+        // glm.vec4.transformMat4(this.position,this.position,lightViewMatrix);
+
+        // console.log("Light:",this.position);
+        
+    }
+}
+
 class Camera {
     //needs to be reset to 0.0,0.0,8.0 and 0.0,0.0,-1.0
     eye = glm.vec3.fromValues(0.0,0.0,8.0);
@@ -28,6 +66,7 @@ class Camera {
 
 export class Global {
     camera = new Camera();
+    light = new LightSource(undefined,10);
     projectionMatrix = glm.mat4.create();
     projectionMatrixInitDone = false;
     scalingMatrix = glm.mat4.create();
@@ -210,13 +249,15 @@ export class Global {
         glm.mat4.mul(modelViewMatrix,this.globalModelViewMatrix,modelMatrix);
         
         const normalMatrix = glm.mat3.normalFromMat4(glm.mat3.create(),modelViewMatrix);
-
+        
+        //shader Matrices
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
         gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
         gl.uniformMatrix3fv(shader.uNormalMatrixLocation, false, normalMatrix);
 
+        // diffuse/specular
         if(this.diffuse_only) {
-            gl.uniform1i(shader.uAmbientLocation, false);
+            gl.uniform1i(shader.uAmbientLocation, true);
             gl.uniform1i(shader.uDiffuseLocation, true);
             gl.uniform1i(shader.uSpecularLocation, false);
         } else {
@@ -224,11 +265,21 @@ export class Global {
             gl.uniform1i(shader.uDiffuseLocation, true);
             gl.uniform1i(shader.uSpecularLocation, true);
         }
+
+        //light uniforms
+        gl.uniform4fv(shader.uLightPositionLocation, this.light.position);
+        gl.uniform4fv(shader.uLightAmbientLocation, this.light.ambient);
+        gl.uniform4fv(shader.uLightDiffuseLocation, this.light.diffuse);
+        gl.uniform4fv(shader.uLightSpecularLocation, this.light.specular);
     }
 
     translateCamera(x = 0.0, y = 0.0, z = 0.0) {
         this.camera.translate(x,y,z);
         this.updateGlobalModelViewMatrix();
+    }
+
+    translateLight(x = 0.0, y = 0.0, z = 0.0) {
+        this.light.translate(x,y,z);
     }
 
     /**

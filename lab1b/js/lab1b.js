@@ -4,8 +4,6 @@ import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
-import { LightSource } from './webgl-resources/lightsource.js';
-
 
 
 
@@ -21,7 +19,6 @@ const main = async () => {
     const global = new Global();
     const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
-    const light = new LightSource(u,10.0);
     const objects = [];
     let selected = -1;
     let beingDragged = false;
@@ -190,7 +187,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(0.1);
                     } else if (moveLight) {
-                        light.translate(0.1,u,u,gl,defaultShader);
+                        global.translateLight(0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(0.1);
@@ -203,7 +200,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(-0.1);
                     } else if (moveLight) {
-                        light.translate(-0.1,u,u,gl,defaultShader);
+                        global.translateLight(-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(-0.1);
@@ -216,7 +213,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(u,0.1);
                     } else if (moveLight) {
-                        light.translate(u,0.1,u,gl,defaultShader);
+                        global.translateLight(u,0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,0.1);
@@ -229,7 +226,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(u,-0.1);
                     } else if (moveLight) {
-                        light.translate(u,-0.1,u,gl,defaultShader);
+                        global.translateLight(u,-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,-0.1);
@@ -242,7 +239,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(u,u,0.1);
                     } else if (moveLight) {
-                        light.translate(u,u,0.1,gl,defaultShader);
+                        global.translateLight(u,u,0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,0.1);
@@ -255,7 +252,7 @@ const main = async () => {
                     if(moveCamera) {
                         global.translateCamera(u,u,-0.1);
                     } else if (moveLight) {
-                        light.translate(u,u,-0.1,gl,defaultShader);
+                        global.translateLight(u,u,-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,-0.1);
@@ -376,8 +373,6 @@ const main = async () => {
 
         gl.useProgram(defaultShader.program);
         
-        light.set(gl, defaultShader);
-
         if(selected == 0) {
             global.drawGlobalCoordinateSystem(gl,defaultShader);
         }
