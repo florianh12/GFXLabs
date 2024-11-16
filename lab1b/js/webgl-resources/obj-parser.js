@@ -20,7 +20,6 @@ export class OBJParser {
     reset() {
         this.min = [0.0,0.0,0.0];
         this.max = [0.0,0.0,0.0];
-        this.maxDistance = 0.0;
         this.vertexMap = new Map();
 
         this.rawVertices = [];
@@ -63,12 +62,6 @@ export class OBJParser {
             this.min[2] = z;
         }
 
-        const distance = Math.sqrt(x*x +y*y+z*z);
-
-        if (distance > this.maxDistance) {
-            this.maxDistance = distance;
-        }
-
         this.rawVertices.push(x);
         this.rawVertices.push(y);
         this.rawVertices.push(z);
@@ -104,14 +97,20 @@ export class OBJParser {
         const yOffset = (this.max[1] + this.min[1])/2;
         const zOffset = (this.max[2] + this.min[2])/2;
 
+        const xScale = 1.0/(this.max[0] - this.min[0]);
+        const yScale = 1.0/(this.max[1] - this.min[1]);
+        const zScale = 1.0/(this.max[2] - this.min[2]);
+
+        const scalar = Math.max(xScale,yScale,zScale);
+
         for (let i = 0; i < this.rawVertices.length; i += 3) {
             this.rawVertices[i] -= xOffset;
             this.rawVertices[i + 1] -= yOffset;
             this.rawVertices[i + 2] -= zOffset;
 
-            this.rawVertices[i] /= this.maxDistance;
-            this.rawVertices[i + 1] /= this.maxDistance;
-            this.rawVertices[i + 2] /= this.maxDistance;
+            this.rawVertices[i] *= scalar;
+            this.rawVertices[i + 1] *= scalar;
+            this.rawVertices[i + 2] *= scalar;
         }
     }
     //simple alternative to generateIndicesFromMap
@@ -142,11 +141,10 @@ export class OBJParser {
     /**
      * 
      * @param {String} string 
-     * @param {boolean} normalize 
      * 
      * @returns {Shape}
      */
-    parseObjectFromString(string, normalize = false) {
+    parseObjectFromString(string) {
         //clear all values
         this.reset();
 
