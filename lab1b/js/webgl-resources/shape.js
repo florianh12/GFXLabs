@@ -68,7 +68,7 @@ export class Shape {
 
         gl.bindBuffer(gl.ARRAY_BUFFER, aVertexNormalBuffer);
 
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices),gl.STATIC_DRAW);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals),gl.STATIC_DRAW);
 
         gl.vertexAttribPointer(shader.aVertexNormalLocation,3/*components amount*/,gl.FLOAT,false/*normalize*/,0/*stride*/,0/*offset*/);
     }
