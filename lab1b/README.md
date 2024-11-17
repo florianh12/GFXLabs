@@ -1,4 +1,4 @@
-# GFXlab1
+# GFXlab1b
 ## Build gl-matrix
 ### Prerequisites
 - Ubuntu Linux (other OS not tested)
@@ -8,12 +8,12 @@ Build glmatrix by cloning it from github (https://github.com/toji/gl-matrix) and
 ```bash
 npm i gl-matrix
 ```
-## Start Lab1a
-Navigate into the lab1a directory and run:
+## Start Lab1b
+Navigate into the lab1b directory and run:
 ```bash
 python3 -m http.server
 ```
-Then open the website in the Browser and open lab1a.html
+Then open the website in the Browser and open lab1b.html
 
 ## Claim
 I did all reqested tasks, including the following: T1, T2, T3(a,b,c,d), T4.
@@ -21,6 +21,7 @@ However local tanslation was implemente correctly after rotating input coordinat
 
 ## Tested environments
 - Ubuntu Linux with python webserver and Mozilla Firefox 131.0.3
+- Ubuntu Linux with python webserver and Chromium Version 130.0.6723.116
 - Windows 11 with python webserver (slightly edited command: python3 -m http.server --bind localhost) Firefox 131.0.3
 
 ## Additional and general remarks
