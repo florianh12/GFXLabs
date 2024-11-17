@@ -41,10 +41,6 @@ export class Shader {
 
         this.uLightPositionLocation = gl.getUniformLocation(this.program, 'u_light_position');
 
-        this.uLightAmbientLocation = gl.getUniformLocation(this.program, 'u_light_ambient');
-
-        this.uLightDiffuseLocation = gl.getUniformLocation(this.program, 'u_light_diffuse');
-
         this.uLightSpecularLocation = gl.getUniformLocation(this.program, 'u_light_specular');
 
         this.uAmbientLocation = gl.getUniformLocation(this.program, 'u_ambient');
