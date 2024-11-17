@@ -52,7 +52,7 @@ void main() {
         vec3 reflect_direction = reflect(-light_direction,normal);
 
         ////calculate specular intensity and adjust color accordingly
-        float Ks = pow(max(dot(reflect_direction,normal),0.0),100.0);
+        float Ks = pow(max(dot(reflect_direction,normal),0.0),40.0);
         vec4 specular = Ks * u_light_specular * 0.9;
 
         //add ambient part to final color

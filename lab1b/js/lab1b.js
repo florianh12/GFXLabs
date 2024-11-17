@@ -17,7 +17,7 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
-    let selected_shader = 1;
+    let selected_shader = 0;
     const shaders = [new Shader("gouraud"),new Shader("phong")];
     //const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
