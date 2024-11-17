@@ -4,8 +4,6 @@ precision highp float;
 
 uniform vec4 u_light_position;
 
-uniform vec4 u_light_ambient;
-uniform vec4 u_light_diffuse;
 uniform vec4 u_light_specular;
 uniform bool u_ambient;
 uniform bool u_diffuse;
@@ -21,7 +19,7 @@ out vec4 outColor;
 void main() {
      //light direction according to vertex position
     vec3 light_direction = normalize(u_light_position.xyz - v_projected_position);
-    
+    vec3 normal = normalize(v_projected_normal);
     
     //scalar to regulate ambient light intensity
     
@@ -32,23 +30,18 @@ void main() {
 
     //calculate and add activated light types to final color
     if(u_ambient) {
-        //mix light source ambient with object color
-        vec4 ambient_product = u_light_ambient * v_color;
-
         //adjust ambient light intensity
-        vec4 ambient = 1.0 * ambient_product;
+        vec4 ambient = 0.2 * v_color;
 
         //add ambent part to final color
         outColor += ambient;
     }
 
     if(u_diffuse) {
-        //mix light source diffuse with object color
-        vec4 diffuse_product = u_light_diffuse * v_color;
 
-        //calculate diffuse intensity and adjust product accordingly
-        float Kd = max(dot(light_direction,v_projected_normal),0.0);
-        vec4 diffuse = Kd * diffuse_product;
+        //calculate diffuse intensity and coefficient and adjust product accordingly
+        float Kd = max(dot(light_direction,normal),0.0);
+        vec4 diffuse = Kd * v_color * 0.8;
 
         //add diffuse part to final color
         outColor += diffuse;
@@ -56,12 +49,11 @@ void main() {
 
     if(u_specular) {
         //calculate necessary components for specular coefficient
-        vec3 view_direction = normalize(-v_projected_position);
-        vec3 half_direction = normalize(view_direction + light_direction);
+        vec3 reflect_direction = reflect(-light_direction,normal);
 
         ////calculate specular intensity and adjust color accordingly
-        float Ks = pow(max(dot(half_direction,v_projected_normal),0.0),100.0);
-        vec4 specular = Ks * u_light_specular;
+        float Ks = pow(max(dot(reflect_direction,normal),0.0),100.0);
+        vec4 specular = Ks * u_light_specular * 0.9;
 
         //add ambient part to final color
         outColor += specular;

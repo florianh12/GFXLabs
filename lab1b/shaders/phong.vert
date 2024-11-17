@@ -19,14 +19,12 @@ out vec3 v_projected_normal;
 
 // all shaders have a main function
 void main() {
-    float material_shininess = 100.0;
-
     
     
     v_color = a_color;
     //projected positions/vectors (to eye space)
     v_projected_position = (u_model_view_matrix * a_position).xyz;
-    v_projected_normal = normalize(u_normal_matrix * a_vertex_normal);
+    v_projected_normal = normalize(u_normal_matrix * a_vertex_normal).xyz;
     
    
 
