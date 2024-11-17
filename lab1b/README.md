@@ -20,9 +20,9 @@ I did all reqested tasks, including the following: T1, T2, T3(a,b,c,d), T4.
 However local tanslation was implemente correctly after rotating input coordinates in translation by local coordinate system rotation.
 
 ## Tested environments
-- Ubuntu Linux with python webserver and Mozilla Firefox 131.0.3
-- Ubuntu Linux with python webserver and Chromium Version 130.0.6723.116
-- Windows 11 with python webserver (slightly edited command: python3 -m http.server --bind localhost) Firefox 131.0.3
+- Ubuntu Linux with python webserver and Mozilla Firefox 132.0 (snap)
+- Ubuntu Linux with python webserver and Chromium Version 130.0.6723.116 (snap)
+- Windows 11 with python webserver (slightly edited command: python -m http.server --bind localhost) Firefox 132.0.2
 
 ## Additional and general remarks
 It would be possible to implement global tansformations differently by swapping the order of local and global transformation matrices in the shader, which has an effect on global scaling and rotating, effects on local coordinate system translations not tested.
