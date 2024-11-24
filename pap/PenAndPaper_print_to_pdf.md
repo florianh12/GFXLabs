@@ -4,7 +4,8 @@
 ```js
 function oblique(alpha=90,phi=0,zNear=0.1,zFar=100.0) { ... }
 function oblique(alpha=90,phi=0) { ... }
-function oblique(alpha=90,phi=0,top=1.0,bottom=-1.0,left=-1.0,right=1.0,zNear=0.1,zFar=100.0) { ... }
+function oblique(alpha=90,phi=0,top=1.0,bottom=-1.0,left=-1.0,right=1.0,zNear=0.1,zFar=100.0) 
+{ ... }
 ```
 The alpha is responsible for the y-rotation and the phi for the z-rotation of the parallel projectors for the objique projection. top, bottom, left and right specify the bounds of the view plane and zNear and zFar specify the bounds of the view volume.
 
@@ -31,7 +32,6 @@ R_x =
  0 & \sin{\beta} & \cos{\beta} & 0 \\
 0 & 0 & 0 & 1
 \end{pmatrix}
-
 R_y = 
 \begin{pmatrix}
 \cos{\gamma} & 0 & \sin{\gamma} & 0 \\
@@ -39,7 +39,6 @@ R_y =
 -\sin{\gamma} & 0 & \cos{\gamma} & 0 \\
 0 & 0 & 0 & 1  
 \end{pmatrix}
-
 R_z = 
 \begin{pmatrix}
 \cos{\alpha} & -\sin{\alpha} & 0 & 0 \\
@@ -88,7 +87,7 @@ $$
 <br>
 
 $$
-R^{-1} = R^{T} = (R_z R_x R_y)^{T} = R_y^{T} R_x^{T} R_z^{T} = 
+\small{R^{-1} = R^{T} = (R_z R_x R_y)^{T} = R_y^{T} R_x^{T} R_z^{T} = 
 \begin{pmatrix}
 \cos{\gamma} & 0 & -\sin{\gamma} & 0 \\
 0 & 1 & 0  & 0 \\
@@ -106,8 +105,9 @@ R^{-1} = R^{T} = (R_z R_x R_y)^{T} = R_y^{T} R_x^{T} R_z^{T} =
 -\sin{\alpha} & \cos{\alpha} & 0 & 0 \\
 0 & 0 & 1 & 0 \\
 0 & 0 & 0 & 1
-\end{pmatrix} =
+\end{pmatrix} =}
 $$
+
 $$
 \begin{pmatrix}
 \cos{\gamma} & 0 & -\sin{\gamma} & 0 \\
@@ -120,8 +120,9 @@ $$
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & 0 \\
  \sin{\alpha}\sin{\beta} & -\cos{\alpha}\sin{\beta} & \cos{\beta} & 0 \\
 0 & 0 & 0 & 1
-\end{pmatrix}
-=
+\end{pmatrix} =
+$$
+$$
 \begin{pmatrix}
 \cos{\alpha}\cos{\gamma} - \sin{\alpha}\sin{\beta}\sin{\gamma} & \sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma} & -\cos{\beta}\sin{\gamma}  & 0 \\
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & 0 \\
@@ -133,7 +134,7 @@ $$
 <br>
 
 $$
-V = (TR)^{-1} = R^{-1} T^{-1} = \begin{pmatrix}
+\tiny{V = (TR)^{-1} = R^{-1} T^{-1} = \begin{pmatrix}
 \cos{\alpha}\cos{\gamma} - \sin{\alpha}\sin{\beta}\sin{\gamma} & \sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma} & -\cos{\beta}\sin{\gamma}  & 0 \\
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & 0 \\
  \cos{\alpha}\sin{\gamma} + \sin{\alpha}\sin{\beta}\cos{\gamma} & \sin{\alpha}\sin{\gamma} - \cos{\alpha}\sin{\beta}\cos{\gamma} & \cos{\beta}\cos{\gamma} & 0 \\
@@ -143,11 +144,10 @@ V = (TR)^{-1} = R^{-1} T^{-1} = \begin{pmatrix}
 0 & 1 & 0 & -y \\
 0 & 0 & 1 & -z \\
 0 & 0 & 0 & 1
-\end{pmatrix}  =
-
+\end{pmatrix}  =}
 $$
 $$
- \begin{pmatrix}
+\tiny\begin{pmatrix}
 \cos{\alpha}\cos{\gamma} - \sin{\alpha}\sin{\beta}\sin{\gamma} & \sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma} & -\cos{\beta}\sin{\gamma}  & (\sin{\alpha}\sin{\beta}\sin{\gamma} - \cos{\alpha}\cos{\gamma})*x - (\sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma})*y + \cos{\beta}\sin{\gamma}*z \\
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & \sin{\alpha}\cos{\beta}*x - \cos{\alpha}\cos{\beta}*y - \sin{\beta}*z \\
  \cos{\alpha}\sin{\gamma} + \sin{\alpha}\sin{\beta}\cos{\gamma} & \sin{\alpha}\sin{\gamma} - \cos{\alpha}\sin{\beta}\cos{\gamma} & \cos{\beta}\cos{\gamma} & -(\cos{\alpha}\sin{\gamma} + \sin{\alpha}\sin{\beta}\cos{\gamma})*x + (\cos{\alpha}\sin{\beta}\cos{\gamma} - \sin{\alpha}\sin{\gamma})*y - \cos{\beta}\cos{\gamma}*z \\
@@ -167,7 +167,11 @@ $$
 0 & 1 & 0 & 0 \\
 0 & 0 & 1 & 0 \\
 0 & 0 & \frac{1}{d} & 0
-\end{pmatrix}\begin{pmatrix}
+\end{pmatrix} *
+$$
+
+$$
+\tiny\begin{pmatrix}
 \cos{\alpha}\cos{\gamma} - \sin{\alpha}\sin{\beta}\sin{\gamma} & \sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma} & -\cos{\beta}\sin{\gamma}  & (\sin{\alpha}\sin{\beta}\sin{\gamma} - \cos{\alpha}\cos{\gamma})*x - (\sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma})*y + \cos{\beta}\sin{\gamma}*z \\
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & \sin{\alpha}\cos{\beta}*x - \cos{\alpha}\cos{\beta}*y - \sin{\beta}*z \\
  \cos{\alpha}\sin{\gamma} + \sin{\alpha}\sin{\beta}\cos{\gamma} & \sin{\alpha}\sin{\gamma} - \cos{\alpha}\sin{\beta}\cos{\gamma} & \cos{\beta}\cos{\gamma} & -(\cos{\alpha}\sin{\gamma} + \sin{\alpha}\sin{\beta}\cos{\gamma})*x + (\cos{\alpha}\sin{\beta}\cos{\gamma} - \sin{\alpha}\sin{\gamma})*y - \cos{\beta}\cos{\gamma}*z \\
@@ -176,7 +180,7 @@ $$
 $$
 
 $$
-
+\tiny
 \begin{pmatrix}
 \cos{\alpha}\cos{\gamma} - \sin{\alpha}\sin{\beta}\sin{\gamma} & \sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma} & -\cos{\beta}\sin{\gamma}  & (\sin{\alpha}\sin{\beta}\sin{\gamma} - \cos{\alpha}\cos{\gamma})*x - (\sin{\alpha}\cos{\gamma} + \cos{\alpha}\sin{\beta}\sin{\gamma})*y + \cos{\beta}\sin{\gamma}*z \\
 -\sin{\alpha}\cos{\beta} & \cos{\alpha}\cos{\beta} & \sin{\beta} & \sin{\alpha}\cos{\beta}*x - \cos{\alpha}\cos{\beta}*y - \sin{\beta}*z \\
@@ -244,7 +248,6 @@ R_y =
 -\sin{\phi} & 0 & \cos{\phi} & 0 \\
 0 & 0 & 0 & 1  
 \end{pmatrix}
-
 R_z =
 \begin{pmatrix}
 \cos{\theta} & -\sin{\theta} & 0 & 0 \\
