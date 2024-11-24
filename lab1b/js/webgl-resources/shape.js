@@ -1,21 +1,26 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
+import { Global } from './global.js';
+import { Shader } from './shader.js';
 
 export class Shape {
     vao = -1;
     coordinateSystemVAO = -1;
     vertices = -1;
+    normals = -1;
     colors = -1;
     indices = -1;
     scalingMatrix = -1;
     rotationMatrix = -1;
     translationMatrix = -1;
     modelMatrix = glm.mat4.create();
+    
 
-    constructor(vertices, colors, indices, 
+    constructor(vertices, normals, colors, indices,
         scalingMatrix = glm.mat4.create(), 
         rotationMatrix = glm.mat4.create(),
         translationMatrix = glm.mat4.create()) {
         this.vertices = vertices;
+        this.normals = normals;
         this.colors = colors;
         this.indices = indices;
         this.scalingMatrix = scalingMatrix;
@@ -30,6 +35,7 @@ export class Shape {
         this.initializeVAO(gl);
         this.bufferVertexData(gl, shader);
         this.bufferColorData(gl, shader);
+        this.bufferNormalsData(gl, shader);
         this.bufferIndices(gl);
         this.bufferCoordinateSystem(gl,shader);
     }
@@ -53,7 +59,19 @@ export class Shape {
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.vertices),gl.STATIC_DRAW);
 
         gl.vertexAttribPointer(shader.aPositionLocation,3/*components amount*/,gl.FLOAT,false/*normalize*/,0/*stride*/,0/*offset*/);
-    } 
+    }
+    
+    bufferNormalsData(gl, shader) {
+        const aVertexNormalBuffer = gl.createBuffer();
+
+        gl.enableVertexAttribArray(shader.aVertexNormalLocation);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, aVertexNormalBuffer);
+
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this.normals),gl.STATIC_DRAW);
+
+        gl.vertexAttribPointer(shader.aVertexNormalLocation,3/*components amount*/,gl.FLOAT,false/*normalize*/,0/*stride*/,0/*offset*/);
+    }
 
     bufferColorData(gl, shader) {
         const aColorBuffer = gl.createBuffer();
@@ -202,19 +220,31 @@ export class Shape {
         this.updateModelMatrix();
     }
 
-    draw(gl, shader) {
-        gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, this.modelMatrix);
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
+    draw(gl, shader, global) {
+        global.applyUniforms(gl,shader,this.modelMatrix);
 
         gl.bindVertexArray(this.vao);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
     //only call this function after draw if the object is selected
-    drawCoordianteSystem(gl, shader) {
+    drawCoordianteSystem(gl, shader, global) {
 
-        //just in case it's not set reset modelMatrix
-        gl.uniformMatrix4fv(shader.uLocalTransformationMatrixLocation, false, this.modelMatrix);
+        //just in case it's not set reset matrices
+        global.applyUniforms(gl,shader,this.modelMatrix);
         
         gl.bindVertexArray(this.coordinateSystemVAO);
         

@@ -2,15 +2,18 @@ import * as webglUtils from './webgl-helper-functions.js';
 
 export class Shader {
     filename = 'default';
-    program = -1;
-    aColorLocation = -1;
-    aColorBuffer = -1;
-    aPositionLocation = -1;
-    aPositionBuffer = -1;
-    uViewMatrixLocation = -1;
-    uProjectionMatrixLocation = -1;
-    uGlobalTransformationMatrixLocation = -1;
-    uLocalTransformationMatrixLocation = -1;
+    program = -2;
+    aColorLocation = -2;
+    aPositionLocation = -2;
+    aVertexNormalLocation = -2;
+    uViewMatrixLocation = -2;
+    uProjectionMatrixLocation = -2;
+    uGlobalTransformationMatrixLocation = -2;
+    uLocalTransformationMatrixLocation = -2;
+    uLightPositionLocation = -2;
+    uLightAmbientLocation = -2;
+    uLightDiffuseLocation = -2;
+    uLightSpecularLocation = -2;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -26,12 +29,24 @@ export class Shader {
 
         this.aColorLocation = gl.getAttribLocation(this.program, 'a_color');
         
+        this.aVertexNormalLocation = gl.getAttribLocation(this.program, 'a_vertex_normal');
+        
         this.uViewMatrixLocation = gl.getUniformLocation(this.program, 'u_view_matrix');
         
         this.uProjectionMatrixLocation = gl.getUniformLocation(this.program, 'u_projection_matrix');
 
-        this.uGlobalTransformationMatrixLocation = gl.getUniformLocation(this.program, 'u_global_transformation_matrix');
+        this.uModelViewMatrixLocation = gl.getUniformLocation(this.program, 'u_model_view_matrix');
 
-        this.uLocalTransformationMatrixLocation = gl.getUniformLocation(this.program, 'u_local_transformation_matrix');
+        this.uNormalMatrixLocation = gl.getUniformLocation(this.program, 'u_normal_matrix');
+
+        this.uLightPositionLocation = gl.getUniformLocation(this.program, 'u_light_position');
+
+        this.uLightSpecularLocation = gl.getUniformLocation(this.program, 'u_light_specular');
+
+        this.uAmbientLocation = gl.getUniformLocation(this.program, 'u_ambient');
+
+        this.uDiffuseLocation = gl.getUniformLocation(this.program, 'u_diffuse');
+
+        this.uSpecularLocation = gl.getUniformLocation(this.program, 'u_specular');
     }
 }

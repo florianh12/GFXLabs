@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Lab 1a</title>
+        <title>Lab 1b</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="google" content="notranslate" />
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>Lab 1a - Object Transformations</h1>
+        <h1>Lab 1b - Shading</h1>
         <div style="columns: 2;">
             <div style="display: flex; justify-content: center;">
                 <canvas id="c"></canvas>
@@ -16,7 +16,15 @@
             <div>
                 <b>Camera</b>
                 <p>Toggled by pressing the spacebar. Controlled by using the arrow keys and , (forward movement) and . (backward movement) or dragging the scene with the mouse. Initially disabled.</p>
+                <p>Light Movement enabled: <b id="moveLightIndicator" style="font-style: italic;">false</b></p>
                 <p>Camera Movement enabled: <b id="moveCameraIndicator" style="font-style: italic;">false</b></p>
+                <b>Shading</b>
+                    <ul>
+                        <li>w Gouraud, diffuse and ambient only</li>
+                        <li>e Gouraud, Phong illumination model (+ specular)</li>
+                        <li>r Phong, diffuse and ambient only</li>
+                        <li>t Phong, Phong illumination model (+ specular)</li>
+                    </ul>
             </div>
             <button id="objFileButton">Add .obj file</button>
             <input id="fileSource" type="file" accept=".obj" hidden>

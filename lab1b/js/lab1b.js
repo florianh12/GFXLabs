@@ -14,45 +14,48 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 
 
 
-
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
-    const defaultShader = new Shader();
+    let selected_shader = 0;
+    const shaders = [new Shader("gouraud"),new Shader("phong")];
+    //const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
     const objects = [];
     let selected = -1;
     let beingDragged = false;
     let moveCamera = false;
+    let moveLight = false;
     let xMouseLast, yMouseLast;
     var moveCameraIndicator = document.getElementById("moveCameraIndicator");
+    var moveLightIndicator = document.getElementById("moveLightIndicator");
     var objFileButton = document.getElementById("objFileButton");
     var fileSource = document.getElementById("fileSource");
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere.obj'));
     objects[0].translate(-3.0,3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
     objects[1].translate(u,3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
     objects[2].translate(3.0,3.0);
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[3].translate(-3.0);
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
 
-    objects.push(generatePyramid());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[5].translate(3.0);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
+    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
     objects[6].translate(-3.0,-3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere_smooth.obj'));
     objects[7].translate(u,-3.0);
 
-    objects.push(generateCube());
+    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
     objects[8].translate(3.0,-3.0);
 
 
@@ -63,16 +66,16 @@ const main = async () => {
     }
 
 
+    for (let i = 0; i < shaders.length; i++) {
+        await shaders[i].init(gl);
 
-    await defaultShader.init(gl);
+        //prepare vertices and faces
+        global.initGlobalCoordinateSystem(gl,shaders[i]);
 
-    //prepare vertices and faces
-    global.initGlobalCoordinateSystem(gl,defaultShader);
-    
-    for (var i = 0; i < objects.length; i++) {
-        objects[i].init(gl, defaultShader);
+        for (let j = 0; j < objects.length; j++) {
+            objects[j].init(gl, shaders[i]);
+        }
     }
-
 
     function onResize(entries) {
 
@@ -141,50 +144,76 @@ const main = async () => {
                     }
                     break;
                 case 'i':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("x",1);
-                    } else if(selected == 0) {
-                        global.rotate("x",1);
+                    if(moveLight) {
+                        global.rotateLight("x",1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("x",1);
+                        } else if(selected == 0) {
+                            global.rotate("x",1);
+                        }
                     }
                     break;
                 case 'k':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("x",-1);
-                    } else if(selected == 0) {
-                        global.rotate("x",-1);
+                    if(moveLight) {
+                        global.rotateLight("x",-1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("x",-1);
+                        } else if(selected == 0) {
+                            global.rotate("x",-1);
+                        }
                     }
                     break;
                 case 'o':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("y",1);
-                    } else if(selected == 0) {
-                        global.rotate("y",1);
+                    if(moveLight) {
+                        global.rotateLight("y",1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("y",1);
+                        } else if(selected == 0) {
+                            global.rotate("y",1);
+                        }
                     }
                     break;
                 case 'u':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("y",-1);
-                    } else if(selected == 0) {
-                        global.rotate("y",-1);
+                    if(moveLight) {
+                        global.rotateLight("y",-1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("y",-1);
+                        } else if(selected == 0) {
+                            global.rotate("y",-1);
+                        }
                     }
                     break;
                 case 'l':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("z",1);
-                    } else if(selected == 0) {
-                        global.rotate("z",1);
+                    if(moveLight) {
+                        global.rotateLight("z",1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("z",1);
+                        } else if(selected == 0) {
+                            global.rotate("z",1);
+                        }
                     }
                     break;
                 case 'j':
-                    if(selected > 0) {
-                        objects[(selected-1)].rotate("z",-1);
-                    } else if(selected == 0) {
-                        global.rotate("z",-1);
+                    if(moveLight) {
+                        global.rotateLight("z",-1);
+                    } else {
+                        if(selected > 0) {
+                            objects[(selected-1)].rotate("z",-1);
+                        } else if(selected == 0) {
+                            global.rotate("z",-1);
+                        }
                     }
                     break;
                 case 'ArrowRight':
                     if(moveCamera) {
                         global.translateCamera(0.1);
+                    } else if (moveLight) {
+                        global.translateLight(0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(0.1);
@@ -196,6 +225,8 @@ const main = async () => {
                 case 'ArrowLeft':
                     if(moveCamera) {
                         global.translateCamera(-0.1);
+                    } else if (moveLight) {
+                        global.translateLight(-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(-0.1);
@@ -207,6 +238,8 @@ const main = async () => {
                 case 'ArrowUp':
                     if(moveCamera) {
                         global.translateCamera(u,0.1);
+                    } else if (moveLight) {
+                        global.translateLight(u,0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,0.1);
@@ -218,6 +251,8 @@ const main = async () => {
                 case 'ArrowDown':
                     if(moveCamera) {
                         global.translateCamera(u,-0.1);
+                    } else if (moveLight) {
+                        global.translateLight(u,-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,-0.1);
@@ -229,6 +264,8 @@ const main = async () => {
                 case ',':
                     if(moveCamera) {
                         global.translateCamera(u,u,0.1);
+                    } else if (moveLight) {
+                        global.translateLight(u,u,0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,0.1);
@@ -240,6 +277,8 @@ const main = async () => {
                 case '.':
                     if(moveCamera) {
                         global.translateCamera(u,u,-0.1);
+                    } else if (moveLight) {
+                        global.translateLight(u,u,-0.1);
                     } else {
                         if(selected > 0) {
                             objects[(selected-1)].translate(u,u,-0.1);
@@ -252,6 +291,31 @@ const main = async () => {
                     moveCamera = !moveCamera;
                     moveCameraIndicator.textContent = moveCamera;
                     break;
+                case 'w':
+                    selected_shader = 0;
+                    global.diffuse_only = true;
+                    break;
+                case 'e':
+                    selected_shader = 0;
+                    global.diffuse_only = false;
+                    break;
+                case 'r':
+                    selected_shader = 1;
+                    global.diffuse_only = true;
+                    break
+                case 't':
+                    selected_shader = 1;
+                    global.diffuse_only = false;
+                    break;
+                case 'L':
+                    moveLight = !moveLight;moveLightIndicator.textContent = moveLight;
+
+                    if (moveLight) {
+                        moveCamera = false;
+                        moveCameraIndicator.textContent = moveCamera;
+                    }
+                    break;
+                     
             }
         }
     });
@@ -325,8 +389,9 @@ const main = async () => {
                 break;
         }
         
-
-        newShape.init(gl, defaultShader);
+        for (let i = 0; i < shaders.length; i++) {
+            newShape.init(gl, shaders[i]);
+        }
 
         objects[(selected-1)] = newShape;
     });
@@ -335,26 +400,26 @@ const main = async () => {
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         // Clear the canvas and set background color
-        gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
+        gl.clearColor(0.5, 0.5, 0.5, 1.0);
+        gl.clearDepth(1.0);
+        
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);
 
         gl.enable(gl.CULL_FACE);
 
-        gl.useProgram(defaultShader.program);
-        
-        global.applyMatrices(gl,defaultShader);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
+        gl.useProgram(shaders[selected_shader].program);
+        
         if(selected == 0) {
-            global.drawGlobalCoordinateSystem(gl,defaultShader);
+            global.drawGlobalCoordinateSystem(gl,shaders[selected_shader]);
         }
 
         for (var i = 0; i < objects.length; i++) {
-            objects[i].draw(gl, defaultShader);
+            objects[i].draw(gl, shaders[selected_shader], global);
             if(selected > 0 && i == (selected-1)) {
-                objects[i].drawCoordianteSystem(gl,defaultShader);
+                objects[i].drawCoordianteSystem(gl,shaders[selected_shader], global);
             }
         }
 
