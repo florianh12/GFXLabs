@@ -14,6 +14,7 @@ export class Shader {
     uLightAmbientLocation = -2;
     uLightDiffuseLocation = -2;
     uLightSpecularLocation = -2;
+    uShadowMapLocation = -2;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -48,5 +49,7 @@ export class Shader {
         this.uDiffuseLocation = gl.getUniformLocation(this.program, 'u_diffuse');
 
         this.uSpecularLocation = gl.getUniformLocation(this.program, 'u_specular');
+
+        this.uShadowMapLocation =  gl.getUniformLocation(this.program, 'u_shadow_map');
     }
 }

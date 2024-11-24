@@ -18,6 +18,7 @@ export class Global {
 
     constructor() {
         this.updateGlobalModelViewMatrix();
+        console.log("ViewMatrixTest:",glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(1.0,0.0,2.0),glm.vec3.fromValues(1.0,1.0,0.0),glm.vec3.fromValues(0.0,1.0,0.0)));
     }
 
     initProjectionMatrix(clientWidth,clientHeight) {
@@ -28,6 +29,13 @@ export class Global {
             0.1,//zNear
             2000.0//zFar
         );
+        console.log("Orthographic Projection:",glm.mat4.orthoNO(glm.mat4.create(),-1.0,1.0,-1.0,1.0,0.1,100.0));
+        //create light projection matrix
+        const lightProjectionMatrix = glm.mat4.create();
+
+        glm.mat4.perspective(lightProjectionMatrix,Math.PI,1.0,0.1,2000.0);
+
+        this.light.initProjectionMatrix(lightProjectionMatrix);
 
         this.projectionMatrixInitDone = true;
     }
@@ -243,5 +251,14 @@ export class Global {
         //actual drawcall
         gl.drawArrays(gl.LINES,0,6);
 
+    }
+
+    /**
+     * @returns {mat4}
+     */
+    calculatelightViewProjectionMatrix() {
+        const lightViewProjectionMatrix = glm.mat4.create();
+        glm.mat4.mul(lightViewProjectionMatrix,this.light.lightProjectionMatrix,this.light.lightViewMatrix);
+        return lightViewProjectionMatrix;
     }
 }
