@@ -1,9 +1,9 @@
-
 import { generateCube, generatePyramid } from './webgl-resources/webgl-helper-functions.js';
 import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
+import { ShadowMap } from './webgl-resources/shadowmap.js';
 
 
 
@@ -17,6 +17,7 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
+    const shadowMap = new ShadowMap();
     let selected_shader = 0;
     const shaders = [new Shader("gouraud"),new Shader("phong")];
     //const defaultShader = new Shader("gouraud");
@@ -65,7 +66,8 @@ const main = async () => {
         return;
     }
 
-
+    shadowMap.init(gl);
+    
     for (let i = 0; i < shaders.length; i++) {
         await shaders[i].init(gl);
 
@@ -397,21 +399,27 @@ const main = async () => {
     });
 
     const draw = () => {
-        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-        // Clear the canvas and set background color
-        gl.clearColor(0.5, 0.5, 0.5, 1.0);
-        gl.clearDepth(1.0);
-        
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);
 
         gl.enable(gl.CULL_FACE);
 
+       shadowMap.makeShadowPass(gl,global.calculatelightViewProjectionMatrix(),objects,global);
+
+
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+        // Clear the canvas and set background color
+        gl.clearColor(0.5, 0.5, 0.5, 1.0);
+
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         gl.useProgram(shaders[selected_shader].program);
         
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, shadowMap.map);
+        gl.uniform1i(shaders[selected_shader].shadowMap, 0);
+
         if(selected == 0) {
             global.drawGlobalCoordinateSystem(gl,shaders[selected_shader]);
         }

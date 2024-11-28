@@ -250,4 +250,17 @@ export class Shape {
         
         gl.drawArrays(gl.LINES, 0, 6);
     }
+
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     */
+    makeShadowPass(gl, shader) {
+        gl.uniformMatrix4fv(shader.uModelMatrixLocation,false,this.modelMatrix);
+        
+        gl.bindVertexArray(this.vao);
+
+        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+    }
 }

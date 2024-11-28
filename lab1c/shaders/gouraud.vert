@@ -11,6 +11,7 @@ uniform mat4 u_projection_matrix;
 uniform mat4 u_model_view_matrix;
 uniform mat3 u_normal_matrix;
 uniform vec4 u_light_position;
+uniform sampler2D u_shadow_map;
 
 uniform vec4 u_light_specular;
 uniform bool u_ambient;

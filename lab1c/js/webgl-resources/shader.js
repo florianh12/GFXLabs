@@ -14,6 +14,10 @@ export class Shader {
     uLightAmbientLocation = -2;
     uLightDiffuseLocation = -2;
     uLightSpecularLocation = -2;
+    uShadowMapLocation = -2;
+    uLightViewProjectionMatrixLocation = -2;
+    uGlobalTransformationMatrixLocation = -2;
+    uModelMatrixLocation = -2;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -48,5 +52,13 @@ export class Shader {
         this.uDiffuseLocation = gl.getUniformLocation(this.program, 'u_diffuse');
 
         this.uSpecularLocation = gl.getUniformLocation(this.program, 'u_specular');
+
+        this.uShadowMapLocation =  gl.getUniformLocation(this.program, 'u_shadow_map');
+
+        this.uLightViewProjectionMatrixLocation = gl.getUniformLocation(this.program, 'u_light_view_projection_matrix');
+
+        this.uGlobalTransformationMatrixLocation = gl.getUniformLocation(this.program,'u_global_transformation_matrix');
+
+        this.uModelMatrixLocation = gl.getUniformLocation(this.program, 'u_model_matrix');
     }
 }

@@ -5,10 +5,22 @@ export class LightSource {
     specular = glm.vec4.fromValues(1.0,1.0,1.0,1.0);
     rotationMatrix = glm.mat4.create();
     translationMatrix = glm.mat4.create();
+    lightViewMatrix = glm.mat4.create();
+    lightProjectionMatrix = glm.mat4.create();
 
     constructor(x = 0.0, y = 0.0, z = 0.0) {
         glm.mat4.fromTranslation(this.translationMatrix,glm.vec3.fromValues(x,y,z));
         this.updateLightPosition();
+
+        this.lightViewMatrix = glm.mat4.lookAt(this.lightViewMatrix,this.position,glm.vec3.fromValues(0.0,0.0,0.0),glm.vec3.fromValues(0.0,1.0,0.0));
+    }
+
+    /**
+     * 
+     * @param {mat4} projectionMatrix 
+     */
+    initProjectionMatrix(projectionMatrix) {
+        this.lightProjectionMatrix = projectionMatrix;
     }
     /**
      * 

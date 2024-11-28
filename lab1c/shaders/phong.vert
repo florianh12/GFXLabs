@@ -10,6 +10,8 @@ in vec3 a_vertex_normal;
 uniform mat4 u_projection_matrix;
 uniform mat4 u_model_view_matrix;
 uniform mat3 u_normal_matrix;
+uniform sampler2D u_shadow_map;
+
 
 
 // a varying the color to the fragment shader
