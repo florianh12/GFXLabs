@@ -9,7 +9,10 @@ export class Pacman {
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.02;
+    translationRate = 0.0;//0.03
+    changeDir = 0;
+    changeDegrees = 0;
+    currentRowPos = 0.0;
     
 
     /**
@@ -39,8 +42,8 @@ export class Pacman {
         if(newDirection < 0 || newDirection > 4) {
             return;
         }
-            this.shape.rotate("y",this.degreeMap.get(this.direction)-this.degreeMap.get(newDirection));
-            this.direction = newDirection;
+            this.changeDegrees = this.degreeMap.get(this.direction)-this.degreeMap.get(newDirection);
+            this.changeDir = newDirection;
     }
 
     move() {
@@ -60,6 +63,17 @@ export class Pacman {
                 this.global.translateCamera(-this.translationRate);
                 break;
         }
-        
+
+        this.currentRowPos = (this.currentRowPos+this.translationRate);
+
+        //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
+        if(this.currentRowPos >= 1.5) {
+            this.currentRowPos = 0.0;
+        }
+        if(this.changeDir != 0 && this.currentRowPos == 0.0) {
+            this.shape.rotate("y",this.changeDegrees);
+            this.direction = this.changeDir;
+            this.changeDir = 0;
+        }
     }
 }

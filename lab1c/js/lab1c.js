@@ -17,6 +17,34 @@ import { Pacman } from './webgl-resources/pacman.js';
 
 const main = async () => {
     const u = undefined; //for selecting default values
+    const defaultScale = [1.5,1.5];
+    const colorPacman = [1.0,1.0,0.0,1.0];
+    const colorPlane = [0.231, 0.361, 0.361, 1.0];
+    const colorWall1 = [0.529, 0, 0.529,1.0];
+    const colorWall2 = [0.231, 0, 0.231,1.0];
+    //rows starting from origin (middle of plane), 
+    //negate row values for lower half of plane
+    const r0 = 0.0;
+    const r1 = 1.5;
+    const r2 = 3.0;
+    const r3 = 4.5;
+    const r4 = 6.0;
+    const r5 = 7.5;
+    const r6 = 9.0;
+    const r7 = 10.5;
+    //columns starting from origin (middle of plane),
+    //negate column values for left half of plane
+    const c0 = 0.0;
+    const c1 = 1.5;
+    const c2 = 3.0;
+    const c3 = 4.5
+    const c4 = 6.0;
+    const c5 = 7.5;
+    const c6 = 9.0;
+    const c7 = 10.5;
+    const c8 = 12.0;
+    const c9 = 13.5;
+    const c10 = 15.0;
     const global = new Global();
     let selected_shader = 0;
     const shaders = [new Shader("phong")];
@@ -33,19 +61,46 @@ const main = async () => {
     var objFileButton = document.getElementById("objFileButton");
     var fileSource = document.getElementById("fileSource");
 
-    var pacmanShape = await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp1.obj',[1.0,1.0,0.0,1.0]);
+    var pacmanShape = await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp1.obj',colorPacman);
     const pacman = new Pacman(global,pacmanShape);
 
-
+    //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
     objects[0].rotate("x",90);
     objects[0].rotate("y",90);
     
-
-    objects.push(generatePlane());
-    objects[1].scale(32.0,24.0);
+    //Labyrinth floor
+    objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
+    objects[1].scale(16.5,12.0);
     objects[1].translate(u,u,-0.5);
 
+
+    //create Labyrinth
+    let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+
+    temp.scale(...defaultScale);
+    temp.translate(c0,r1);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(c0,r3);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(c0,r5);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(c0,r7);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(-c10,r7)
+    objects.push(temp);
 
     var canvas = document.querySelector("#c");
     var gl = canvas.getContext("webgl2");
