@@ -25,7 +25,14 @@ const main = async () => {
     //additional scaling on per block basis
     const b3 = 3.0;
     const b5 = 5.0;
-
+    const b7 = 7.0;
+    const b9 = 9.0;
+    const b11 = 11.0;
+    const b13 = 13.0;
+    const b15 = 15.0;//max vertical
+    const b17 = 17.0;
+    const b19 = 19.0;
+    const b21 = 21.0;
     //rows starting from origin (middle of plane), 
     //negate row values for lower half of plane
     const r0 = 0.0;
@@ -83,13 +90,31 @@ const main = async () => {
     let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
 
     temp.scale(...defaultScale);
-    temp.scale(3);
-    temp.translate(c0,r1);
+    temp.scale(u,b15);
+    temp.translate(c10,r0);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.scale(u,b15);
+    temp.translate(-c10,r0);
     objects.push(temp);
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
     temp.scale(...defaultScale);
-    temp.translate(-c2,r2);
+    temp.scale(b21);
+    temp.translate(c0,r7);
+    objects.push(temp);
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.scale(b21);
+    temp.translate(c0,-r7);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.scale(b3)
+    temp.translate(-c2,r5);
     objects.push(temp);
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
@@ -97,14 +122,19 @@ const main = async () => {
     temp.translate(c0,r5);
     objects.push(temp);
 
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(c1,r5);
+    objects.push(temp);
+
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
     temp.scale(...defaultScale);
-    temp.translate(c0,r7);
+    temp.translate(c0,r6);
     objects.push(temp);
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
     temp.scale(...defaultScale);
-    temp.translate(-c10,r7)
+    temp.translate(-c9,r6)
     objects.push(temp);
 
     var canvas = document.querySelector("#c");
