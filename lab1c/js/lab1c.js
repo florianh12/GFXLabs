@@ -4,6 +4,7 @@ import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
 import { ShadowMap } from './webgl-resources/shadowmap.js';
+import { AnimatedShape } from './webgl-resources/animatedShape.js';
 
 
 
@@ -45,7 +46,8 @@ const main = async () => {
     objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[3].translate(-3.0);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
+    objects.push(new AnimatedShape(100));
+    //new AnimatedShape(50, await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp1.obj'))
 
     objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[5].translate(3.0);
@@ -75,7 +77,7 @@ const main = async () => {
         global.initGlobalCoordinateSystem(gl,shaders[i]);
 
         for (let j = 0; j < objects.length; j++) {
-            objects[j].init(gl, shaders[i]);
+            await objects[j].init(gl, shaders[i]);
         }
     }
 
@@ -404,7 +406,7 @@ const main = async () => {
 
         gl.enable(gl.CULL_FACE);
 
-       shadowMap.makeShadowPass(gl,global.calculatelightViewProjectionMatrix(),objects,global);
+       shadowMap.makeShadowPass(gl,objects,global);
 
 
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -418,7 +420,7 @@ const main = async () => {
         
         gl.activeTexture(gl.TEXTURE0);
         gl.bindTexture(gl.TEXTURE_2D, shadowMap.map);
-        gl.uniform1i(shaders[selected_shader].shadowMap, 0);
+        gl.uniform1i(shaders[selected_shader].uShadowMapLocation, 0);
 
         if(selected == 0) {
             global.drawGlobalCoordinateSystem(gl,shaders[selected_shader]);

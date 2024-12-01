@@ -29,6 +29,7 @@ export class ShadowMap {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        console.log(this.map);
     }
 
     /**
@@ -70,42 +71,16 @@ export class ShadowMap {
      * @param {Shape[]} objects
      * @param {Global} global
      */
-    makeShadowPass(gl, lightViewProjectionMatrix, objects, global) {
+    makeShadowPass(gl, objects, global) {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
         gl.viewport(0,0,this.size,this.size);
         gl.clear(gl.DEPTH_BUFFER_BIT);
 
         gl.useProgram(this.shader.program);
-        
-        //calculate global transformation matrix
-        const globalTransformationMatrix = glm.mat4.create();
-
-        glm.mat4.mul(
-            globalTransformationMatrix,
-            globalTransformationMatrix,
-            global.scalingMatrix
-        )
-
-        glm.mat4.mul(
-            globalTransformationMatrix,
-            globalTransformationMatrix,
-            global.rotationMatrix
-        )
-
-        //adds translation
-        glm.mat4.multiply(
-            globalTransformationMatrix,
-            globalTransformationMatrix,
-            global.translationMatrix
-        );
-
-        //set object independent uniforms
-        gl.uniformMatrix4fv(this.shader.uLightViewProjectionMatrixLocation, false,lightViewProjectionMatrix);
-        gl.uniformMatrix4fv(this.shader.uGlobalTransformationMatrixLocation, false,globalTransformationMatrix);
 
 
         for (let i = 0; i < objects.length; i++) {
-            objects[i].makeShadowPass(gl,this.shader);
+            objects[i].draw(gl,this.shader,global);
         }
 
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);

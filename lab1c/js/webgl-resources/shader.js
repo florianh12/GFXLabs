@@ -3,21 +3,21 @@ import * as webglUtils from './webgl-helper-functions.js';
 export class Shader {
     filename = 'default';
     program = -2;
-    aColorLocation = -2;
-    aPositionLocation = -2;
-    aVertexNormalLocation = -2;
-    uViewMatrixLocation = -2;
-    uProjectionMatrixLocation = -2;
-    uGlobalTransformationMatrixLocation = -2;
-    uLocalTransformationMatrixLocation = -2;
-    uLightPositionLocation = -2;
-    uLightAmbientLocation = -2;
-    uLightDiffuseLocation = -2;
-    uLightSpecularLocation = -2;
-    uShadowMapLocation = -2;
-    uLightViewProjectionMatrixLocation = -2;
-    uGlobalTransformationMatrixLocation = -2;
-    uModelMatrixLocation = -2;
+    aColorLocation = -1;
+    aPositionLocation = -1;
+    aVertexNormalLocation = -1;
+    uViewMatrixLocation = -1;
+    uProjectionMatrixLocation = -1;
+    uGlobalTransformationMatrixLocation = -1;
+    uLocalTransformationMatrixLocation = -1;
+    uLightPositionLocation = -1;
+    uLightAmbientLocation = -1;
+    uLightDiffuseLocation = -1;
+    uLightSpecularLocation = -1;
+    uShadowMapLocation = -1;
+    uLightViewProjectionMatrixLocation = -1;
+    uGlobalTransformationMatrixLocation = -1;
+    uModelMatrixLocation = -1;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -55,10 +55,6 @@ export class Shader {
 
         this.uShadowMapLocation =  gl.getUniformLocation(this.program, 'u_shadow_map');
 
-        this.uLightViewProjectionMatrixLocation = gl.getUniformLocation(this.program, 'u_light_view_projection_matrix');
-
-        this.uGlobalTransformationMatrixLocation = gl.getUniformLocation(this.program,'u_global_transformation_matrix');
-
-        this.uModelMatrixLocation = gl.getUniformLocation(this.program, 'u_model_matrix');
+        this.uLightProjectionModelViewMatrixLocation = gl.getUniformLocation(this.program, 'u_light_projection_model_view_matrix');
     }
 }

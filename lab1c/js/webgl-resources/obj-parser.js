@@ -17,7 +17,18 @@ export class OBJParser {
     indices = [];
     colors = [];
 
-    reset() {
+    new_object = true;
+    xOffset = 0;
+    yOffset = 0;
+    zOffset = 0;
+
+    xScale = 0;
+    yScale = 0;
+    zScale = 0;
+
+    indexOffset = 0;
+
+    #reset() {
         this.min = [0.0,0.0,0.0];
         this.max = [0.0,0.0,0.0];
         this.vertexMap = new Map();
@@ -31,17 +42,36 @@ export class OBJParser {
         this.normals = [];
         this.indices = [];
         this.colors = [];
+        //animation properties
+        this.new_object = true;
+        this.xOffset = 0;
+        this.yOffset = 0;
+        this.zOffset = 0;
+
+        this.xScale = 0;
+        this.yScale = 0;
+        this.zScale = 0;
+        this.indexOffset = 0;
     }
 
     async parseObjectFromFile(filePath) {
        return this.parseObjectFromString(await (fetch(filePath).then(file => file.text())));
     }
 
+    async parseAnimationFromFiles(frame_count,filePath) {
+        let obj_strings = [];
+        for(let i = 0; i < this.frame_count; i++) {
+            obj_strings.push(await (fetch(this.filename+String(i+1)+'.obj').then(file => file.text())));   
+        } 
+
+        return this.#parseAnimationFromString(obj_strings);
+     }
+
     /**
      * 
      * @param {String[]} line 
      */
-    parseVertex(line) {
+    #parseVertex(line) {
         const [x, y, z] = line.slice(1,4).map(Number);
 
         if (this.max[0] < x) {
@@ -71,7 +101,7 @@ export class OBJParser {
      * 
      * @param {String[]} line 
      */
-    parseNormal(line) {
+    #parseNormal(line) {
         const [x, y, z] = line.slice(1,4).map(Number);
 
         this.rawNormals.push(x);
@@ -83,7 +113,7 @@ export class OBJParser {
      * 
      * @param {String[]} line 
      */
-    parseFace(line) {
+    #parseFace(line) {
         for (let i = 1; i < line.length; i++) {
             const [vertexIndex,,normalIndex] = line[i].split('/').map(Number);
 
@@ -92,21 +122,23 @@ export class OBJParser {
         }
     }
 
-    normalize() {
-        const xOffset = (this.max[0] + this.min[0])/2;
-        const yOffset = (this.max[1] + this.min[1])/2;
-        const zOffset = (this.max[2] + this.min[2])/2;
+    #normalize() {
+        if(this.new_object) {
+            this.xOffset = (this.max[0] + this.min[0])/2;
+            this.yOffset = (this.max[1] + this.min[1])/2;
+            this.zOffset = (this.max[2] + this.min[2])/2;
 
-        const xScale = 1.0/(this.max[0] - this.min[0]);
-        const yScale = 1.0/(this.max[1] - this.min[1]);
-        const zScale = 1.0/(this.max[2] - this.min[2]);
+            this.xScale = 1.0/(this.max[0] - this.min[0]);
+            this.yScale = 1.0/(this.max[1] - this.min[1]);
+            this.zScale = 1.0/(this.max[2] - this.min[2]);
+        }
 
-        const scalar = Math.max(xScale,yScale,zScale);
+        const scalar = Math.max(this.xScale,this.yScale,this.zScale);
 
         for (let i = 0; i < this.rawVertices.length; i += 3) {
-            this.rawVertices[i] -= xOffset;
-            this.rawVertices[i + 1] -= yOffset;
-            this.rawVertices[i + 2] -= zOffset;
+            this.rawVertices[i] -= this.xOffset;
+            this.rawVertices[i + 1] -= this.yOffset;
+            this.rawVertices[i + 2] -= this.zOffset;
 
             this.rawVertices[i] *= scalar;
             this.rawVertices[i + 1] *= scalar;
@@ -114,7 +146,7 @@ export class OBJParser {
         }
     }
     //simple alternative to generateIndicesFromMap
-    combine() {
+    #combine() {
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
             this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
@@ -123,19 +155,21 @@ export class OBJParser {
         }
     }
 
-    generateIndicesFromMap() {
+    #generateIndicesFromMap() {
+        this.vertexMap.clear();
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
             if (!this.vertexMap.has(indicesString)) {
                 this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
                 this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
                 this.colors.push(...[0.0,1.0,1.0,1.0]);
-                this.indices.push(this.vertexMap.size);
-                this.vertexMap.set(indicesString,this.vertexMap.size);
+                this.indices.push(this.vertexMap.size+this.indexOffset);
+                this.vertexMap.set(indicesString,this.vertexMap.size+this.indexOffset);
             } else {
                 this.indices.push(this.vertexMap.get(indicesString));
             }
         }
+        this.indexOffset += this.vertexMap.size;
     }
 
     /**
@@ -146,7 +180,7 @@ export class OBJParser {
      */
     parseObjectFromString(string) {
         //clear all values
-        this.reset();
+        this.#reset();
 
         //split string into lines
         const data = string.split('\n');
@@ -155,22 +189,61 @@ export class OBJParser {
             const line = data[i].split(' ');
 
             if (line[0] == 'v') {
-                this.parseVertex(line);
+                this.#parseVertex(line);
 
             } else if (line[0] == 'vn') {
-                this.parseNormal(line);
+                this.#parseNormal(line);
 
             } else if (line[0] == 'f') {
-                this.parseFace(line);
+                this.#parseFace(line);
             }
         }
 
-        this.normalize();
+        this.#normalize();
 
-        this.generateIndicesFromMap();
-        console.log(this.rawVertices,this.rawVertexIndices,this.rawNormals,this.rawNormalIndices);
-        console.log("After modification",this.vertices.length,this.normals.length,this.colors.length,this.indices.length,this.vertexMap.size)
+        this.#generateIndicesFromMap();
         return new Shape(this.vertices,this.normals,this.colors,this.indices);
+        
+    }
+
+    /**
+     * 
+     * @param {String[]} strings 
+     * 
+     * @returns {[Float32Array,Float32Array,Uint16Array]}
+     */
+    #parseAnimationFromString(strings) {
+        //clear all values
+        this.#reset();
+
+        for (let i = 0; i < strings.length; i++) {
+            //split string into lines
+            const data = strings[i].split('\n');
+
+            for (let i = 0; i < data.length; i++) {
+                const line = data[i].split(' ');
+
+                if (line[0] == 'v') {
+                    this.#parseVertex(line);
+
+                } else if (line[0] == 'vn') {
+                    this.#parseNormal(line);
+
+                } else if (line[0] == 'f') {
+                    this.#parseFace(line);
+                }
+            }
+
+            this.#normalize();
+
+            if(this.new_object) {
+                this.new_object = false;
+            }
+
+            this.#generateIndicesFromMap();
+        } 
+        
+        return [this.vertices,this.normals,this.colors,this.indices];
         
     }
 }

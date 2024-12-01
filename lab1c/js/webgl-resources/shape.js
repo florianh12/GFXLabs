@@ -31,7 +31,7 @@ export class Shape {
         this.updateModelMatrix();
     }
 
-    init(gl, shader) {
+    async init(gl, shader) {
         this.initializeVAO(gl);
         this.bufferVertexData(gl, shader);
         this.bufferColorData(gl, shader);
@@ -249,18 +249,5 @@ export class Shape {
         gl.bindVertexArray(this.coordinateSystemVAO);
         
         gl.drawArrays(gl.LINES, 0, 6);
-    }
-
-    /**
-     * 
-     * @param {WebGL2RenderingContext} gl 
-     * @param {Shader} shader 
-     */
-    makeShadowPass(gl, shader) {
-        gl.uniformMatrix4fv(shader.uModelMatrixLocation,false,this.modelMatrix);
-        
-        gl.bindVertexArray(this.vao);
-
-        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
 }

@@ -77,7 +77,9 @@ export class LightSource {
         this.position = positionVec4;
         console.log(this.rotationMatrix);
         console.log(this.translationMatrix);
-        console.log(this.position);        
+        console.log(this.position);
+        
+        this.lightViewMatrix = glm.mat4.lookAt(this.lightViewMatrix,this.position,glm.vec3.fromValues(0.0,0.0,0.0),glm.vec3.fromValues(0.0,1.0,0.0));
 
         //const lightViewMatrix = glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(0.0,0.0,0.0),this.position,glm.vec3.fromValues(0.0,1.0,0.0));
         // console.log("Matrix",lightViewMatrix);
@@ -87,4 +89,11 @@ export class LightSource {
         // console.log("Light:",this.position);
         
     }
+    /**
+     * @returns {mat4}
+     */
+    calculateProjectionViewMatrix() {
+        return glm.mat4.mul(glm.mat4.create(),this.lightProjectionMatrix,this.lightViewMatrix);
+    }
+
 }

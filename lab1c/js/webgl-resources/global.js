@@ -12,12 +12,14 @@ export class Global {
     rotationMatrix = glm.mat4.create();
     translationMatrix = glm.mat4.create();
     globalModelViewMatrix = glm.mat4.create();
+    globalLightProjectionModelViewMatrix = glm.mat4.create();
     diffuse_only = false;
     vao = -1;
-    count = 0;
+   // count = 0;
 
     constructor() {
         this.updateGlobalModelViewMatrix();
+        this.updateGlobalLightProjectionModelViewMatrix();
         console.log("ViewMatrixTest:",glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(1.0,0.0,2.0),glm.vec3.fromValues(1.0,1.0,0.0),glm.vec3.fromValues(0.0,1.0,0.0)));
     }
 
@@ -109,6 +111,7 @@ export class Global {
 
         //applys changes
         this.updateGlobalModelViewMatrix();
+        this.updateGlobalLightProjectionModelViewMatrix();
     }
 
     rotate(axis,degree) {
@@ -142,6 +145,7 @@ export class Global {
 
         // recalculate matrix passed to shader
         this.updateGlobalModelViewMatrix();
+        this.updateGlobalLightProjectionModelViewMatrix();
     }
 
     scale(x = 1.0, y = 1.0, z = 1.0) {
@@ -153,6 +157,7 @@ export class Global {
 
         // recalculate matrix passed to shader
         this.updateGlobalModelViewMatrix();
+        this.updateGlobalLightProjectionModelViewMatrix();
     }
 
     updateGlobalModelViewMatrix() {
@@ -183,6 +188,25 @@ export class Global {
             this.translationMatrix
         );
     }
+
+    updateGlobalLightProjectionModelViewMatrix() {
+        glm.mat4.mul(
+            this.globalLightProjectionModelViewMatrix,
+            this.light.calculateProjectionViewMatrix(),
+            this.scalingMatrix
+        );
+
+        glm.mat4.mul(
+            this.globalLightProjectionModelViewMatrix,
+            this.globalLightProjectionModelViewMatrix,
+            this.rotationMatrix
+        );
+        glm.mat4.mul(
+            this.globalLightProjectionModelViewMatrix,
+            this.globalLightProjectionModelViewMatrix,
+            this.translationMatrix
+        );
+    }
     /**
      * 
      * @param {WebGL2RenderingContext} gl 
@@ -191,9 +215,11 @@ export class Global {
      */
     applyUniforms(gl, shader, modelMatrix) {
         const modelViewMatrix = glm.mat4.create();
+        const lightProjectionModelViewMatrix = glm.mat4.create();
 
         //calculate actual ModelViewMatrix with shape modelMatrix
         glm.mat4.mul(modelViewMatrix,this.globalModelViewMatrix,modelMatrix);
+        glm.mat4.mul(lightProjectionModelViewMatrix,this.globalLightProjectionModelViewMatrix,modelMatrix);
         
         const normalMatrix = glm.mat3.create();
 
@@ -218,6 +244,7 @@ export class Global {
         //light uniforms
         gl.uniform4fv(shader.uLightPositionLocation, this.light.position);
         gl.uniform4fv(shader.uLightSpecularLocation, this.light.specular);
+        gl.uniformMatrix4fv(shader.uLightProjectionModelViewMatrixLocation, false, lightProjectionModelViewMatrix);
     }
 
     translateCamera(x = 0.0, y = 0.0, z = 0.0) {
@@ -227,9 +254,11 @@ export class Global {
 
     translateLight(x = 0.0, y = 0.0, z = 0.0) {
         this.light.translate(x,y,z);
+        this.updateGlobalLightProjectionModelViewMatrix();
     }
     rotateLight(axis,degree) {
         this.light.rotate(axis,degree);
+        this.updateGlobalLightProjectionModelViewMatrix();
     }
 
     /**
