@@ -5,7 +5,7 @@ import { Camera } from './camera.js';
 
 export class Global {
     camera = new Camera();
-    light = new LightSource(undefined,10);
+    light = new LightSource(undefined,10,10);
     projectionMatrix = glm.mat4.create();
     projectionMatrixInitDone = false;
     scalingMatrix = glm.mat4.create();

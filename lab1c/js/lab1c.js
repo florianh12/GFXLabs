@@ -1,9 +1,10 @@
 
-import { generateCube, generatePyramid } from './webgl-resources/webgl-helper-functions.js';
+import { generateCube, generatePyramid, generatePlane } from './webgl-resources/webgl-helper-functions.js';
 import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
+import { Pacman } from './webgl-resources/pacman.js';
 
 
 
@@ -18,7 +19,7 @@ const main = async () => {
     const u = undefined; //for selecting default values
     const global = new Global();
     let selected_shader = 0;
-    const shaders = [new Shader("gouraud"),new Shader("phong")];
+    const shaders = [new Shader("phong")];
     //const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
     const objects = [];
@@ -32,31 +33,18 @@ const main = async () => {
     var objFileButton = document.getElementById("objFileButton");
     var fileSource = document.getElementById("fileSource");
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere.obj'));
-    objects[0].translate(-3.0,3.0);
+    var pacmanShape = await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp1.obj',[1.0,1.0,0.0,1.0]);
+    const pacman = new Pacman(global,pacmanShape);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
-    objects[1].translate(u,3.0);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
-    objects[2].translate(3.0,3.0);
+    objects.push(pacmanShape);
+    objects[0].rotate("x",90);
+    objects[0].rotate("y",90);
+    
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
-    objects[3].translate(-3.0);
-
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
-
-    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
-    objects[5].translate(3.0);
-
-    objects.push(await parser.parseObjectFromFile('./sampleModels/sphere.obj'));
-    objects[6].translate(-3.0,-3.0);
-
-    objects.push(await parser.parseObjectFromFile('./sampleModels/icosphere_smooth.obj'));
-    objects[7].translate(u,-3.0);
-
-    objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
-    objects[8].translate(3.0,-3.0);
+    objects.push(generatePlane());
+    objects[1].scale(32.0,24.0);
+    objects[1].translate(u,u,-0.5);
 
 
     var canvas = document.querySelector("#c");
@@ -101,219 +89,17 @@ const main = async () => {
             selected = parseFloat(event.key);
         } else {
             switch(event.key) {
-                case 'a':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(0.9);
-                    } else if(selected == 0) {
-                        global.scale(0.9);
-                    }
-                    break;
-                case 'A':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(1.1);
-                    } else if(selected == 0) {
-                        global.scale(1.1);
-                    }
-                    break;
-                case 'b':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(u,0.9);
-                    } else if(selected == 0) {
-                        global.scale(u,0.9);
-                    }
-                    break;
-                case 'B':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(u,1.1);
-                    } else if(selected == 0) {
-                        global.scale(u,1.1);
-                    }
-                    break;
-                case 'c':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(u,u,0.9);
-                    } else if(selected == 0) {
-                        global.scale(u,u,0.9);
-                    }
-                    break;
-                case 'C':
-                    if(selected > 0) {
-                        objects[(selected-1)].scale(u,u,1.1);
-                    } else if(selected == 0) {
-                        global.scale(u,u,1.1);
-                    }
-                    break;
-                case 'i':
-                    if(moveLight) {
-                        global.rotateLight("x",1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("x",1);
-                        } else if(selected == 0) {
-                            global.rotate("x",1);
-                        }
-                    }
-                    break;
-                case 'k':
-                    if(moveLight) {
-                        global.rotateLight("x",-1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("x",-1);
-                        } else if(selected == 0) {
-                            global.rotate("x",-1);
-                        }
-                    }
-                    break;
-                case 'o':
-                    if(moveLight) {
-                        global.rotateLight("y",1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("y",1);
-                        } else if(selected == 0) {
-                            global.rotate("y",1);
-                        }
-                    }
-                    break;
-                case 'u':
-                    if(moveLight) {
-                        global.rotateLight("y",-1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("y",-1);
-                        } else if(selected == 0) {
-                            global.rotate("y",-1);
-                        }
-                    }
-                    break;
-                case 'l':
-                    if(moveLight) {
-                        global.rotateLight("z",1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("z",1);
-                        } else if(selected == 0) {
-                            global.rotate("z",1);
-                        }
-                    }
-                    break;
-                case 'j':
-                    if(moveLight) {
-                        global.rotateLight("z",-1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].rotate("z",-1);
-                        } else if(selected == 0) {
-                            global.rotate("z",-1);
-                        }
-                    }
-                    break;
                 case 'ArrowRight':
-                    if(moveCamera) {
-                        global.translateCamera(0.1);
-                    } else if (moveLight) {
-                        global.translateLight(0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(0.1);
-                        } else if(selected == 0) {
-                            global.translate(0.1);
-                        }
-                    }
+                    pacman.translate(3);
                     break;
                 case 'ArrowLeft':
-                    if(moveCamera) {
-                        global.translateCamera(-0.1);
-                    } else if (moveLight) {
-                        global.translateLight(-0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(-0.1);
-                        } else if(selected == 0) {
-                            global.translate(-0.1);
-                        }
-                    }
+                    pacman.translate(4);
                     break;
                 case 'ArrowUp':
-                    if(moveCamera) {
-                        global.translateCamera(u,0.1);
-                    } else if (moveLight) {
-                        global.translateLight(u,0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(u,0.1);
-                        } else if(selected == 0) {
-                            global.translate(u,0.1);
-                        }
-                    }
+                    pacman.translate(1);
                     break;
                 case 'ArrowDown':
-                    if(moveCamera) {
-                        global.translateCamera(u,-0.1);
-                    } else if (moveLight) {
-                        global.translateLight(u,-0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(u,-0.1);
-                        } else if(selected == 0) {
-                            global.translate(u,-0.1);
-                        }
-                    }
-                    break;
-                case ',':
-                    if(moveCamera) {
-                        global.translateCamera(u,u,0.1);
-                    } else if (moveLight) {
-                        global.translateLight(u,u,0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(u,u,0.1);
-                        } else if(selected == 0) {
-                            global.translate(u,u,0.1);
-                        }
-                    }
-                    break;
-                case '.':
-                    if(moveCamera) {
-                        global.translateCamera(u,u,-0.1);
-                    } else if (moveLight) {
-                        global.translateLight(u,u,-0.1);
-                    } else {
-                        if(selected > 0) {
-                            objects[(selected-1)].translate(u,u,-0.1);
-                        } else if(selected == 0) {
-                            global.translate(u,u,-0.1);
-                        }
-                    }
-                    break;
-                case ' ':
-                    moveCamera = !moveCamera;
-                    moveCameraIndicator.textContent = moveCamera;
-                    break;
-                case 'w':
-                    selected_shader = 0;
-                    global.diffuse_only = true;
-                    break;
-                case 'e':
-                    selected_shader = 0;
-                    global.diffuse_only = false;
-                    break;
-                case 'r':
-                    selected_shader = 1;
-                    global.diffuse_only = true;
-                    break
-                case 't':
-                    selected_shader = 1;
-                    global.diffuse_only = false;
-                    break;
-                case 'L':
-                    moveLight = !moveLight;moveLightIndicator.textContent = moveLight;
-
-                    if (moveLight) {
-                        moveCamera = false;
-                        moveCameraIndicator.textContent = moveCamera;
-                    }
+                    pacman.translate(2);
                     break;
                      
             }
@@ -395,6 +181,7 @@ const main = async () => {
 
         objects[(selected-1)] = newShape;
     });
+
 
     const draw = () => {
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);

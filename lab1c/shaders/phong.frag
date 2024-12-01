@@ -41,7 +41,7 @@ void main() {
 
         //calculate diffuse intensity and coefficient and adjust product accordingly
         float Kd = max(dot(light_direction,normal),0.0);
-        vec4 diffuse = Kd * v_color * 0.8;
+        vec4 diffuse = Kd * v_color * 0.9;
 
         //add diffuse part to final color
         outColor += diffuse;
@@ -52,8 +52,8 @@ void main() {
         vec3 reflect_direction = reflect(-light_direction,normal);
 
         ////calculate specular intensity and adjust color accordingly
-        float Ks = pow(max(dot(reflect_direction,normal),0.0),40.0);
-        vec4 specular = Ks * u_light_specular * 0.9;
+        float Ks = pow(max(dot(reflect_direction,normal),0.0),200.0);
+        vec4 specular = Ks * u_light_specular * 0.4;
 
         //add ambient part to final color
         outColor += specular;

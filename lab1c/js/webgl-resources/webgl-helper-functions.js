@@ -142,6 +142,36 @@ export function generateCube() {
         14,2,5,
     ]);
 }
+export function generatePlane() {
+    return new Shape([
+        //Vertices (centered around 0,0,0)
+        -0.5,-0.5,0.0,
+        -0.5,0.5,0.0,
+        0.5,-0.5,0.0,
+        0.5,0.5,0.0,
+    ],
+    [
+        //Surface normals (vertex normals) corresponding to the indexed vertices
+        0.0,0.0,1.0,
+        0.0,0.0,1.0,
+        0.0,0.0,1.0,
+        0.0,0.0,1.0,
+    ],
+    [
+        //Colors
+        0.231, 0.361, 0.361,1.0,
+        0.231, 0.361, 0.361,1.0,
+        0.231, 0.361, 0.361,1.0,
+        0.231, 0.361, 0.361,1.0,
+    ],
+    [
+        //indices
+        //front
+        0,3,1,
+        0,2,3
+        
+    ]);
+}
 
 export function generatePyramid() {
     return new Shape([
