@@ -22,6 +22,10 @@ const main = async () => {
     const colorPlane = [0.231, 0.361, 0.361, 1.0];
     const colorWall1 = [0.529, 0, 0.529,1.0];
     const colorWall2 = [0.231, 0, 0.231,1.0];
+    //additional scaling on per block basis
+    const b3 = 3.0;
+    const b5 = 5.0;
+
     //rows starting from origin (middle of plane), 
     //negate row values for lower half of plane
     const r0 = 0.0;
@@ -79,12 +83,13 @@ const main = async () => {
     let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
 
     temp.scale(...defaultScale);
+    temp.scale(3);
     temp.translate(c0,r1);
     objects.push(temp);
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
     temp.scale(...defaultScale);
-    temp.translate(c0,r3);
+    temp.translate(-c2,r2);
     objects.push(temp);
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
@@ -159,82 +164,6 @@ const main = async () => {
                      
             }
         }
-    });
-
-    //Mouse drag listeners
-    canvas.addEventListener('mousedown', function(event) {
-        if(moveCamera) {
-            beingDragged = true;
-            //transform browser coordinates to 0-1 coordiante system
-            xMouseLast = (event.clientX - canvas.offsetLeft) / canvas.clientWidth;
-            yMouseLast = (event.clientY - canvas.offsetTop) / canvas.clientHeight;
-        }
-    });
-
-    canvas.addEventListener('mousemove', function(event) {
-        if(moveCamera && beingDragged) {
-            //calculate vector after normalizing coordinates
-            const movementX = (event.clientX - canvas.offsetLeft) / canvas.clientWidth - xMouseLast;
-            const movementY = (event.clientY - canvas.offsetTop) / canvas.clientHeight - yMouseLast;
-            
-            //apply movement and scale size relative to camera z position
-            global.translateCamera(movementX*-global.camera.eye[2],movementY*global.camera.eye[2]);
-            
-            //update point
-            xMouseLast += movementX;
-            yMouseLast += movementY;
-        }
-    });
-
-    //so that even if the mouse gets out of the canvas, the movement is stopped window is used
-    window.addEventListener('mouseup', function(event) {
-        beingDragged = false;
-    });
-
-    //Read in .obj files
-
-    objFileButton.addEventListener('click', function(event) { if(selected > 0) { fileSource.click()}});
-
-    fileSource.addEventListener('change', async function(event) {
-        if(selected < 1) {
-            return;
-        }
-        const file = await (event.target.files[0].text());
-
-        const newShape = parser.parseObjectFromString(file);
-
-        switch(selected) {
-            case 1:
-                newShape.translate(-3.0,3.0);
-                break;
-            case 2:
-                newShape.translate(u,3.0);
-                break;
-            case 3:
-                newShape.translate(3.0,3.0);
-                break;
-            case 4:
-                newShape.translate(-3.0);
-                break;
-            case 6:
-                newShape.translate(3.0);
-                break;
-            case 7:
-                newShape.translate(-3.0,-3.0);
-                break;
-            case 8:
-                newShape.translate(u,-3.0);
-                break;
-            case 9:
-                newShape.translate(3.0,-3.0);
-                break;
-        }
-        
-        for (let i = 0; i < shaders.length; i++) {
-            newShape.init(gl, shaders[i]);
-        }
-
-        objects[(selected-1)] = newShape;
     });
 
 

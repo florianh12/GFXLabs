@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <h1>Lab 1b - Shading</h1>
+        <h1>Lab 1c - Pacman</h1>
         <div style="columns: 2;">
             <div style="display: flex; justify-content: center;">
                 <canvas id="c"></canvas>
@@ -26,39 +26,11 @@
                         <li>t Phong, Phong illumination model (+ specular)</li>
                     </ul>
             </div>
-            <button id="objFileButton">Add .obj file</button>
-            <input id="fileSource" type="file" accept=".obj" hidden>
         </div>
 
         <div style="margin-top: 20px;">
             <b>Objects</b>
-            <p>Selected by pressing 1-9, 0 selects all objects. All transformations only apply for selected objects.</p>
-
-            <div style="columns: 2;">
-                <div>
-                    <i>Scaling</i>
-                    <ul>
-                        <li>a decreases the width (x-axis) by a factor of 0.9</li>
-                        <li>A inecreases the width (x-axis) by a factor of 1.1</li>
-                        <li>b decreases the height (y-axis) by a factor of 0.9</li>
-                        <li>B inecreases the height (y-axis) by a factor of 1.1</li>
-                        <li>c decreases the depth (z-axis) by a factor of 0.9</li>
-                        <li>C inecreases the depth (z-axis) by a factor of 1.1</li>
-                    </ul>
-                </div>
-                <div>
-                    <i>Rotation</i>
-                    <ul>
-                        <li>i rotates the selection clockwise around the x-axis by 1 degree</li>
-                        <li>k rotates the selection counterclockwise around the x-axis by 1 degree</li>
-                        <li>o rotates the selection clockwise around the y-axis by 1 degree</li>
-                        <li>u rotates the selection counterclockwise around the y-axis by 1 degree</li>
-                        <li>l rotates the selection clockwise around the z-axis by 1 degree</li>
-                        <li>j rotates the selection counterclockwise around the z-axis by 1 degree</li>
-                    </ul>
-                </div>
-            </div>
-            
+            <p>Selected by pressing 1-9, 0 selects all objects. All transformations only apply for selected objects.</p>            
 
             <i>Translation</i>
             <p>The translation is applied to the selection by using the arrow keys and ',' for forward translation and '.' for backward translation as long as camera movement is disabled</p>
