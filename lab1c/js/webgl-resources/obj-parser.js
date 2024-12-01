@@ -33,8 +33,8 @@ export class OBJParser {
         this.colors = [];
     }
 
-    async parseObjectFromFile(filePath) {
-       return this.parseObjectFromString(await (fetch(filePath).then(file => file.text())));
+    async parseObjectFromFile(filePath,color=[0.0,1.0,1.0,1.0]) {
+       return this.parseObjectFromString(await (fetch(filePath).then(file => file.text())),color);
     }
 
     /**
@@ -123,13 +123,13 @@ export class OBJParser {
         }
     }
 
-    generateIndicesFromMap() {
+    generateIndicesFromMap(color) {
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
             if (!this.vertexMap.has(indicesString)) {
                 this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
                 this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
-                this.colors.push(...[0.0,1.0,1.0,1.0]);
+                this.colors.push(...color);
                 this.indices.push(this.vertexMap.size);
                 this.vertexMap.set(indicesString,this.vertexMap.size);
             } else {
@@ -140,11 +140,12 @@ export class OBJParser {
 
     /**
      * 
-     * @param {String} string 
+     * @param {String} string
+     * @param {[]} color 
      * 
      * @returns {Shape}
      */
-    parseObjectFromString(string) {
+    parseObjectFromString(string,color) {
         //clear all values
         this.reset();
 
@@ -167,7 +168,7 @@ export class OBJParser {
 
         this.normalize();
 
-        this.generateIndicesFromMap();
+        this.generateIndicesFromMap(color);
         console.log(this.rawVertices,this.rawVertexIndices,this.rawNormals,this.rawNormalIndices);
         console.log("After modification",this.vertices.length,this.normals.length,this.colors.length,this.indices.length,this.vertexMap.size)
         return new Shape(this.vertices,this.normals,this.colors,this.indices);
