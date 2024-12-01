@@ -97,9 +97,9 @@ export class OBJParser {
         const yOffset = (this.max[1] + this.min[1])/2;
         const zOffset = (this.max[2] + this.min[2])/2;
 
-        const xScale = 1.0/(this.max[0] - this.min[0]);
-        const yScale = 1.0/(this.max[1] - this.min[1]);
-        const zScale = 1.0/(this.max[2] - this.min[2]);
+        const xScale = (this.max[0] - this.min[0]) ? 1.0/(this.max[0] - this.min[0]) : 1.0;
+        const yScale = (this.max[1] - this.min[1]) ? 1.0/(this.max[1] - this.min[1]) : 1.0;
+        const zScale = (this.max[2] - this.min[2]) ? 1.0/(this.max[2] - this.min[2]) : 1.0;
 
         const scalar = Math.max(xScale,yScale,zScale);
 
