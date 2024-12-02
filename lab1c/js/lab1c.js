@@ -134,8 +134,62 @@ const main = async () => {
 
     temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
     temp.scale(...defaultScale);
-    temp.translate(-c9,r6)
+    temp.translate(-c7,r6);
+    temp.scale(b3);
     objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(c9,-r2);
+    temp.scale(u,b7);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(-c9,r0);
+    temp.scale(u,b7);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(-c6,r4);
+    temp.scale(b3);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(-c6,r2);
+    temp.scale(u,b3);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(-c8,r2);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    temp.scale(...defaultScale);
+    temp.translate(-c7,-r3);
+    temp.scale(u,b5);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(-c9,-r6);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(-c4,-r5);
+    temp.scale(b5);
+    objects.push(temp);
+
+    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    temp.scale(...defaultScale);
+    temp.translate(-c5,-r1);
+    temp.scale(u,b5);
+    objects.push(temp);
+
 
     var canvas = document.querySelector("#c");
     var gl = canvas.getContext("webgl2");
