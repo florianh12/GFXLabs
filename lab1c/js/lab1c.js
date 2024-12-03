@@ -5,6 +5,7 @@ import { Global } from './webgl-resources/global.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
 import { ShadowMap } from './webgl-resources/shadowmap.js';
 import { AnimatedShape } from './webgl-resources/animatedShape.js';
+import { LargeAnimatedShape } from './webgl-resources/largeAnimatedShape.js';
 
 
 
@@ -43,11 +44,12 @@ const main = async () => {
     objects.push(await parser.parseObjectFromFile('./sampleModels/bunny.obj'));
     objects[2].translate(3.0,3.0);
 
-    objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
+    objects.push(await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp60.obj'));
     objects[3].translate(-3.0);
 
-    objects.push(new AnimatedShape(100));
+    objects.push(new LargeAnimatedShape(1,100,'./sampleModels/pacmanAnimation/pacman_chomp'));
     //new AnimatedShape(50, await parser.parseObjectFromFile('./sampleModels/pacmanAnimation/pacman_chomp1.obj'))
+    //objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
 
     objects.push(await parser.parseObjectFromFile('./sampleModels/teapot.obj'));
     objects[5].translate(3.0);

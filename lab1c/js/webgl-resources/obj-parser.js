@@ -27,6 +27,8 @@ export class OBJParser {
     zScale = 0;
 
     indexOffset = 0;
+    frame_offsets = [];
+    index_counts = [];
 
     #reset() {
         this.min = [0.0,0.0,0.0];
@@ -52,16 +54,18 @@ export class OBJParser {
         this.yScale = 0;
         this.zScale = 0;
         this.indexOffset = 0;
+        this.frame_offsets = [];
+        this.index_counts = [];
     }
 
     async parseObjectFromFile(filePath) {
        return this.parseObjectFromString(await (fetch(filePath).then(file => file.text())));
     }
 
-    async parseAnimationFromFiles(frame_count,filePath) {
+    async parseAnimationFromFiles(startFrame,endFrame,filePath) {
         let obj_strings = [];
-        for(let i = 0; i < this.frame_count; i++) {
-            obj_strings.push(await (fetch(this.filename+String(i+1)+'.obj').then(file => file.text())));   
+        for(let i = startFrame; i < endFrame+1; i++) {
+            obj_strings.push(await (fetch(filePath+String(i)+'.obj').then(file => file.text())));   
         } 
 
         return this.#parseAnimationFromString(obj_strings);
@@ -157,6 +161,7 @@ export class OBJParser {
 
     #generateIndicesFromMap() {
         this.vertexMap.clear();
+        this.frame_offsets.push(this.indices.length);
         for(let i = 0; i < this.rawVertexIndices.length; i++) {
             const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
             if (!this.vertexMap.has(indicesString)) {
@@ -169,6 +174,7 @@ export class OBJParser {
                 this.indices.push(this.vertexMap.get(indicesString));
             }
         }
+        this.index_counts.push(this.indices.length-this.frame_offsets[this.frame_offsets.length-1]);
         this.indexOffset += this.vertexMap.size;
     }
 
@@ -210,40 +216,32 @@ export class OBJParser {
      * 
      * @param {String[]} strings 
      * 
-     * @returns {[Float32Array,Float32Array,Uint16Array]}
+     * @returns {[Float32Array,Float32Array,Float32Array,Uint16Array,Uint16Array,Uint16Array]}
      */
     #parseAnimationFromString(strings) {
         //clear all values
+        
+        let shapes = [];
+        let indexOffsets = []; 
+        for (let i = 0; i < strings.length; i++) {
+            shapes.push(this.parseObjectFromString(strings[i]));
+            indexOffsets.push(this.vertexMap.size);
+        } 
+
         this.#reset();
 
-        for (let i = 0; i < strings.length; i++) {
-            //split string into lines
-            const data = strings[i].split('\n');
-
-            for (let i = 0; i < data.length; i++) {
-                const line = data[i].split(' ');
-
-                if (line[0] == 'v') {
-                    this.#parseVertex(line);
-
-                } else if (line[0] == 'vn') {
-                    this.#parseNormal(line);
-
-                } else if (line[0] == 'f') {
-                    this.#parseFace(line);
-                }
+        for (let i = 0; i < shapes.length; i++) {
+            this.frame_offsets.push(this.indices.length);
+            this.vertices.push(...shapes[i].vertices);
+            this.normals.push(...shapes[i].normals);
+            this.colors.push(...shapes[i].colors);
+            for (let j = 0; j < shapes[i].indices.length; j++) {
+                this.indices.push(shapes[i].indices[j]+this.indexOffset);
             }
-
-            this.#normalize();
-
-            if(this.new_object) {
-                this.new_object = false;
-            }
-
-            this.#generateIndicesFromMap();
-        } 
-        
-        return [this.vertices,this.normals,this.colors,this.indices];
+            this.index_counts.push(shapes[i].indices.length);
+            this.indexOffset += indexOffsets[i];
+        }
+        return [this.vertices,this.normals,this.colors,this.indices,this.frame_offsets,this.index_counts];
         
     }
 }

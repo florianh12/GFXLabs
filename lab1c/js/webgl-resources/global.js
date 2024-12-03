@@ -20,7 +20,6 @@ export class Global {
     constructor() {
         this.updateGlobalModelViewMatrix();
         this.updateGlobalLightProjectionModelViewMatrix();
-        console.log("ViewMatrixTest:",glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(1.0,0.0,2.0),glm.vec3.fromValues(1.0,1.0,0.0),glm.vec3.fromValues(0.0,1.0,0.0)));
     }
 
     initProjectionMatrix(clientWidth,clientHeight) {
@@ -31,7 +30,6 @@ export class Global {
             0.1,//zNear
             2000.0//zFar
         );
-        console.log("Orthographic Projection:",glm.mat4.orthoNO(glm.mat4.create(),-1.0,1.0,-1.0,1.0,0.1,100.0));
         //create light projection matrix
         const lightProjectionMatrix = glm.mat4.create();
 
