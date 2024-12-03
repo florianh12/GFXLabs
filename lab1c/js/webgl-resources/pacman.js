@@ -9,7 +9,7 @@ export class Pacman {
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.0;//0.03
+    translationRate = 0.03;//0.03
     changeDir = 0;
     changeDegrees = 0;
     currentRowPos = 0.0;
