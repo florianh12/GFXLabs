@@ -169,8 +169,6 @@ export class OBJParser {
         this.normalize();
 
         this.generateIndicesFromMap(color);
-        console.log(this.rawVertices,this.rawVertexIndices,this.rawNormals,this.rawNormalIndices);
-        console.log("After modification",this.vertices.length,this.normals.length,this.colors.length,this.indices.length,this.vertexMap.size)
         return new Shape(this.vertices,this.normals,this.colors,this.indices);
         
     }
