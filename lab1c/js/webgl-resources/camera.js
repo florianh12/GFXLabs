@@ -4,7 +4,7 @@ import { ShearXY } from './webgl-helper-functions.js';
 export class Camera {
     //needs to be reset to 0.0,0.0,8.0 and 0.0,0.0,-1.0
     eye = glm.vec3.fromValues(0.0,0.0,20.0);//20
-    shearMatrix = ShearXY(0.5,0.9);
+    shearMatrix = ShearXY(1.0,1.5);
 
     constructor() {
         this.viewMatrix = this.initViewMatrix(this.eye);

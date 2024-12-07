@@ -77,6 +77,7 @@ const main = async () => {
     var pacmanShape = new PacmanShapeController();
     const pacman = new Pacman(global,pacmanShape);
 
+    global.toggleShear();
 
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
