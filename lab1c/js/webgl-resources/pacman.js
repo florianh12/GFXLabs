@@ -33,6 +33,7 @@ export class Pacman {
         this.degreeMap.set(1,270);
         this.degreeMap.set(4,180);
         this.degreeMap.set(2,90);
+        this.rotationStepSize = 10;
         //movement
         setInterval(this.move.bind(this),10);
     }
@@ -47,6 +48,12 @@ export class Pacman {
         }
             this.targetAngle = this.degreeMap.get(newDirection);
 
+            if(Math.sign(calculateRotationDegrees(this.currentAngle,this.targetAngle)) == -1) {
+                this.rotationStepSize = Math.abs(this.rotationStepSize);
+            } else {
+                this.rotationStepSize = Math.abs(this.rotationStepSize)*(-1);
+            }
+            console.log(calculateRotationDegrees(this.currentAngle,this.targetAngle));
             this.changeDir = newDirection;
     }
 
@@ -86,7 +93,12 @@ export class Pacman {
         if(this.currentAngle != this.targetAngle) {
             this.shape.rotate("z",this.rotationStepSize);
             this.currentAngle += this.rotationStepSize;
-            this.currentAngle = this.currentAngle % 360; 
+            if( this.currentAngle >= 360) {
+                this.currentAngle -= 360;
+            } else if (this.currentAngle < 0){
+                this.currentAngle += 360;
+            }
+            console.log("current",this.currentAngle);
 
         }
     }
