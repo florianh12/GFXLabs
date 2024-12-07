@@ -280,10 +280,40 @@ export function calculateRotationDegrees(currentAngle,targetAngle) {
  * 
  * @returns {mat4} 
  */
-export function ShearXY(x_shear, y_shear) {
+export function shearXY(x_shear, y_shear) {
     const shearingMatrix = glm.mat4.create();
     shearingMatrix[8] = x_shear;
     shearingMatrix[9] = y_shear;
+
+    return shearingMatrix;
+}
+
+/**
+ * 
+ * @param {Number} x_shear 
+ * @param {Number} z_shear
+ * 
+ * @returns {mat4} 
+ */
+export function shearXZ(x_shear, z_shear) {
+    const shearingMatrix = glm.mat4.create();
+    shearingMatrix[4] = x_shear;
+    shearingMatrix[6] = z_shear;
+
+    return shearingMatrix;
+}
+
+/**
+ * 
+ * @param {Number} y_shear 
+ * @param {Number} z_shear
+ * 
+ * @returns {mat4} 
+ */
+export function shearYZ(y_shear, z_shear) {
+    const shearingMatrix = glm.mat4.create();
+    shearingMatrix[1] = y_shear;
+    shearingMatrix[2] = z_shear;
 
     return shearingMatrix;
 }
