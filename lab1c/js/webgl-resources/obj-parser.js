@@ -218,43 +218,15 @@ export class OBJParser {
         
     }
 
-    async parseTextureData(filePath) {
-       //read in image as blob and convert it into bitmap
-        let blob = await (fetch(filePath).then(file => file.blob()));
-        let bitmap = await createImageBitmap(blob);
-        
-        //draw bitmap on offscreen canvas to retrieve data
-        let canvas = new OffscreenCanvas(bitmap.width,bitmap.height);
-        let context = canvas.getContext("2d");
-        context.drawImage(bitmap,0,0);
 
-        //get per pixel RGB color data
-        let contextDataWrapper = context.getImageData(0,0,canvas.width,canvas.height);
-        let data = contextDataWrapper.data;
-        
-
-        //normalize RGB data for WebGL format
-        for (let i = 0; i < data.length; i++) {
-            data[i] /= 255; 
-        }
-
-
-        //set object variables
-        this.textureWidth = canvas.width;
-        this.textureHeight = canvas.height;
-        this.textureData = data;
-        
-    }
-
-    async parsePacman(filePath,texture = true,color=[1.0,1.0,0.0,1.0]) {
+    async parsePacman(filePath,texture = true,textureFilePath = './sampleModels/Pacman/PacmanUpper.png', color=[1.0,1.0,0.0,1.0]) {
 
         let string =  await (fetch(filePath).then(file => file.text()));
         
 
         //clear all values
         this.reset();
-        //evtl, let 
-        await this.parseTextureData('./sampleModels/Pacman/PacmanUpper.png');
+
         //split string into lines
         const data = string.split('\n');
 
@@ -280,7 +252,7 @@ export class OBJParser {
         }
 
         this.generateIndicesFromMap(color, texture);
-        return new PacmanShape(this.vertices,this.normals,this.colors,this.indices,this.textureColorCoordinates,texture);
+        return new PacmanShape(this.vertices,this.normals,this.colors,this.indices,this.textureColorCoordinates,texture,textureFilePath);
 
      }
 }

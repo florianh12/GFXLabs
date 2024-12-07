@@ -7,12 +7,15 @@ export class PacmanShape extends Shape {
     textureColorCoordinates = [];
     texture_active = false;
     texture = -1;
+    textureFilePath = './sampleModels/Pacman/PacmanUpper.png';
 
-    constructor(vertices, normals, colors, indices, textureColorCoordinates, texture_active) {
+    constructor(vertices, normals, colors, indices, 
+        textureColorCoordinates, texture_active = false, textureFilePath = './sampleModels/Pacman/PacmanUpper.png') {
         super(vertices,normals,colors,indices);
 
         this.textureColorCoordinates = textureColorCoordinates;
         this.texture_active = texture_active;
+        this.textureFilePath = textureFilePath;
     }
 
     async init(gl, shader) {
@@ -20,7 +23,7 @@ export class PacmanShape extends Shape {
 
         if(this.texture_active) {
             this.bufferTextureColorCoordinates(gl, shader);
-            await this.bufferTexture(gl,'./sampleModels/Pacman/PacmanUpper.png');
+            await this.bufferTexture(gl,this.textureFilePath);
         }
 
         console.log(await loadTexture('./sampleModels/Pacman/PacmanUpper.png'));
