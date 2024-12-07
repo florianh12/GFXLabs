@@ -246,3 +246,9 @@ export function generatePyramid() {
         0,6,12,
     ]);
 }
+
+export const loadTexture = (filePath) => new Promise(resolve => {
+    const texture = new Image();
+    texture.addEventListener('load', () => resolve(texture));
+    texture.src = filePath;
+});

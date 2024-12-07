@@ -61,4 +61,6 @@ void main() {
     
     //Adjust final alpha value to 1.0
     outColor.a = 1.0;
+
+    //outColor = v_texture_color;
 }

@@ -23,6 +23,7 @@ export class OBJParser {
     textureData = [];
     textureWidth = [];
     textureHeight = [];
+    rawTextureColorCoordinates = [];
     textureColorCoordinates = [];
 
     reset() {
@@ -45,6 +46,7 @@ export class OBJParser {
         this.textureData = [];
         this.textureWidth = [];
         this.textureHeight = [];
+        this.rawTextureColorCoordinates = [];
         this.textureColorCoordinates = [];
     }
 
@@ -100,12 +102,9 @@ export class OBJParser {
      */
     parseColor(line) {
         const [x, y] = line.slice(1,3).map(Number);
-        let xScaled = Math.floor(x*(this.textureWidth));
-        let yScaled = Math.floor(y*(this.textureHeight));
         
-        this.textureColorCoordinates.push(xScaled);
-        this.textureColorCoordinates.push(yScaled);
-        this.rawColors.push(...this.textureData.slice((yScaled*this.textureWidth+xScaled*4), (yScaled*this.textureWidth+xScaled*4)+4));
+        this.rawTextureColorCoordinates.push(x);
+        this.rawTextureColorCoordinates.push(y);
     }
 
     /**
@@ -160,7 +159,8 @@ export class OBJParser {
                 if (!this.vertexMap.has(indicesString)) {
                     this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
                     this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
-                    this.colors.push(...this.rawColors.slice(this.rawColorIndices[i]*4,this.rawColorIndices[i]*4+4));
+                    this.colors.push(...color);
+                    this.textureColorCoordinates.push(...this.rawTextureColorCoordinates.slice(this.rawColorIndices[i]*2,this.rawColorIndices[i]*2 + 2))
                     this.indices.push(this.vertexMap.size);
                     this.vertexMap.set(indicesString,this.vertexMap.size);
                 } else {
@@ -258,13 +258,9 @@ export class OBJParser {
         //split string into lines
         const data = string.split('\n');
 
-        const loadImage = () => new Promise(resolve => {
-            const image = new Image();
-            image.addEventListener('load', () => resolve(image));
-            image.src = './sampleModels/Pacman/PacmanUpper.png';
-        });
         
-        console.log(await loadImage());
+        
+        //console.log(await loadImage());
 
         for (let i = 0; i < data.length; i++) {
             const line = data[i].split(' ');
@@ -284,8 +280,7 @@ export class OBJParser {
         }
 
         this.generateIndicesFromMap(color, texture);
-        console.log(this.textureColorCoordinates,this.rawColors.length/4, this.rawColorIndices.length, this.rawVertexIndices.length);
-        return new PacmanShape(this.vertices,this.normals,this.colors,this.indices);
+        return new PacmanShape(this.vertices,this.normals,this.colors,this.indices,this.textureColorCoordinates,texture);
 
      }
 }

@@ -6,6 +6,7 @@ export class Shader {
     aColorLocation = -2;
     aPositionLocation = -2;
     aVertexNormalLocation = -2;
+    aTextureColorCoordinatesLocation = -2;
     uViewMatrixLocation = -2;
     uProjectionMatrixLocation = -2;
     uGlobalTransformationMatrixLocation = -2;
@@ -14,6 +15,8 @@ export class Shader {
     uLightAmbientLocation = -2;
     uLightDiffuseLocation = -2;
     uLightSpecularLocation = -2;
+    uTextureLocation = -2;
+    uTextureActiveLocation = -2;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -28,6 +31,8 @@ export class Shader {
         this.aPositionLocation = gl.getAttribLocation(this.program, 'a_position');
 
         this.aColorLocation = gl.getAttribLocation(this.program, 'a_color');
+
+        this.aTextureColorCoordinateLocation = gl.getAttribLocation(this.program, 'a_texture_color_coordinate');
         
         this.aVertexNormalLocation = gl.getAttribLocation(this.program, 'a_vertex_normal');
         
@@ -48,5 +53,9 @@ export class Shader {
         this.uDiffuseLocation = gl.getUniformLocation(this.program, 'u_diffuse');
 
         this.uSpecularLocation = gl.getUniformLocation(this.program, 'u_specular');
+
+        this.uTextureLocation = gl.getUniformLocation(this.program, 'u_texture');
+
+        this.uTextureActiveLocation = gl.getUniformLocation(this.program, 'u_texture_active');
     }
 }

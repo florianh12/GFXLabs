@@ -4,6 +4,7 @@
 // It will receive data from a buffer
 in vec4 a_position;
 in vec4 a_color;
+in vec2 a_texture_color_coordinate;
 in vec3 a_vertex_normal;
 
 // A matrix to transform the positions by
@@ -16,6 +17,7 @@ uniform vec4 u_light_specular;
 uniform bool u_ambient;
 uniform bool u_diffuse;
 uniform bool u_specular;
+uniform sampler2D u_texture;
 
 // a varying the color to the fragment shader
 out vec4 v_color;

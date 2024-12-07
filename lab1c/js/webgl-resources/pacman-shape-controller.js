@@ -18,7 +18,7 @@ export class PacmanShapeController extends Shape {
     }
 
     async init(gl,shader) {
-        this.upper = await this.parser.parsePacman('./sampleModels/Pacman/PacmanUpper.obj',false);
+        this.upper = await this.parser.parsePacman('./sampleModels/Pacman/PacmanUpper.obj');
         this.lower = await this.parser.parsePacman('./sampleModels/Pacman/PacmanLower.obj', false);
 
         await this.upper.init(gl,shader);
