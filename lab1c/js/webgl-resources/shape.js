@@ -31,7 +31,7 @@ export class Shape {
         this.updateModelMatrix();
     }
 
-    init(gl, shader) {
+    async init(gl, shader) {
         this.initializeVAO(gl);
         this.bufferVertexData(gl, shader);
         this.bufferColorData(gl, shader);

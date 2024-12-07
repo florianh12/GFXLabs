@@ -9,7 +9,7 @@ export class Pacman {
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.03;//0.03
+    translationRate = 0.0;//0.03
     changeDir = 0;
     changeDegrees = 0;
     currentRowPos = 0.0;
@@ -48,7 +48,7 @@ export class Pacman {
 
     move() {
         
-        this.shape.translate(0.0,0.0,this.translationRate);
+        //this.shape.translate(0.0,0.0,this.translationRate);
         switch(this.direction){
             case 1:
                 this.global.translateCamera(0.0,this.translationRate);
@@ -71,7 +71,7 @@ export class Pacman {
             this.currentRowPos = 0.0;
         }
         if(this.changeDir != 0 && this.currentRowPos == 0.0) {
-            this.shape.rotate("y",this.changeDegrees);
+            //this.shape.rotate("y",this.changeDegrees);
             this.direction = this.changeDir;
             this.changeDir = 0;
         }

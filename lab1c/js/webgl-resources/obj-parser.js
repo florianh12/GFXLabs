@@ -1,4 +1,5 @@
 import { distance } from "../gl-matrix/dist/esm/vec3.js";
+import { PacmanShape } from "./pacman-shape.js";
 import { Shape } from "./shape.js";
 
 export class OBJParser {
@@ -9,13 +10,20 @@ export class OBJParser {
 
     rawVertices = [];
     rawNormals = [];
+    rawColors = [];
     rawVertexIndices = [];
     rawNormalIndices = [];
+    rawColorIndices =[];
     
     vertices = [];
     normals = [];
     indices = [];
     colors = [];
+
+    textureData = [];
+    textureWidth = [];
+    textureHeight = [];
+    textureColorCoordinates = [];
 
     reset() {
         this.min = [0.0,0.0,0.0];
@@ -24,13 +32,20 @@ export class OBJParser {
 
         this.rawVertices = [];
         this.rawNormals = [];
+        this.rawColors = [];
         this.rawVertexIndices = [];
         this.rawNormalIndices = [];
+        this.rawColorIndices = [];
         
         this.vertices = [];
         this.normals = [];
         this.indices = [];
         this.colors = [];
+
+        this.textureData = [];
+        this.textureWidth = [];
+        this.textureHeight = [];
+        this.textureColorCoordinates = [];
     }
 
     async parseObjectFromFile(filePath,color=[0.0,1.0,1.0,1.0]) {
@@ -83,12 +98,27 @@ export class OBJParser {
      * 
      * @param {String[]} line 
      */
+    parseColor(line) {
+        const [x, y] = line.slice(1,3).map(Number);
+        let xScaled = Math.floor(x*(this.textureWidth));
+        let yScaled = Math.floor(y*(this.textureHeight));
+        
+        this.textureColorCoordinates.push(xScaled);
+        this.textureColorCoordinates.push(yScaled);
+        this.rawColors.push(...this.textureData.slice((yScaled*this.textureWidth+xScaled*4), (yScaled*this.textureWidth+xScaled*4)+4));
+    }
+
+    /**
+     * 
+     * @param {String[]} line 
+     */
     parseFace(line) {
         for (let i = 1; i < line.length; i++) {
-            const [vertexIndex,,normalIndex] = line[i].split('/').map(Number);
+            const [vertexIndex,colorIndex,normalIndex] = line[i].split('/').map(Number);
 
             this.rawVertexIndices.push(vertexIndex-1);
             this.rawNormalIndices.push(normalIndex-1);
+            this.rawColorIndices.push(colorIndex-1);
         }
     }
 
@@ -123,17 +153,32 @@ export class OBJParser {
         }
     }
 
-    generateIndicesFromMap(color) {
-        for(let i = 0; i < this.rawVertexIndices.length; i++) {
-            const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
-            if (!this.vertexMap.has(indicesString)) {
-                this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
-                this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
-                this.colors.push(...color);
-                this.indices.push(this.vertexMap.size);
-                this.vertexMap.set(indicesString,this.vertexMap.size);
-            } else {
-                this.indices.push(this.vertexMap.get(indicesString));
+    generateIndicesFromMap(color,texture = false) {
+        if(texture) {
+            for(let i = 0; i < this.rawVertexIndices.length; i++) {
+                const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]},${this.rawColorIndices[i]}`;
+                if (!this.vertexMap.has(indicesString)) {
+                    this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
+                    this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
+                    this.colors.push(...this.rawColors.slice(this.rawColorIndices[i]*4,this.rawColorIndices[i]*4+4));
+                    this.indices.push(this.vertexMap.size);
+                    this.vertexMap.set(indicesString,this.vertexMap.size);
+                } else {
+                    this.indices.push(this.vertexMap.get(indicesString));
+                }
+            }
+        } else {
+            for(let i = 0; i < this.rawVertexIndices.length; i++) {
+                const indicesString = `${this.rawVertexIndices[i]},${this.rawNormalIndices[i]}`;
+                if (!this.vertexMap.has(indicesString)) {
+                    this.vertices.push(...this.rawVertices.slice(this.rawVertexIndices[i]*3, this.rawVertexIndices[i]*3 +3));
+                    this.normals.push(...this.rawNormals.slice(this.rawNormalIndices[i]*3,this.rawNormalIndices[i]*3+3));
+                    this.colors.push(...color);
+                    this.indices.push(this.vertexMap.size);
+                    this.vertexMap.set(indicesString,this.vertexMap.size);
+                } else {
+                    this.indices.push(this.vertexMap.get(indicesString));
+                }
             }
         }
     }
@@ -172,4 +217,75 @@ export class OBJParser {
         return new Shape(this.vertices,this.normals,this.colors,this.indices);
         
     }
+
+    async parseTextureData(filePath) {
+       //read in image as blob and convert it into bitmap
+        let blob = await (fetch(filePath).then(file => file.blob()));
+        let bitmap = await createImageBitmap(blob);
+        
+        //draw bitmap on offscreen canvas to retrieve data
+        let canvas = new OffscreenCanvas(bitmap.width,bitmap.height);
+        let context = canvas.getContext("2d");
+        context.drawImage(bitmap,0,0);
+
+        //get per pixel RGB color data
+        let contextDataWrapper = context.getImageData(0,0,canvas.width,canvas.height);
+        let data = contextDataWrapper.data;
+        
+
+        //normalize RGB data for WebGL format
+        for (let i = 0; i < data.length; i++) {
+            data[i] /= 255; 
+        }
+
+
+        //set object variables
+        this.textureWidth = canvas.width;
+        this.textureHeight = canvas.height;
+        this.textureData = data;
+        
+    }
+
+    async parsePacman(filePath,texture = true,color=[1.0,1.0,0.0,1.0]) {
+
+        let string =  await (fetch(filePath).then(file => file.text()));
+        
+
+        //clear all values
+        this.reset();
+        //evtl, let 
+        await this.parseTextureData('./sampleModels/Pacman/PacmanUpper.png');
+        //split string into lines
+        const data = string.split('\n');
+
+        const loadImage = () => new Promise(resolve => {
+            const image = new Image();
+            image.addEventListener('load', () => resolve(image));
+            image.src = './sampleModels/Pacman/PacmanUpper.png';
+        });
+        
+        console.log(await loadImage());
+
+        for (let i = 0; i < data.length; i++) {
+            const line = data[i].split(' ');
+
+            if (line[0] == 'v') {
+                this.parseVertex(line);
+
+            } else if (line[0] == 'vn') {
+                this.parseNormal(line);
+
+            } else if (line[0] == 'vt' && texture) {
+                this.parseColor(line);
+
+            } else if (line[0] == 'f') {
+                this.parseFace(line);
+            }
+        }
+
+        this.generateIndicesFromMap(color, texture);
+        console.log(this.textureColorCoordinates,this.rawColors.length/4, this.rawColorIndices.length, this.rawVertexIndices.length);
+        return new PacmanShape(this.vertices,this.normals,this.colors,this.indices);
+
+     }
 }
