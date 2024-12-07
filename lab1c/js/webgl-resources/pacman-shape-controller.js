@@ -3,7 +3,7 @@ import { OBJParser } from "./obj-parser.js";
 import { Shape } from "./shape.js";
 
 export class PacmanShapeController extends Shape {
-    maxAngle = 45;
+    maxAngle = 30;
     currentAngle = 0;
     changeRate = 1;
     direction = 1;
@@ -24,10 +24,6 @@ export class PacmanShapeController extends Shape {
         await this.upper.init(gl,shader);
         await this.lower.init(gl,shader);
 
-        this.upper.rotate("x",90);
-        this.lower.rotate("x",90);
-
-        this.translate(1,1);
         
         //console.log(this.modelMatrix);
     }
