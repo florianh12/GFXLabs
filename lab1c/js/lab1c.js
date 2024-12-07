@@ -77,6 +77,7 @@ const main = async () => {
     var pacmanShape = new PacmanShapeController();
     const pacman = new Pacman(global,pacmanShape);
 
+
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
     objects[0].rotate("x",180);
@@ -351,7 +352,9 @@ const main = async () => {
                 case 'ArrowDown':
                     pacman.translate(2);
                     break;
-                     
+                case 'v':
+                    global.toggleShear();
+                    break;
             }
         }
     });

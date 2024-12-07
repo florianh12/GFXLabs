@@ -13,6 +13,7 @@ export class Global {
     translationMatrix = glm.mat4.create();
     globalModelViewMatrix = glm.mat4.create();
     diffuse_only = false;
+    shear_view = false;
     vao = -1;
     count = 0;
 
@@ -155,18 +156,27 @@ export class Global {
             this.camera.viewMatrix
         );
 
+        if(this.shear_view) {
+            glm.mat4.mul(
+                this.globalModelViewMatrix,
+                this.globalModelViewMatrix,
+                this.camera.shearMatrix
+            );
+        }
+        
+
         glm.mat4.mul(
             this.globalModelViewMatrix,
             this.globalModelViewMatrix,
             this.scalingMatrix
-        )
+        );
 
         //add rotation
         glm.mat4.mul(
             this.globalModelViewMatrix,
             this.globalModelViewMatrix,
             this.rotationMatrix
-        )
+        );
 
         //adds translation
         glm.mat4.multiply(
@@ -243,5 +253,11 @@ export class Global {
         //actual drawcall
         gl.drawArrays(gl.LINES,0,6);
 
+    }
+
+    toggleShear() {
+        this.shear_view = !this.shear_view;
+
+        this.updateGlobalModelViewMatrix();
     }
 }

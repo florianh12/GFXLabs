@@ -1,3 +1,5 @@
+import * as glm from '../gl-matrix/dist/esm/index.js';
+
 import { Shape } from './shape.js';
 
 function createShader(gl, type, source) {
@@ -269,4 +271,19 @@ export function calculateRotationDegrees(currentAngle,targetAngle) {
     }
 
     return degrees;
+}
+
+/**
+ * 
+ * @param {Number} x_shear 
+ * @param {Number} y_shear
+ * 
+ * @returns {mat4} 
+ */
+export function ShearXY(x_shear, y_shear) {
+    const shearingMatrix = glm.mat4.create();
+    shearingMatrix[8] = x_shear;
+    shearingMatrix[9] = y_shear;
+
+    return shearingMatrix;
 }
