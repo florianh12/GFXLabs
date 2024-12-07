@@ -1,6 +1,7 @@
 import { set } from "../gl-matrix/dist/esm/mat2.js";
 import { Global } from "./global.js";
 import { Shape } from "./shape.js";
+import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 
 
 export class Pacman {
@@ -9,9 +10,11 @@ export class Pacman {
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.0;//0.03
+    translationRate = 0.03;//0.03
     changeDir = 0;
-    changeDegrees = 0;
+    currentAngle = 0;
+    targetAngle = 0;
+    rotationStepSize = 10;
     currentRowPos = 0.0;
     
 
@@ -42,24 +45,28 @@ export class Pacman {
         if(newDirection < 0 || newDirection > 4) {
             return;
         }
-            this.changeDegrees = this.degreeMap.get(this.direction)-this.degreeMap.get(newDirection);
+            this.targetAngle = this.degreeMap.get(newDirection);
+
             this.changeDir = newDirection;
     }
 
     move() {
         
-        //this.shape.translate(0.0,0.0,this.translationRate);
         switch(this.direction){
             case 1:
+                this.shape.translate(0.0,this.translationRate);
                 this.global.translateCamera(0.0,this.translationRate);
                 break;
             case 2:
+                this.shape.translate(0.0,-this.translationRate);
                 this.global.translateCamera(0.0,-this.translationRate);
                 break;
             case 3:
+                this.shape.translate(this.translationRate);
                 this.global.translateCamera(this.translationRate);
                 break;
             case 4:
+                this.shape.translate(-this.translationRate);
                 this.global.translateCamera(-this.translationRate);
                 break;
         }
@@ -69,11 +76,18 @@ export class Pacman {
         //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
         if(this.currentRowPos >= 1.5) {
             this.currentRowPos = 0.0;
+
+            if(this.changeDir != 0) {
+                this.direction = this.changeDir;
+                this.changeDir = 0;
+            }
+            
         }
-        if(this.changeDir != 0 && this.currentRowPos == 0.0) {
-            //this.shape.rotate("y",this.changeDegrees);
-            this.direction = this.changeDir;
-            this.changeDir = 0;
+        if(this.currentAngle != this.targetAngle) {
+            this.shape.rotate("z",this.rotationStepSize);
+            this.currentAngle += this.rotationStepSize;
+            this.currentAngle = this.currentAngle % 360; 
+
         }
     }
 }

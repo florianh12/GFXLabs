@@ -252,3 +252,21 @@ export const loadTexture = (filePath) => new Promise(resolve => {
     texture.addEventListener('load', () => resolve(texture));
     texture.src = filePath;
 });
+
+/**
+ * 
+ * @param {Number} currentAngle 
+ * @param {Number} targetAngle 
+ * 
+ * @returns {Number}
+ */
+export function calculateRotationDegrees(currentAngle,targetAngle) {
+    let degrees = currentAngle - targetAngle;
+    if(degrees > 180) {
+        degrees -= 360;
+    } else if (degrees < -180) {
+        degrees += 360;
+    }
+
+    return degrees;
+}
