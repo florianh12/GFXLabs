@@ -50,23 +50,19 @@ export class Pacman {
         if(newDirection < 0 || newDirection > 4) {
             return;
         }
-            this.targetAngle = this.degreeMap.get(newDirection);
 
-            if(Math.sign(calculateRotationDegrees(this.currentAngle,this.targetAngle)) == -1) {
-                this.rotationStepSize = Math.abs(this.rotationStepSize);
-            } else {
-                this.rotationStepSize = Math.abs(this.rotationStepSize)*(-1);
-            }
+            
+
             this.changeDir = newDirection;
     }
 
     /**
      * @returns {Number[]}
      */
-    calcCollisionPosition() {
+    calcCollisionPosition(inDirection) {
         //magic number 0.76, because 0.01 bigger than 1/2 grid entry size
         //prevents stepping into next grid cell, position is modified, depending on direction for adequate collission
-        switch(this.direction) {
+        switch(inDirection) {
             case 1:
                 return [this.position[0],this.position[1]+0.76];
                 break;
@@ -82,8 +78,8 @@ export class Pacman {
         }
     }
 
-    checkCollision() {
-        let collisionPosition = this.calcCollisionPosition();
+    checkCollision(inDirection) {
+        let collisionPosition = this.calcCollisionPosition(inDirection);
         
         
 
@@ -109,7 +105,19 @@ export class Pacman {
             this.currentRowPos = 0.0;
         }
 
-        if(this.changeDir != 0 && this.currentRowPos == 0.0) {
+        //initiate rotation if direction change possible
+        if (this.changeDir != 0 && this.targetAngle != this.degreeMap.get(this.changeDir) && !this.checkCollision(this.changeDir)) {
+            this.targetAngle = this.degreeMap.get(this.changeDir);
+
+            if(Math.sign(calculateRotationDegrees(this.currentAngle,this.targetAngle)) == -1) {
+                this.rotationStepSize = Math.abs(this.rotationStepSize);
+            } else {
+                this.rotationStepSize = Math.abs(this.rotationStepSize)*(-1);
+            }
+        }
+
+        //check if change direction is possible (when in center of cell and no collision in change direction)
+        if(this.changeDir != 0 && this.currentRowPos == 0.0 && !this.checkCollision(this.changeDir)) {
             this.direction = this.changeDir;
             this.changeDir = 0;
         }
@@ -123,7 +131,7 @@ export class Pacman {
                 this.currentAngle += 360;
             }
         }
-        if(!this.checkCollision()) {
+        if(!this.checkCollision(this.direction)) {
             switch(this.direction){
                 case 1:
                     this.shape.translate(0.0,this.translationRate);
