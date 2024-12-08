@@ -29,6 +29,7 @@ export class PacmanShape extends Shape {
     }
 
     async bufferTexture(gl, filePath) {
+        gl.activeTexture(gl.TEXTURE1);
         //flip texture y coordinates for webgl processing
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
             
@@ -84,7 +85,9 @@ export class PacmanShape extends Shape {
         gl.bindVertexArray(this.vao);
 
         if(this.texture_active) {
+            gl.activeTexture(gl.TEXTURE1);
             gl.bindTexture(gl.TEXTURE_2D, this.texture);
+            gl.uniform1i(shader.uTextureLocation, 0);
 
             gl.uniform1i(shader.uTextureActiveLocation, true);
         }

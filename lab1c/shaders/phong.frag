@@ -8,10 +8,12 @@ uniform vec4 u_light_specular;
 uniform bool u_ambient;
 uniform bool u_diffuse;
 uniform bool u_specular;
+uniform sampler2D u_shadow_map;
 
 // the color, projected vertex position and normal passed from the vertex shader
 in vec4 v_color;
 in vec3 v_projected_position;
+in vec3 v_projected_light_position;
 in vec3 v_projected_normal;
 // we need to declare an output for the fragment shader
 out vec4 outColor;
@@ -61,6 +63,10 @@ void main() {
     
     //Adjust final alpha value to 1.0
     outColor.a = 1.0;
+
+    if(texture(u_shadow_map,v_projected_light_position.xy).r <= v_projected_position.z) {
+        outColor = vec4(0.0,0.0,0.0,1.0);
+    }
 
     //outColor = v_texture_color;
 }

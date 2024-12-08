@@ -13,7 +13,7 @@ uniform mat4 u_view_matrix;
 uniform mat4 u_model_matrix;
 uniform mat3 u_normal_matrix;
 uniform sampler2D u_texture;
-uniform sampler2D u_shadow_map;
+
 uniform bool u_texture_active;
 uniform mat4 u_light_world_matrix;
 uniform mat4 u_light_projection_matrix;
@@ -22,11 +22,16 @@ uniform mat4 u_light_projection_matrix;
 
 // a varying the color to the fragment shader
 out vec4 v_color;
+out vec3 v_projected_light_position;
 out vec3 v_projected_position;
 out vec3 v_projected_normal;
 
 // all shaders have a main function
 void main() {
+
+    vec4 lightspace_pos = u_light_projection_matrix * u_light_world_matrix * u_model_matrix * a_position;
+
+    v_projected_light_position = lightspace_pos.xyz / lightspace_pos.w;
     
     if (u_texture_active) {
         v_color = texture(u_texture,a_texture_color_coordinate);

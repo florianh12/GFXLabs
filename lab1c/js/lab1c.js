@@ -76,245 +76,247 @@ const main = async () => {
 
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
-    objects[0].rotate("x",180);
-    objects[0].rotate("z",270);
+    objects[0].rotate("x",90);
+     //objects[0].rotate("x",180);
+    // objects[0].rotate("z",270);
 
     const drawLabyrinth = async () => {
         //Labyrinth floor
     objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
     objects[1].scale(16.5,12.0);
+    objects[1].rotate("x",-45);
     objects[1].translate(u,u,-0.5);
 
 
-    //create Labyrinth
+    // //create Labyrinth
 
-    //Borders
-    let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // //Borders
+    // let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
 
-    temp.scale(...defaultScale);
-    temp.scale(u,b15);
-    temp.translate(c10,r0);
-    objects.push(temp);
+    // temp.scale(...defaultScale);
+    // temp.scale(u,b15);
+    // temp.translate(c10,r0);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.scale(u,b15);
-    temp.translate(-c10,r0);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.scale(u,b15);
+    // temp.translate(-c10,r0);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.scale(b21);
-    temp.translate(c0,r7);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.scale(b21);
+    // temp.translate(c0,r7);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.scale(b21);
-    temp.translate(c0,-r7);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.scale(b21);
+    // temp.translate(c0,-r7);
+    // objects.push(temp);
 
-    //structure 1
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c7,r6);
-    temp.scale(b3);
-    objects.push(temp);
+    // //structure 1
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c7,r6);
+    // temp.scale(b3);
+    // objects.push(temp);
 
-    //structure 2
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.scale(b3,b3);
-    temp.translate(-c2,r4);
-    objects.push(temp);
+    // //structure 2
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.scale(b3,b3);
+    // temp.translate(-c2,r4);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c0,r5);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c0,r5);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c1,r5);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c1,r5);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c0,r6);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c0,r6);
+    // objects.push(temp);
 
-    //structure 3
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,r6);
-    temp.scale(b3);
-    objects.push(temp);
+    // //structure 3
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c4,r6);
+    // temp.scale(b3);
+    // objects.push(temp);
 
-    //structure 4
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c9,r0);
-    temp.scale(u,b7);
-    objects.push(temp);
+    // //structure 4
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c9,r0);
+    // temp.scale(u,b7);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c8,r2);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c8,r2);
+    // objects.push(temp);
 
-    //structure 5
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,r4);
-    temp.scale(b3);
-    objects.push(temp);
+    // //structure 5
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c6,r4);
+    // temp.scale(b3);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,r2);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c6,r2);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
-    //structure 6
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c1,r2);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // //structure 6
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c1,r2);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
-    //structure 7
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c4,r3);
-    temp.scale(b3,b3);
-    objects.push(temp);
+    // //structure 7
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c4,r3);
+    // temp.scale(b3,b3);
+    // objects.push(temp);
 
-    //structure 8
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c7,r2);
-    temp.scale(u,b7);
-    objects.push(temp);
+    // //structure 8
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c7,r2);
+    // temp.scale(u,b7);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c8,r4);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c8,r4);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
-    //structure 9
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c7,-r3);
-    temp.scale(u,b5);
-    objects.push(temp);
+    // //structure 9
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c7,-r3);
+    // temp.scale(u,b5);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c4,-r5);
-    temp.scale(b5);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c4,-r5);
+    // temp.scale(b5);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,-r3);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c6,-r3);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
-    //structure 10
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c4,-r0);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // //structure 10
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c4,-r0);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c3,-r1);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c3,-r1);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c2,r1);
-    temp.scale(b3);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c2,r1);
+    // temp.scale(b3);
+    // objects.push(temp);
 
-    //structure 11
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c1,-r1);
-    temp.scale(b5);
-    objects.push(temp);
-
-
-    //structure 12
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c5,-r3);
-    temp.scale(b3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c7,-r3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c5,-r1);
-    temp.scale(u,b3);
-    objects.push(temp);
+    // //structure 11
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c1,-r1);
+    // temp.scale(b5);
+    // objects.push(temp);
 
 
-    //structure 13
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c9,-r2);
-    temp.scale(u,b7);
-    objects.push(temp);
+    // //structure 12
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c5,-r3);
+    // temp.scale(b3);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c8,-r5);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c7,-r3);
+    // objects.push(temp);
+
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c5,-r1);
+    // temp.scale(u,b3);
+    // objects.push(temp);
 
 
-    //structure 14
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c9,-r6);
-    objects.push(temp);    
+    // //structure 13
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c9,-r2);
+    // temp.scale(u,b7);
+    // objects.push(temp);
+
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c8,-r5);
+    // objects.push(temp);
+
+
+    // //structure 14
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c9,-r6);
+    // objects.push(temp);    
 
     
 
-    //structure 15
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c1,-r3);
-    temp.scale(b7);
-    objects.push(temp);
+    // //structure 15
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(-c1,-r3);
+    // temp.scale(b7);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c0,-r4);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c0,-r4);
+    // objects.push(temp);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c0,-r5);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+    // temp.scale(...defaultScale);
+    // temp.translate(c0,-r5);
+    // objects.push(temp);
 
-    //structure 16
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,-r5);
-    temp.scale(b5);
-    objects.push(temp);
+    // //structure 16
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c4,-r5);
+    // temp.scale(b5);
+    // objects.push(temp);
     
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,-r6);
-    objects.push(temp);
+    // temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+    // temp.scale(...defaultScale);
+    // temp.translate(c4,-r6);
+    // objects.push(temp);
     }
 
     await drawLabyrinth();
@@ -382,45 +384,54 @@ const main = async () => {
         }
     });
 
+    //init Texture
+    gl.activeTexture(gl.TEXTURE0);
+    const depthTexture = gl.createTexture();
+    const depthTextureSize = 2000;
+    gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+    gl.texImage2D(
+        gl.TEXTURE_2D,      // target
+        0,                  // mip level
+        gl.DEPTH_COMPONENT32F, // internal format
+        depthTextureSize,   // width
+        depthTextureSize,   // height
+        0,                  // border
+        gl.DEPTH_COMPONENT, // format
+        gl.FLOAT,           // type
+        null);              // data
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
 
     const draw = () => {
+        // first draw from the POV of the light
+        const lightWorldMatrix = glm.mat4.lookAt(glm.mat4.create(),
+            glm.vec3.fromValues(0.0,10.0,10.0),
+            glm.vec3.fromValues(0.0,0.0,0.0), 
+            glm.vec3.fromValues(0.0,1.0,0.0));
+
+        const lightProjectionMatrix = glm.mat4.create();
+
+        glm.mat4.perspective(
+            lightProjectionMatrix,
+            ((60 * Math.PI) / 180),//field of view in rad
+            1,//aspect 
+            0.1,//zNear
+            2000.0//zFar
+        );
+
+        const viewMatrix = glm.mat4.invert(glm.mat4.create(), lightWorldMatrix);
 
         const shadowPass = () => {
             gl.enable(gl.CULL_FACE);
             gl.enable(gl.DEPTH_TEST);
 
-            // first draw from the POV of the light
-            const lightWorldMatrix = global.light.lightWorldMatrix;
-            const lightProjectionMatrix = glm.mat4.create();
-
-            glm.mat4.perspective(
-                lightProjectionMatrix,
-                ((60 * Math.PI) / 180),//field of view in rad
-                1,//aspect 
-                0.1,//zNear
-                2000.0//zFar
-            );
-
-            const viewMatrix = glm.mat4.invert(glm.mat4.create(), lightWorldMatrix);
+            
 
             //create texture and frame buffer
-            const depthTexture = gl.createTexture();
-            const depthTextureSize = 512;
-            gl.bindTexture(gl.TEXTURE_2D, depthTexture);
-            gl.texImage2D(
-                gl.TEXTURE_2D,      // target
-                0,                  // mip level
-                gl.DEPTH_COMPONENT32F, // internal format
-                depthTextureSize,   // width
-                depthTextureSize,   // height
-                0,                  // border
-                gl.DEPTH_COMPONENT, // format
-                gl.FLOAT,           // type
-                null);              // data
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            
 
             const depthFramebuffer = gl.createFramebuffer();
             gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
@@ -438,7 +449,7 @@ const main = async () => {
             gl.useProgram(shadowShader.program);
 
             gl.uniformMatrix4fv(shadowShader.uLightProjectionMatrix, false, lightProjectionMatrix);
-            gl.uniformMatrix4fv(shadowShader.uLightWorldMatrix, false, viewMatrix);
+            gl.uniformMatrix4fv(shadowShader.uLightWorldMatrix, false, lightWorldMatrix);
 
             for (var i = 0; i < objects.length; i++) {
                 objects[i].shadowPass(gl, shadowShader);
@@ -464,6 +475,12 @@ const main = async () => {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         gl.useProgram(defaultShader.program);
+        
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+        gl.uniform1i(defaultShader.uShadowMapLocation, 0);
+        gl.uniformMatrix4fv(defaultShader.uLightProjectionMatrix, false, lightProjectionMatrix);
+        gl.uniformMatrix4fv(defaultShader.uLightWorldMatrix, false, lightWorldMatrix);
 
         for (var i = 0; i < objects.length; i++) {
             objects[i].draw(gl, defaultShader, global);
