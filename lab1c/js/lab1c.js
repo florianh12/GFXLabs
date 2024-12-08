@@ -8,6 +8,7 @@ import { Pacman } from './webgl-resources/pacman.js';
 import { PacmanShapeController } from './webgl-resources/pacman-shape-controller.js';
 import { PacmanShape } from './webgl-resources/pacman-shape.js';
 import { GhostShape } from './webgl-resources/ghost-shape.js';
+import { Ghost } from './webgl-resources/ghost.js';
 
 
 
@@ -79,6 +80,7 @@ const main = async () => {
     var pacmanShape = new PacmanShapeController();
     var ghostShape = new GhostShape('Red');
     const pacman = new Pacman(global,pacmanShape, objects);
+    const ghostRed = new Ghost(ghostShape, objects, [c2,r1]);
 
 
     //manage drawcalls and starting position for pacman shape
@@ -91,9 +93,7 @@ const main = async () => {
     objects[1].scale(16.5,12.0);
     objects[1].translate(u,u,-0.5);
 
-    objects.push(ghostShape);
-    objects[2].translate(2.0);
-    
+    objects.push(ghostShape);    
 
     const createLabyrinth = async () => {
         //create Labyrinth
@@ -327,7 +327,7 @@ const main = async () => {
         objects.push(temp);
     }
 
-    //await createLabyrinth();
+    await createLabyrinth();
 
     
 

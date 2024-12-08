@@ -3,26 +3,27 @@ import { shearXY } from './webgl-helper-functions.js';
 
 export class Camera {
     //needs to be reset to 0.0,0.0,8.0 and 0.0,0.0,-1.0
-    eye = glm.vec3.fromValues(0.0,0.0,20.0);//20
-    shearMatrix = shearXY(0.5,1.0);
+    eye = glm.vec3.create();//20
+    target = glm.vec3.create();
+    shearMatrix = shearXY(0.5,0.8);
 
     constructor() {
-        this.viewMatrix = this.initViewMatrix(this.eye);
+        this.viewMatrix = glm.mat4.create();
+        this.eye = glm.vec3.fromValues(0.0,-5.0,10.0);//20
+        this.target = glm.vec3.fromValues(0.0,0.0,0.0);
+        this.initViewMatrix();
     }
 
-    initViewMatrix(eye) {
-        const matrix = glm.mat4.create();
-        const target = glm.mat4.create();
+    initViewMatrix() {
 
-        glm.vec3.add(target,eye,glm.vec3.fromValues(0.0,0.0,-1.0));
-        glm.mat4.lookAt(matrix,eye,target, glm.vec3.fromValues(0.0,1.0,0.0));
-
-        return matrix;
+        //glm.mat4.lookAt(this.viewMatrix,this.eye,this.target, glm.vec3.fromValues(0.0,1.0,0.0));
+        glm.mat4.lookAt(this.viewMatrix, this.eye, this.target, glm.vec3.fromValues(0.0,1.0,0.0));
     }
 
     translate(x,y,z) {
         glm.vec3.add(this.eye,this.eye,glm.vec3.fromValues(x,y,z));
+        glm.vec3.add(this.target,this.target,glm.vec3.fromValues(x,y,z));
 
-        this.viewMatrix = this.initViewMatrix(this.eye);
+        this.initViewMatrix();
     }
 }
