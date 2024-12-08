@@ -26,7 +26,6 @@ export class PacmanShape extends Shape {
             await this.bufferTexture(gl,this.textureFilePath);
         }
 
-        console.log(await loadTexture('./sampleModels/Pacman/PacmanUpper.png'));
     }
 
     async bufferTexture(gl, filePath) {

@@ -13,6 +13,9 @@ export class Shape {
     rotationMatrix = -1;
     translationMatrix = -1;
     modelMatrix = glm.mat4.create();
+    position = [0.0,0.0];
+    //only relevant for labyrinth walls [max_x,min_x][max_y,min_y]
+    boundingRectangle = [[0.5,-0.5],[0.5,-0.5]];
     
 
     constructor(vertices, normals, colors, indices,
@@ -26,6 +29,9 @@ export class Shape {
         this.scalingMatrix = scalingMatrix;
         this.rotationMatrix = rotationMatrix;
         this.translationMatrix = translationMatrix;
+
+        this.position = [0.0,0.0];
+        this.boundingRectangle = [[0.5,-0.5],[0.5,-0.5]];
         
         //applies transformations if any exist
         this.updateModelMatrix();
@@ -164,6 +170,12 @@ export class Shape {
     translate(x = 0.0, y = 0.0, z = 0.0){
         //rotate x,y,z coordinates with local coordinate system
         const adaptedCoordinates = glm.vec4.fromValues(x,y,z,1.0);
+        //update bounding rectangle
+        this.position[0] += x;
+        this.position[1] += y;
+
+        console.log(this.position);
+
         glm.vec4.transformMat4(adaptedCoordinates,adaptedCoordinates,this.rotationMatrix);
         
         //actual translation
@@ -210,6 +222,17 @@ export class Shape {
     }
 
     scale(x = 1.0, y = 1.0, z = 1.0) {
+        //update bounding rectangle
+
+        
+        this.boundingRectangle[0][0] *= x;
+        this.boundingRectangle[0][1] *= x;
+        this.boundingRectangle[1][0] *= y;
+        this.boundingRectangle[1][1] *= y;
+        
+
+        
+
         //update scaling matrix
         glm.mat4.scale(
             this.scalingMatrix,

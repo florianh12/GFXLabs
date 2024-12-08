@@ -76,7 +76,7 @@ const main = async () => {
     var fileSource = document.getElementById("fileSource");
 
     var pacmanShape = new PacmanShapeController();
-    const pacman = new Pacman(global,pacmanShape);
+    const pacman = new Pacman(global,pacmanShape, objects);
 
 
     //manage drawcalls and starting position for pacman shape
@@ -319,9 +319,6 @@ const main = async () => {
     temp.scale(...defaultScale);
     temp.translate(c4,-r6);
     objects.push(temp);
-
-
-
 
 
     var canvas = document.querySelector("#c");

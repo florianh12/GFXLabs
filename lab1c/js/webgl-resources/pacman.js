@@ -7,15 +7,18 @@ import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 export class Pacman {
     shape;
     global;
+    objects;
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.0;//0.03
+    translationRate = 0.03;//0.03
     changeDir = 0;
     currentAngle = 0;
     targetAngle = 0;
     rotationStepSize = 10;
     currentRowPos = 0.0;
+    position = [0.0,0.0];
+    
     
 
     /**
@@ -23,7 +26,7 @@ export class Pacman {
      * @param {Global} global 
      * @param {Shape} shape 
      */
-    constructor(global, shape) {
+    constructor(global, shape, objects) {
         this.shape = shape;
         this.global = global;
         this.direction = 3;
@@ -34,6 +37,7 @@ export class Pacman {
         this.degreeMap.set(4,180);
         this.degreeMap.set(2,90);
         this.rotationStepSize = 10;
+        this.objects = objects;
         //movement
         setInterval(this.move.bind(this),10);
     }
@@ -53,43 +57,63 @@ export class Pacman {
             } else {
                 this.rotationStepSize = Math.abs(this.rotationStepSize)*(-1);
             }
-            console.log(calculateRotationDegrees(this.currentAngle,this.targetAngle));
             this.changeDir = newDirection;
     }
 
-    move() {
-        
-        switch(this.direction){
+    /**
+     * @returns {Number[]}
+     */
+    calcCollisionPosition() {
+        //magic number 0.76, because 0.01 bigger than 1/2 grid entry size
+        //prevents stepping into next grid cell, position is modified, depending on direction for adequate collission
+        switch(this.direction) {
             case 1:
-                this.shape.translate(0.0,this.translationRate);
-                this.global.translateCamera(0.0,this.translationRate);
+                return [this.position[0],this.position[1]+0.76];
                 break;
             case 2:
-                this.shape.translate(0.0,-this.translationRate);
-                this.global.translateCamera(0.0,-this.translationRate);
+                return [this.position[0],this.position[1]-0.76];
                 break;
             case 3:
-                this.shape.translate(this.translationRate);
-                this.global.translateCamera(this.translationRate);
+                return [this.position[0]+0.76,this.position[1]];
                 break;
             case 4:
-                this.shape.translate(-this.translationRate);
-                this.global.translateCamera(-this.translationRate);
+                return [this.position[0]-0.76,this.position[1]];
                 break;
         }
+    }
 
-        this.currentRowPos = (this.currentRowPos+this.translationRate);
+    checkCollision() {
+        let collisionPosition = this.calcCollisionPosition();
+        
+        
 
-        //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
-        if(this.currentRowPos >= 1.5) {
-            this.currentRowPos = 0.0;
+        //starts at 2, because the object 0 is the labyrinth floor and object 1 is the pacman shape
+        for( let i = 2; i < this.objects.length; i++) {
+            let objectPosition = this.objects[i].position;
+            let boundingRectangle = this.objects[i].boundingRectangle;
+            if(collisionPosition[0] <= boundingRectangle[0][0]+objectPosition[0] && 
+                collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&
+                collisionPosition[1] <= boundingRectangle[1][0]+objectPosition[1] &&
+                collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
+                    return true;
+                }
+                
 
-            if(this.changeDir != 0) {
-                this.direction = this.changeDir;
-                this.changeDir = 0;
-            }
-            
         }
+        return false;
+    }
+
+    move() {
+        //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
+        if(this.currentRowPos >= 1.5 || this.currentRowPos < this.translationRate) {
+            this.currentRowPos = 0.0;
+        }
+
+        if(this.changeDir != 0 && this.currentRowPos == 0.0) {
+            this.direction = this.changeDir;
+            this.changeDir = 0;
+        }
+
         if(this.currentAngle != this.targetAngle) {
             this.shape.rotate("z",this.rotationStepSize);
             this.currentAngle += this.rotationStepSize;
@@ -98,8 +122,32 @@ export class Pacman {
             } else if (this.currentAngle < 0){
                 this.currentAngle += 360;
             }
-            console.log("current",this.currentAngle);
-
+        }
+        if(!this.checkCollision()) {
+            switch(this.direction){
+                case 1:
+                    this.shape.translate(0.0,this.translationRate);
+                    this.global.translateCamera(0.0,this.translationRate);
+                    this.position[1] += this.translationRate;
+                    break;
+                case 2:
+                    this.shape.translate(0.0,-this.translationRate);
+                    this.global.translateCamera(0.0,-this.translationRate);
+                    this.position[1] += -this.translationRate;
+                    break;
+                case 3:
+                    this.shape.translate(this.translationRate);
+                    this.global.translateCamera(this.translationRate);
+                    this.position[0] += this.translationRate;
+                    break;
+                case 4:
+                    this.shape.translate(-this.translationRate);
+                    this.global.translateCamera(-this.translationRate);
+                    this.position[0] += -this.translationRate;
+                    break;
+            }
+    
+            this.currentRowPos = (this.currentRowPos+this.translationRate);
         }
     }
 }
