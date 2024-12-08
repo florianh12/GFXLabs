@@ -7,6 +7,7 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 import { Pacman } from './webgl-resources/pacman.js';
 import { PacmanShapeController } from './webgl-resources/pacman-shape-controller.js';
 import { PacmanShape } from './webgl-resources/pacman-shape.js';
+import { GhostShape } from './webgl-resources/ghost-shape.js';
 
 
 
@@ -76,6 +77,7 @@ const main = async () => {
     var fileSource = document.getElementById("fileSource");
 
     var pacmanShape = new PacmanShapeController();
+    var ghostShape = new GhostShape('Red');
     const pacman = new Pacman(global,pacmanShape, objects);
 
 
@@ -89,236 +91,245 @@ const main = async () => {
     objects[1].scale(16.5,12.0);
     objects[1].translate(u,u,-0.5);
 
-
-    //create Labyrinth
-
-    //Borders
-    let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-
-    temp.scale(...defaultScale);
-    temp.scale(u,b15);
-    temp.translate(c10,r0);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.scale(u,b15);
-    temp.translate(-c10,r0);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.scale(b21);
-    temp.translate(c0,r7);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.scale(b21);
-    temp.translate(c0,-r7);
-    objects.push(temp);
-
-    //structure 1
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c7,r6);
-    temp.scale(b3);
-    objects.push(temp);
-
-    //structure 2
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.scale(b3,b3);
-    temp.translate(-c2,r4);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c0,r5);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c1,r5);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c0,r6);
-    objects.push(temp);
-
-    //structure 3
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,r6);
-    temp.scale(b3);
-    objects.push(temp);
-
-    //structure 4
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c9,r0);
-    temp.scale(u,b7);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c8,r2);
-    objects.push(temp);
-
-    //structure 5
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,r4);
-    temp.scale(b3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,r2);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-    //structure 6
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c1,r2);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-    //structure 7
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c4,r3);
-    temp.scale(b3,b3);
-    objects.push(temp);
-
-    //structure 8
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c7,r2);
-    temp.scale(u,b7);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c8,r4);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-    //structure 9
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c7,-r3);
-    temp.scale(u,b5);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c4,-r5);
-    temp.scale(b5);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(-c6,-r3);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-    //structure 10
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c4,-r0);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c3,-r1);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c2,r1);
-    temp.scale(b3);
-    objects.push(temp);
-
-    //structure 11
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c1,-r1);
-    temp.scale(b5);
-    objects.push(temp);
-
-
-    //structure 12
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c5,-r3);
-    temp.scale(b3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c7,-r3);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c5,-r1);
-    temp.scale(u,b3);
-    objects.push(temp);
-
-
-    //structure 13
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c9,-r2);
-    temp.scale(u,b7);
-    objects.push(temp);
-
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c8,-r5);
-    objects.push(temp);
-
-
-    //structure 14
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c9,-r6);
-    objects.push(temp);    
-
+    objects.push(ghostShape);
+    objects[2].translate(2.0);
     
 
-    //structure 15
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(-c1,-r3);
-    temp.scale(b7);
-    objects.push(temp);
+    const createLabyrinth = async () => {
+        //create Labyrinth
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c0,-r4);
-    objects.push(temp);
+        //Borders
+        let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
 
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
-    temp.scale(...defaultScale);
-    temp.translate(c0,-r5);
-    objects.push(temp);
+        temp.scale(...defaultScale);
+        temp.scale(u,b15);
+        temp.translate(c10,r0);
+        objects.push(temp);
 
-    //structure 16
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,-r5);
-    temp.scale(b5);
-    objects.push(temp);
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.scale(u,b15);
+        temp.translate(-c10,r0);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.scale(b21);
+        temp.translate(c0,r7);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.scale(b21);
+        temp.translate(c0,-r7);
+        objects.push(temp);
+
+        //structure 1
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c7,r6);
+        temp.scale(b3);
+        objects.push(temp);
+
+        //structure 2
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.scale(b3,b3);
+        temp.translate(-c2,r4);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c0,r5);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c1,r5);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c0,r6);
+        objects.push(temp);
+
+        //structure 3
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c4,r6);
+        temp.scale(b3);
+        objects.push(temp);
+
+        //structure 4
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c9,r0);
+        temp.scale(u,b7);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c8,r2);
+        objects.push(temp);
+
+        //structure 5
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c6,r4);
+        temp.scale(b3);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c6,r2);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+        //structure 6
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c1,r2);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+        //structure 7
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c4,r3);
+        temp.scale(b3,b3);
+        objects.push(temp);
+
+        //structure 8
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c7,r2);
+        temp.scale(u,b7);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c8,r4);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+        //structure 9
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c7,-r3);
+        temp.scale(u,b5);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c4,-r5);
+        temp.scale(b5);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(-c6,-r3);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+        //structure 10
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c4,-r0);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c3,-r1);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c2,r1);
+        temp.scale(b3);
+        objects.push(temp);
+
+        //structure 11
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c1,-r1);
+        temp.scale(b5);
+        objects.push(temp);
+
+
+        //structure 12
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c5,-r3);
+        temp.scale(b3);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c7,-r3);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c5,-r1);
+        temp.scale(u,b3);
+        objects.push(temp);
+
+
+        //structure 13
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c9,-r2);
+        temp.scale(u,b7);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c8,-r5);
+        objects.push(temp);
+
+
+        //structure 14
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c9,-r6);
+        objects.push(temp);    
+
+        
+
+        //structure 15
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(-c1,-r3);
+        temp.scale(b7);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c0,-r4);
+        objects.push(temp);
+
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall2);
+        temp.scale(...defaultScale);
+        temp.translate(c0,-r5);
+        objects.push(temp);
+
+        //structure 16
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c4,-r5);
+        temp.scale(b5);
+        objects.push(temp);
+        
+        temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
+        temp.scale(...defaultScale);
+        temp.translate(c4,-r6);
+        objects.push(temp);
+    }
+
+    //await createLabyrinth();
+
     
-    temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
-    temp.scale(...defaultScale);
-    temp.translate(c4,-r6);
-    objects.push(temp);
 
 
     var canvas = document.querySelector("#c");
