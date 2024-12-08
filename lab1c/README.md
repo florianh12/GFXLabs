@@ -22,5 +22,8 @@ However local tanslation was implemente correctly after rotating input coordinat
 ## Tested environments
 - Ubuntu Linux with python webserver and Mozilla Firefox 132.0.2 (snap)
 
+## Ghost model
+ghost model from: PacMan Ghost by Hatch on Thingiverse: https://www.thingiverse.com/thing:557527
+
 ## Additional and general remarks
 It would be possible to implement global tansformations differently by swapping the order of local and global transformation matrices in the shader, which has an effect on global scaling and rotating, effects on local coordinate system translations not tested. Game crashed all the time, didn't have enough time to fix it. Also, some parts are missing. Maybe will take grace days.
