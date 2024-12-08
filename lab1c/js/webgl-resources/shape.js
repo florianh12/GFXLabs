@@ -4,6 +4,7 @@ import { Shader } from './shader.js';
 
 export class Shape {
     vao = -1;
+    shadowVao = -1;
     coordinateSystemVAO = -1;
     vertices = -1;
     normals = -1;
@@ -44,6 +45,14 @@ export class Shape {
         this.bufferNormalsData(gl, shader);
         this.bufferIndices(gl);
         this.bufferCoordinateSystem(gl,shader);
+    }
+
+    async initShadow(gl, shader) {
+        this.shadowVao = gl.createVertexArray();
+
+        gl.bindVertexArray(this.shadowVao);
+        this.bufferVertexData(gl, shader);
+        this.bufferIndices(gl);
     }
 
     initializeVAO(gl) {
@@ -251,6 +260,21 @@ export class Shape {
         global.applyUniforms(gl,shader,this.modelMatrix);
 
         gl.bindVertexArray(this.vao);
+
+        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+    }
+
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
+    shadowPass(gl, shader) {
+
+        gl.uniformMatrix4fv(shader.uModelMatrixLocation, false, this.modelMatrix);
+
+        gl.bindVertexArray(this.shadowVao);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }

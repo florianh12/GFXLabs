@@ -11,7 +11,8 @@ export class Global {
     scalingMatrix = glm.mat4.create();
     rotationMatrix = glm.mat4.create();
     translationMatrix = glm.mat4.create();
-    globalModelViewMatrix = glm.mat4.create();
+    globalModelMatrix = glm.mat4.create();
+    globalViewMatrix = glm.mat4.create();
     diffuse_only = false;
     shear_view = false;
     vao = -1;
@@ -151,37 +152,37 @@ export class Global {
     updateGlobalModelViewMatrix() {
         //combine camera and scaling into globalModelViewMatrix
         glm.mat4.multiply(
-            this.globalModelViewMatrix,
+            this.globalViewMatrix,
             glm.mat4.create(),
             this.camera.viewMatrix
         );
 
         if(this.shear_view) {
             glm.mat4.mul(
-                this.globalModelViewMatrix,
-                this.globalModelViewMatrix,
+                this.globalViewMatrix,
+                this.globalViewMatrix,
                 this.camera.shearMatrix
             );
         }
         
 
         glm.mat4.mul(
-            this.globalModelViewMatrix,
-            this.globalModelViewMatrix,
+            this.globalModelMatrix,
+            glm.mat4.create(),
             this.scalingMatrix
         );
 
         //add rotation
         glm.mat4.mul(
-            this.globalModelViewMatrix,
-            this.globalModelViewMatrix,
+            this.globalModelMatrix,
+            this.globalModelMatrix,
             this.rotationMatrix
         );
 
         //adds translation
         glm.mat4.multiply(
-            this.globalModelViewMatrix,
-            this.globalModelViewMatrix,
+            this.globalModelMatrix,
+            this.globalModelMatrix,
             this.translationMatrix
         );
     }
@@ -192,18 +193,21 @@ export class Global {
      * @param {mat4} modelMatrix 
      */
     applyUniforms(gl, shader, modelMatrix) {
+        const combinedModelMatrix = glm.mat4.create();
         const modelViewMatrix = glm.mat4.create();
 
         //calculate actual ModelViewMatrix with shape modelMatrix
-        glm.mat4.mul(modelViewMatrix,this.globalModelViewMatrix,modelMatrix);
-        
+        glm.mat4.mul(combinedModelMatrix,this.globalModelMatrix,modelMatrix);
+        glm.mat4.mul(modelViewMatrix,this.globalViewMatrix,combinedModelMatrix);
+
         const normalMatrix = glm.mat3.create();
 
          glm.mat3.normalFromMat4(normalMatrix,modelViewMatrix);
         
         //shader Matrices
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, this.projectionMatrix);
-        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
+        gl.uniformMatrix4fv(shader.uViewMatrixLocation, false, this.globalViewMatrix);
+        gl.uniformMatrix4fv(shader.uModelMatrixLocation, false, combinedModelMatrix);
         gl.uniformMatrix3fv(shader.uNormalMatrixLocation, false, normalMatrix);
 
         // diffuse/specular

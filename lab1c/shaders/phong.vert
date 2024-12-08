@@ -9,10 +9,14 @@ in vec3 a_vertex_normal;
 
 // A matrix to transform the positions by
 uniform mat4 u_projection_matrix;
-uniform mat4 u_model_view_matrix;
+uniform mat4 u_view_matrix;
+uniform mat4 u_model_matrix;
 uniform mat3 u_normal_matrix;
 uniform sampler2D u_texture;
 uniform bool u_texture_active;
+uniform mat4 u_light_world_matrix;
+uniform mat4 u_light_projection_matrix;
+
 
 
 // a varying the color to the fragment shader
@@ -30,11 +34,11 @@ void main() {
     }
 
     //projected positions/vectors (to eye space)
-    v_projected_position = (u_model_view_matrix * a_position).xyz;
+    v_projected_position = (u_view_matrix * u_model_matrix * a_position).xyz;
     v_projected_normal = normalize(u_normal_matrix * a_vertex_normal).xyz;
     
    
 
     // Multiply the position by the model-view and projection matrices.
-    gl_Position = u_projection_matrix * u_model_view_matrix * a_position;
+    gl_Position = u_projection_matrix * u_view_matrix * u_model_matrix * a_position;
 }

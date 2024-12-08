@@ -95,4 +95,24 @@ export class PacmanShape extends Shape {
         gl.bindTexture(gl.TEXTURE_2D, null);
     }
 
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     * @param {mat4} pacmanModelMatrix
+     */
+    shadowPass(gl, shader, pacmanModelMatrix) {
+        const adaptedModelMatrix = glm.mat4.create();
+
+        glm.mat4.mul(adaptedModelMatrix,pacmanModelMatrix,this.modelMatrix);
+
+        gl.uniformMatrix4fv(shader.uModelMatrixLocation, false, adaptedModelMatrix);
+
+        gl.bindVertexArray(this.shadowVao);
+
+        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+
+    }
+
 }

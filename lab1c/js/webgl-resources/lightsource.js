@@ -5,6 +5,7 @@ export class LightSource {
     specular = glm.vec4.fromValues(1.0,1.0,1.0,1.0);
     rotationMatrix = glm.mat4.create();
     translationMatrix = glm.mat4.create();
+    lightWorldMatrix = glm.mat4.create() 
 
     constructor(x = 0.0, y = 0.0, z = 0.0) {
         glm.mat4.fromTranslation(this.translationMatrix,glm.vec3.fromValues(x,y,z));
@@ -63,6 +64,9 @@ export class LightSource {
         positionVec4[3] = 1.0;
         glm.vec4.transformMat4(positionVec4,positionVec4,lightModelMatrix);
         this.position = positionVec4;
+
+
+        glm.mat4.lookAt(this.lightWorldMatrix,glm.vec3.fromValues(this.position[0],this.position[1],this.position[2]),glm.vec3.fromValues(0.0,0.0,0.0), glm.vec3.fromValues(0.0,1.0,0.0));
 
 
         //const lightViewMatrix = glm.mat4.lookAt(glm.mat4.create(),glm.vec3.fromValues(0.0,0.0,0.0),this.position,glm.vec3.fromValues(0.0,1.0,0.0));

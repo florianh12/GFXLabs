@@ -1,4 +1,6 @@
 
+import * as glm from './gl-matrix/dist/esm/index.js';
+
 import { generateCube, generatePyramid, generatePlane } from './webgl-resources/webgl-helper-functions.js';
 import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
@@ -7,6 +9,7 @@ import { OBJParser } from './webgl-resources/obj-parser.js';
 import { Pacman } from './webgl-resources/pacman.js';
 import { PacmanShapeController } from './webgl-resources/pacman-shape-controller.js';
 import { PacmanShape } from './webgl-resources/pacman-shape.js';
+import { ShadowShader } from './webgl-resources/shadow-shader.js';
 
 
 
@@ -61,19 +64,11 @@ const main = async () => {
     const c10 = 15.0;
     const global = new Global();
     let selected_shader = 0;
-    const shaders = [new Shader("phong")];
-    //const defaultShader = new Shader("gouraud");
+    const shadowShader = new ShadowShader("shadow");
+    const defaultShader = new Shader("phong");
     const parser = new OBJParser();
     const objects = [];
     let selected = -1;
-    let beingDragged = false;
-    let moveCamera = false;
-    let moveLight = false;
-    let xMouseLast, yMouseLast;
-    var moveCameraIndicator = document.getElementById("moveCameraIndicator");
-    var moveLightIndicator = document.getElementById("moveLightIndicator");
-    var objFileButton = document.getElementById("objFileButton");
-    var fileSource = document.getElementById("fileSource");
 
     var pacmanShape = new PacmanShapeController();
     const pacman = new Pacman(global,pacmanShape, objects);
@@ -83,8 +78,9 @@ const main = async () => {
     objects.push(pacmanShape);
     objects[0].rotate("x",180);
     objects[0].rotate("z",270);
-    
-    //Labyrinth floor
+
+    const drawLabyrinth = async () => {
+        //Labyrinth floor
     objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
     objects[1].scale(16.5,12.0);
     objects[1].translate(u,u,-0.5);
@@ -319,6 +315,10 @@ const main = async () => {
     temp.scale(...defaultScale);
     temp.translate(c4,-r6);
     objects.push(temp);
+    }
+
+    await drawLabyrinth();
+    
 
 
     var canvas = document.querySelector("#c");
@@ -328,16 +328,16 @@ const main = async () => {
     }
 
 
-    for (let i = 0; i < shaders.length; i++) {
-        await shaders[i].init(gl);
+        await defaultShader.init(gl);
+        await shadowShader.init(gl);
 
+        console.log(shadowShader);
         //prepare vertices and faces
-        global.initGlobalCoordinateSystem(gl,shaders[i]);
 
         for (let j = 0; j < objects.length; j++) {
-            await objects[j].init(gl, shaders[i]);
+            await objects[j].init(gl, defaultShader);
+            await objects[j].initShadow(gl, shadowShader);
         }
-    }
 
     function onResize(entries) {
 
@@ -384,6 +384,72 @@ const main = async () => {
 
 
     const draw = () => {
+
+        const shadowPass = () => {
+            gl.enable(gl.CULL_FACE);
+            gl.enable(gl.DEPTH_TEST);
+
+            // first draw from the POV of the light
+            const lightWorldMatrix = global.light.lightWorldMatrix;
+            const lightProjectionMatrix = glm.mat4.create();
+
+            glm.mat4.perspective(
+                lightProjectionMatrix,
+                ((60 * Math.PI) / 180),//field of view in rad
+                1,//aspect 
+                0.1,//zNear
+                2000.0//zFar
+            );
+
+            const viewMatrix = glm.mat4.invert(glm.mat4.create(), lightWorldMatrix);
+
+            //create texture and frame buffer
+            const depthTexture = gl.createTexture();
+            const depthTextureSize = 512;
+            gl.bindTexture(gl.TEXTURE_2D, depthTexture);
+            gl.texImage2D(
+                gl.TEXTURE_2D,      // target
+                0,                  // mip level
+                gl.DEPTH_COMPONENT32F, // internal format
+                depthTextureSize,   // width
+                depthTextureSize,   // height
+                0,                  // border
+                gl.DEPTH_COMPONENT, // format
+                gl.FLOAT,           // type
+                null);              // data
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+            const depthFramebuffer = gl.createFramebuffer();
+            gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
+            gl.framebufferTexture2D(
+                gl.FRAMEBUFFER,       // target
+                gl.DEPTH_ATTACHMENT,  // attachment point
+                gl.TEXTURE_2D,        // texture target
+                depthTexture,         // texture
+                0);
+
+            gl.bindFramebuffer(gl.FRAMEBUFFER, depthFramebuffer);
+            gl.viewport(0, 0, depthTextureSize, depthTextureSize);
+            gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+            
+            gl.useProgram(shadowShader.program);
+
+            gl.uniformMatrix4fv(shadowShader.uLightProjectionMatrix, false, lightProjectionMatrix);
+            gl.uniformMatrix4fv(shadowShader.uLightWorldMatrix, false, viewMatrix);
+
+            for (var i = 0; i < objects.length; i++) {
+                objects[i].shadowPass(gl, shadowShader);
+            }
+
+
+            gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        }
+
+        shadowPass();
+
         gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
         // Clear the canvas and set background color
@@ -397,17 +463,10 @@ const main = async () => {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        gl.useProgram(shaders[selected_shader].program);
-        
-        if(selected == 0) {
-            global.drawGlobalCoordinateSystem(gl,shaders[selected_shader]);
-        }
+        gl.useProgram(defaultShader.program);
 
         for (var i = 0; i < objects.length; i++) {
-            objects[i].draw(gl, shaders[selected_shader], global);
-            if(selected > 0 && i == (selected-1)) {
-                objects[i].drawCoordianteSystem(gl,shaders[selected_shader], global);
-            }
+            objects[i].draw(gl, defaultShader, global);
         }
 
         window.requestAnimationFrame(draw);

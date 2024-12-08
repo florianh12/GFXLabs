@@ -28,6 +28,11 @@ export class PacmanShapeController extends Shape {
         //console.log(this.modelMatrix);
     }
 
+    async initShadow(gl,shader) {
+        await this.upper.initShadow(gl,shader);
+        await this.lower.initShadow(gl,shader);
+    }
+
     //disentangle translation from rotation -> this override
     translate(x = 0.0, y = 0.0, z = 0.0){
         
@@ -61,6 +66,14 @@ export class PacmanShapeController extends Shape {
         
 
         this.nextAnimationStep();
+    }
+
+    shadowPass(gl, shader) {
+
+        this.upper.shadowPass(gl, shader, this.modelMatrix);
+        this.lower.shadowPass(gl, shader, this.modelMatrix);        
+        
+
     }
 
 }
