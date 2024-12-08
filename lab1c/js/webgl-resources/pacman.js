@@ -20,6 +20,7 @@ export class Pacman {
     position = [0.0,0.0];
     stop = false;
     ghosts = 0;
+    movementIntervalID;
 
     
     
@@ -43,7 +44,7 @@ export class Pacman {
         this.objects = objects;
         this.ghosts = ghosts;
         //movement
-        setInterval(this.move.bind(this),10);
+        this.movementIntervalID = setInterval(this.move.bind(this),10);
     }
 
     /**
@@ -60,10 +61,24 @@ export class Pacman {
             this.changeDir = newDirection;
     }
 
+    clearIntervals() {
+        clearInterval(this.movementIntervalID);
+    }
+
     reset() {
+        
         this.shape.resetTranslation();
+        this.global.translateCamera(-this.position[0], -this.position[1]);
         this.position = [0.0,0.0];
         this.stop = false;
+        this.direction = 3;
+        this.targetAngle = this.degreeMap.get(3);
+        this.currentRowPos = 0.0;
+        
+    }
+
+    restart() {
+        this.movementIntervalID = setInterval(this.move.bind(this),10);
     }
 
     /**
@@ -94,18 +109,45 @@ export class Pacman {
         
 
         //starts at 2, because the object 0 is the labyrinth floor and object 1 is the pacman shape
-        for( let i = 2+this.ghosts; i < this.objects.length; i++) {
+        for( let i = 2+this.ghosts.length; i < this.objects.length; i++) {
             let objectPosition = this.objects[i].position;
             let boundingRectangle = this.objects[i].boundingRectangle;
+
             if(collisionPosition[0] <= boundingRectangle[0][0]+objectPosition[0] && 
                 collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&
                 collisionPosition[1] <= boundingRectangle[1][0]+objectPosition[1] &&
                 collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
                     return true;
-                }
-                
-
+            }
         }
+
+            let endGame = false;
+            for(let i = 0; i < this.ghosts.length; i++) {
+                //0.75 is the width of the rectangle of the scaled ghost
+                if(collisionPosition[0] <= 0.75+this.ghosts[i].position[0] && 
+                    collisionPosition[0] >= -0.75+this.ghosts[i].position[0] &&
+                    collisionPosition[1] <= 0.75+this.ghosts[i].position[1] &&
+                    collisionPosition[1] >= -0.75+this.ghosts[i].position[1]) {
+                        endGame = true;
+                        break;
+                    }
+            }
+
+            if(endGame) {
+                this.clearIntervals();
+                for(let i = 0; i < this.ghosts.length; i++) {
+                    this.ghosts[i].clearIntervals();
+                }
+                this.reset();
+                for(let i = 0; i < this.ghosts.length; i++) {
+                    this.ghosts[i].reset();
+                }
+                this.restart();
+                for(let i = 0; i < this.ghosts.length; i++) {
+                    this.ghosts[i].restart();
+                }
+            }
+        
         return false;
     }
 

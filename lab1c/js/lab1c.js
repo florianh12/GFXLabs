@@ -80,12 +80,10 @@ const main = async () => {
 
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
-    const pacman = new Pacman(global,pacmanShape, objects,ghostShapes.length);
-    const ghosts = [new Ghost(ghostShapes[0], objects, [c2,r1]),new Ghost(ghostShapes[1], objects, [-c4,r2])];
-    const game = new Game(pacman,ghosts);
-    for (let i = 0; i < ghosts.length; i++) {
-        ghosts[i].init(game);
-    }
+    
+    const ghosts = [new Ghost(ghostShapes[0], objects, [c3,r1]),new Ghost(ghostShapes[1], objects, [-c4,r2])];
+    const pacman = new Pacman(global,pacmanShape, objects, ghosts);
+
     
     
 
@@ -435,5 +433,8 @@ const main = async () => {
 
     window.requestAnimationFrame(draw);
 }
+    try{
+     main();
+    } catch(e) {
 
-main();
+    }

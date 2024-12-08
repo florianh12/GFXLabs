@@ -5,7 +5,6 @@ import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 
 
 export class Ghost {
-    game;
     shape;
     objects;
     startPosition;
@@ -24,7 +23,7 @@ export class Ghost {
     minCooldown = 1000;
     stop = false;
     directionTimerID;
-    movementTimerID;
+    movementIntervalID;
     
     
 
@@ -50,17 +49,9 @@ export class Ghost {
 
         this.shape.translate(this.position[0],this.position[1]);
         //movement
-        setInterval(this.move.bind(this),10);
+        this.movementIntervalID = setInterval(this.move.bind(this),10);
         //random direction changes (cooldown to prevent stuck in wall bug)
-        setTimeout(this.changeDirection.bind(this),100);
-    }
-
-    /**
-     * 
-     * @param {Game} game 
-     */
-    init(game) {
-        this.game = game;
+        //this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
     }
 
     changeDirection() {
@@ -68,9 +59,8 @@ export class Ghost {
         const newDirection = Math.floor(Math.random() * 4) + 1;
 
         this.translate(newDirection);
-        console.log("NewDirection chosen:", newDirection);
         
-        setTimeout(this.changeDirection.bind(this), delay);
+        //this.directionTimerID = setTimeout(this.changeDirection.bind(this), delay);
     }
 
     /**
@@ -122,32 +112,39 @@ export class Ghost {
                 collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&
                 collisionPosition[1] <= boundingRectangle[1][0]+objectPosition[1] &&
                 collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
+                    if(this.currentRowPos != 0) {
+                        this.currentRowPos = 0;
+                    }
                     const newDirection = Math.floor(Math.random() * 4) + 1;
                     this.translate(newDirection);                    
                     return true;
                 }
-                
-                if(collisionPosition[0] <= this.objects[0].boundingRectangle[0][0]+this.objects[0].position[0] && 
-                    collisionPosition[0] >= this.objects[0].boundingRectangle[0][1]+this.objects[0].position[0] &&
-                    collisionPosition[1] <= this.objects[0].boundingRectangle[1][0]+this.objects[0].position[1] &&
-                    collisionPosition[1] >= this.objects[0].boundingRectangle[1][1]+this.objects[0].position[1] && !this.stop) {
-                        this.stop = true;
-                        console.log("GameOver");
-                        
-                        this.game.gameOver();
-                    }
         }
         return false;
     }
+    clearIntervals() {
+        //clearTimeout(this.directionTimerID);
+        clearInterval(this.movementIntervalID);
+    }
 
     reset() {
+        
         this.shape.resetTranslation();
         this.shape.translate(this.startPosition[0],this.startPosition[1]);
         this.position = [...this.startPosition];
         this.stop = false;
+        this.direction = 3;
+    }
+
+    restart() {
+        this.movementIntervalID = setInterval(this.move.bind(this),10);
+        //random direction changes (cooldown to prevent stuck in wall bug)
+        //this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
     }
 
     move() {
+        console.log("ghost",this.shape.color,this.direction, this.currentRowPos, this.startPosition);
+        
         //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
         if(this.currentRowPos >= 1.5 || this.currentRowPos < this.translationRate) {
             this.currentRowPos = 0.0;
