@@ -1,11 +1,14 @@
 import { set } from "../gl-matrix/dist/esm/mat2.js";
+import { Game } from "./game.js";
 import { Shape } from "./shape.js";
 import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 
 
 export class Ghost {
+    game;
     shape;
     objects;
+    startPosition;
     direction = 3;
     timer = -1;
     degreeMap = new Map();
@@ -16,6 +19,12 @@ export class Ghost {
     rotationStepSize = 10;
     currentRowPos = 0.0;
     position = [0.0,0.0];
+    //for direction changes
+    maxCooldown = 10000;
+    minCooldown = 1000;
+    stop = false;
+    directionTimerID;
+    movementTimerID;
     
     
 
@@ -36,11 +45,32 @@ export class Ghost {
         this.degreeMap.set(2,90);
         this.rotationStepSize = 10;
         this.objects = objects;
-        this.position = position;
+        this.position = [...position];
+        this.startPosition = [...position];
 
         this.shape.translate(this.position[0],this.position[1]);
         //movement
         setInterval(this.move.bind(this),10);
+        //random direction changes (cooldown to prevent stuck in wall bug)
+        setTimeout(this.changeDirection.bind(this),100);
+    }
+
+    /**
+     * 
+     * @param {Game} game 
+     */
+    init(game) {
+        this.game = game;
+    }
+
+    changeDirection() {
+        const delay = Math.floor(Math.random() * (this.maxCooldown-this.minCooldown)) + this.minCooldown;
+        const newDirection = Math.floor(Math.random() * 4) + 1;
+
+        this.translate(newDirection);
+        console.log("NewDirection chosen:", newDirection);
+        
+        setTimeout(this.changeDirection.bind(this), delay);
     }
 
     /**
@@ -92,12 +122,29 @@ export class Ghost {
                 collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&
                 collisionPosition[1] <= boundingRectangle[1][0]+objectPosition[1] &&
                 collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
+                    const newDirection = Math.floor(Math.random() * 4) + 1;
+                    this.translate(newDirection);                    
                     return true;
                 }
                 
-
+                if(collisionPosition[0] <= this.objects[0].boundingRectangle[0][0]+this.objects[0].position[0] && 
+                    collisionPosition[0] >= this.objects[0].boundingRectangle[0][1]+this.objects[0].position[0] &&
+                    collisionPosition[1] <= this.objects[0].boundingRectangle[1][0]+this.objects[0].position[1] &&
+                    collisionPosition[1] >= this.objects[0].boundingRectangle[1][1]+this.objects[0].position[1] && !this.stop) {
+                        this.stop = true;
+                        console.log("GameOver");
+                        
+                        this.game.gameOver();
+                    }
         }
         return false;
+    }
+
+    reset() {
+        this.shape.resetTranslation();
+        this.shape.translate(this.startPosition[0],this.startPosition[1]);
+        this.position = [...this.startPosition];
+        this.stop = false;
     }
 
     move() {

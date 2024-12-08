@@ -30,6 +30,10 @@ export class PacmanShapeController extends Shape {
 
     //disentangle translation from rotation -> this override
     translate(x = 0.0, y = 0.0, z = 0.0){
+
+        this.position[0] += x;
+        this.position[1] += y;
+
         
         //actual translation
         glm.mat4.translate(

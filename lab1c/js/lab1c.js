@@ -9,6 +9,7 @@ import { PacmanShapeController } from './webgl-resources/pacman-shape-controller
 import { PacmanShape } from './webgl-resources/pacman-shape.js';
 import { GhostShape } from './webgl-resources/ghost-shape.js';
 import { Ghost } from './webgl-resources/ghost.js';
+import { Game } from './webgl-resources/game.js';
 
 
 
@@ -78,10 +79,15 @@ const main = async () => {
     var fileSource = document.getElementById("fileSource");
 
     var pacmanShape = new PacmanShapeController();
-    var ghostShape = new GhostShape('Red');
-    const pacman = new Pacman(global,pacmanShape, objects);
-    const ghostRed = new Ghost(ghostShape, objects, [c2,r1]);
-
+    var ghostShapes = [new GhostShape('Red'),new GhostShape()];
+    const pacman = new Pacman(global,pacmanShape, objects,ghostShapes.length);
+    const ghosts = [new Ghost(ghostShapes[0], objects, [c2,r1]),new Ghost(ghostShapes[1], objects, [-c4,r2])];
+    const game = new Game(pacman,ghosts);
+    for (let i = 0; i < ghosts.length; i++) {
+        ghosts[i].init(game);
+    }
+    
+    
 
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
@@ -93,7 +99,10 @@ const main = async () => {
     objects[1].scale(16.5,12.0);
     objects[1].translate(u,u,-0.5);
 
-    objects.push(ghostShape);    
+    for (let i = 0; i < ghostShapes.length; i++) {
+        objects.push(ghostShapes[i]);
+    }
+        
 
     const createLabyrinth = async () => {
         //create Labyrinth

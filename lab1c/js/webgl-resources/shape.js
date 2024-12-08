@@ -188,6 +188,12 @@ export class Shape {
         this.updateModelMatrix();
     }
 
+    resetTranslation() {
+        this.translationMatrix = glm.mat4.create();
+        this.position = [0.0,0.0];
+        this.updateModelMatrix();
+    }
+
     rotate(axis,degree) {
         //converts degree to radians for glmatrix
         const rad = (degree * Math.PI) / 180;

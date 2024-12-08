@@ -9,7 +9,7 @@ export class Camera {
 
     constructor() {
         this.viewMatrix = glm.mat4.create();
-        this.eye = glm.vec3.fromValues(0.0,-5.0,10.0);//20
+        this.eye = glm.vec3.fromValues(0.0,.0,20.0);//20
         this.target = glm.vec3.fromValues(0.0,0.0,0.0);
         this.initViewMatrix();
     }

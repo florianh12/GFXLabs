@@ -11,13 +11,16 @@ export class Pacman {
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.00;//0.03
+    translationRate = 0.03;//0.03
     changeDir = 0;
     currentAngle = 0;
     targetAngle = 0;
     rotationStepSize = 10;
     currentRowPos = 0.0;
     position = [0.0,0.0];
+    stop = false;
+    ghosts = 0;
+
     
     
 
@@ -26,7 +29,7 @@ export class Pacman {
      * @param {Global} global 
      * @param {Shape} shape 
      */
-    constructor(global, shape, objects) {
+    constructor(global, shape, objects, ghosts) {
         this.shape = shape;
         this.global = global;
         this.direction = 3;
@@ -38,6 +41,7 @@ export class Pacman {
         this.degreeMap.set(2,90);
         this.rotationStepSize = 10;
         this.objects = objects;
+        this.ghosts = ghosts;
         //movement
         setInterval(this.move.bind(this),10);
     }
@@ -54,6 +58,12 @@ export class Pacman {
             
 
             this.changeDir = newDirection;
+    }
+
+    reset() {
+        this.shape.resetTranslation();
+        this.position = [0.0,0.0];
+        this.stop = false;
     }
 
     /**
@@ -84,7 +94,7 @@ export class Pacman {
         
 
         //starts at 2, because the object 0 is the labyrinth floor and object 1 is the pacman shape
-        for( let i = 2; i < this.objects.length; i++) {
+        for( let i = 2+this.ghosts; i < this.objects.length; i++) {
             let objectPosition = this.objects[i].position;
             let boundingRectangle = this.objects[i].boundingRectangle;
             if(collisionPosition[0] <= boundingRectangle[0][0]+objectPosition[0] && 
