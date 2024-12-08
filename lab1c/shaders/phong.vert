@@ -13,6 +13,7 @@ uniform mat4 u_view_matrix;
 uniform mat4 u_model_matrix;
 uniform mat3 u_normal_matrix;
 uniform sampler2D u_texture;
+uniform sampler2D u_shadow_map;
 uniform bool u_texture_active;
 uniform mat4 u_light_world_matrix;
 uniform mat4 u_light_projection_matrix;

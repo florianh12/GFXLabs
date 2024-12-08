@@ -454,7 +454,7 @@ const main = async () => {
 
         // Clear the canvas and set background color
         gl.clearColor(0.5, 0.5, 0.5, 1.0);
-        gl.clearDepth(1.0);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         
         gl.enable(gl.DEPTH_TEST);
         gl.depthFunc(gl.LEQUAL);

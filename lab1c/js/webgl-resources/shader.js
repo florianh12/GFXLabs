@@ -19,6 +19,7 @@ export class Shader {
     uLightSpecularLocation = -2;
     uTextureLocation = -2;
     uTextureActiveLocation = -2;
+    uShadowMapLocation = -2;
 
     constructor(filename = 'default') {
         this.filename = filename;
@@ -64,5 +65,6 @@ export class Shader {
 
         this.uTextureActiveLocation = gl.getUniformLocation(this.program, 'u_texture_active');
 
+        this.uShadowMapLocation = gl.getUniformLocation(this.program, 'u_shadow_map');
     }
 }
