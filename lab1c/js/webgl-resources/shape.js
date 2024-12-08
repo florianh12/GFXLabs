@@ -174,8 +174,6 @@ export class Shape {
         this.position[0] += x;
         this.position[1] += y;
 
-        console.log(this.position);
-
         glm.vec4.transformMat4(adaptedCoordinates,adaptedCoordinates,this.rotationMatrix);
         
         //actual translation
