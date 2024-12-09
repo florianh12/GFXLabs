@@ -464,6 +464,9 @@ const main = async () => {
                 case 'v':
                     global.toggleShear();
                     break;
+                case ' ':
+                    pacman.startJump();
+                    break;
             }
         }
     });

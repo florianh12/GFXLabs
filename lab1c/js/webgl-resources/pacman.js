@@ -23,6 +23,14 @@ export class Pacman {
     score = 0;
     movementIntervalID;
 
+    //jump mechanic
+    onGround = true;
+    jump = false;
+    jumpSteps = [];
+    currentJumpStep = 0;
+    //steps equal three grid cells
+    jumpStepCount = 200;
+    jumpHeight = 5.5;
     
     
 
@@ -46,6 +54,18 @@ export class Pacman {
         this.ghosts = ghosts;
         this.dots = dots;
         this.score = 0;
+
+        //calculate jump z translate sequence
+        for(let i = 1; i < (this.jumpStepCount/2)+1; i++) {
+            const t = i /this.jumpStepCount;
+            this.jumpSteps.push((this.jumpHeight/this.jumpStepCount)*Math.sin(Math.PI * t));
+        }
+
+        for(let i = this.jumpSteps.length-1; i >= 0; i--) {
+            this.jumpSteps.push(-this.jumpSteps[i]);
+        }
+
+        console.log("JumpSteps", this.jumpSteps);
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
     }
@@ -131,20 +151,23 @@ export class Pacman {
                 collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
                     return true;
             }
-        }            
-
-        for (let i = 0; i < this.dots.length; i++) {
-            if(!this.dots[i].visibility)
-                continue;
-
-            const dotPos = this.dots[i].position;
-            if (dotPos[0] <= this.position[0]+0.1 &&
-                dotPos[0] >= this.position[0]-0.1 &&
-                dotPos[1] <= this.position[1]+0.1 &&
-                dotPos[1] >= this.position[1]-0.1) {
-                this.dots[i].setVisibility(false);
-                this.score += 1;
-            }
+        }
+        //if on ground eat dots            
+        if(this.onGround) {
+            for (let i = 0; i < this.dots.length; i++) {
+                if(!this.dots[i].visibility)
+                    continue;
+    
+                const dotPos = this.dots[i].position;
+                if (dotPos[0] <= this.position[0]+0.1 &&
+                    dotPos[0] >= this.position[0]-0.1 &&
+                    dotPos[1] <= this.position[1]+0.1 &&
+                    dotPos[1] >= this.position[1]-0.1) {
+                    this.dots[i].setVisibility(false);
+                    this.score += 1;
+                }
+        }
+        
             
         }
         
@@ -190,6 +213,10 @@ export class Pacman {
             }
     }
 
+    startJump() {
+        this.jump = true;
+    }
+
     move() {
         if(this.checkGameOver()) {
             this.gameOver();
@@ -212,12 +239,36 @@ export class Pacman {
             }
         }
 
-        //check if change direction is possible (when in center of cell and no collision in change direction)
+        //check if change direction is possible, and do so if yes
+        //(when in center of cell and no collision in change direction)
         if(this.changeDir != 0 && this.currentRowPos == 0.0 && !this.checkCollision(this.changeDir)) {
             this.direction = this.changeDir;
             this.changeDir = 0;
         }
 
+        //jump checks
+        if(this.jump) {
+            console.log(this.jump);
+            
+        }
+        if(this.jump && this.onGround && this.currentRowPos == 0.0) {
+            this.jump = false;
+            this.onGround = false;
+            this.currentJumpStep = 0;
+        }
+
+        if(!this.onGround) {
+            if (this.currentJumpStep >= this.jumpSteps.length) {
+                this.onGround = true;
+            } else {
+                this.shape.translate(undefined, undefined, this.jumpSteps[this.currentJumpStep++]);
+            }
+            
+        }
+
+        
+
+        //rotation animation
         if(this.currentAngle != this.targetAngle) {
             this.shape.rotate("z",this.rotationStepSize);
             this.currentAngle += this.rotationStepSize;
@@ -227,6 +278,8 @@ export class Pacman {
                 this.currentAngle += 360;
             }
         }
+
+        //actual movement calculations with collision check
         if(!this.checkCollision(this.direction)) {
             switch(this.direction){
                 case 1:
