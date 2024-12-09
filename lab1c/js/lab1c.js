@@ -65,7 +65,7 @@ const main = async () => {
     const c10 = 15.0;
     const global = new Global();
     let selected_shader = 0;
-    const shaders = [new Shader("phong")];
+    const shader = new Shader("phong");
     //const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
     const objects = [];
@@ -414,16 +414,13 @@ const main = async () => {
     }
 
 
-    for (let i = 0; i < shaders.length; i++) {
-        await shaders[i].init(gl);
+    
+        await shader.init(gl);
 
-        //prepare vertices and faces
-        global.initGlobalCoordinateSystem(gl,shaders[i]);
 
         for (let j = 0; j < objects.length; j++) {
-            await objects[j].init(gl, shaders[i]);
+            await objects[j].init(gl, shader);
         }
-    }
 
     function onResize(entries) {
 
@@ -486,17 +483,11 @@ const main = async () => {
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        gl.useProgram(shaders[selected_shader].program);
+        gl.useProgram(shader.program);
         
-        if(selected == 0) {
-            global.drawGlobalCoordinateSystem(gl,shaders[selected_shader]);
-        }
 
         for (var i = 0; i < objects.length; i++) {
-            objects[i].draw(gl, shaders[selected_shader], global);
-            if(selected > 0 && i == (selected-1)) {
-                objects[i].drawCoordianteSystem(gl,shaders[selected_shader], global);
-            }
+            objects[i].draw(gl, shader, global);
         }
 
         window.requestAnimationFrame(draw);
