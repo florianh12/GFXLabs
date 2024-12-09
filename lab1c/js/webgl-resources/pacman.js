@@ -165,6 +165,7 @@ export class Pacman {
             this.gameOver();
             return;
         }
+        
         //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
         if(this.currentRowPos >= 1.5 || this.currentRowPos < this.translationRate) {
             this.currentRowPos = 0.0;
@@ -221,6 +222,11 @@ export class Pacman {
             }
     
             this.currentRowPos = (this.currentRowPos+this.translationRate);
+
+            //update Ghost pacpos
+            for(let i = 0; i < this.ghosts.length; i++) {
+                this.ghosts[i].updatePacpos(this.position);
+            }
         }
     }
 }

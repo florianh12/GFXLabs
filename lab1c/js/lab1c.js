@@ -10,6 +10,7 @@ import { PacmanShape } from './webgl-resources/pacman-shape.js';
 import { GhostShape } from './webgl-resources/ghost-shape.js';
 import { Ghost } from './webgl-resources/ghost.js';
 import { Game } from './webgl-resources/game.js';
+import * as glm from './gl-matrix/dist/esm/index.js';
 
 
 
@@ -73,6 +74,9 @@ const main = async () => {
 
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
+    
+    const testTargetTo = glm.mat4.targetTo(glm.mat4.create(), glm.vec3.fromValues(1.0,1.0,0.0),glm.vec3.fromValues(0.0,0.0,0.0), glm.vec3.fromValues(0.0,0.0,1.0));
+    console.log("tagetTo Matrix:",testTargetTo);
     
 
     //manage drawcalls and starting position for pacman shape

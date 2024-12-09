@@ -23,19 +23,22 @@ export class GhostShape extends Shape {
         this.shape = await this.parser.parsePacman('./sampleModels/Pacman/Ghost.obj',true,texturePath);
         await this.shape.init(gl,shader);
 
-        this.shape.rotate("x",90);
+        //orient ghost correctly
+        this.shape.rotate("y",-180);
         
-        //console.log(this.modelMatrix);
     }
 
-    //disentangle translation from rotation -> this override
-    translate(x = 0.0, y = 0.0, z = 0.0){
-        
+    //exchange translation with tagetTo
+    translate(x = 0.0, y = 0.0, pac_x = 0.0, pac_y = 0.0){
+
+        this.position[0] += x;
+        this.position[1] += y;
         //actual translation
-        glm.mat4.translate(
-            this.translationMatrix,
-            this.translationMatrix,
-            glm.vec3.fromValues(x,y,z));
+        glm.mat4.targetTo(
+            this.translationMatrix, 
+        glm.vec3.fromValues(this.position[0],this.position[1],0.0),
+        glm.vec3.fromValues(pac_x,pac_y,0.0), 
+        glm.vec3.fromValues(0.0,0.0,1.0));
 
         //applys changes
         this.updateModelMatrix();

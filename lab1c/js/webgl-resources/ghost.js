@@ -24,6 +24,7 @@ export class Ghost {
     stop = false;
     directionTimerID;
     movementIntervalID;
+    pacPos = [0.0,0.0];
     
     
 
@@ -46,12 +47,17 @@ export class Ghost {
         this.walls = walls;
         this.position = [...position];
         this.startPosition = [...position];
+        this.pacPos = [0.0,0.0];
 
         this.shape.translate(this.position[0],this.position[1]);
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
         //random direction changes (cooldown to prevent stuck in wall bug)
         //this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
+    }
+
+    updatePacpos(pacpos) {
+        this.pacPos = [...pacpos];
     }
 
     changeDirection() {
@@ -142,7 +148,6 @@ export class Ghost {
     }
 
     move() {
-        console.log("ghost",this.shape.color,this.direction, this.currentRowPos, this.startPosition);
         
         //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
         if(this.currentRowPos >= 1.5 || this.currentRowPos < this.translationRate) {
@@ -159,19 +164,19 @@ export class Ghost {
         if(!this.checkCollision(this.direction)) {
             switch(this.direction){
                 case 1:
-                    this.shape.translate(0.0,this.translationRate);
+                    this.shape.translate(0.0,this.translationRate,this.pacPos[0],this.pacPos[1]);
                     this.position[1] += this.translationRate;
                     break;
                 case 2:
-                    this.shape.translate(0.0,-this.translationRate);
+                    this.shape.translate(0.0,-this.translationRate,this.pacPos[0],this.pacPos[1]);
                     this.position[1] += -this.translationRate;
                     break;
                 case 3:
-                    this.shape.translate(this.translationRate);
+                    this.shape.translate(this.translationRate,undefined,this.pacPos[0],this.pacPos[1]);
                     this.position[0] += this.translationRate;
                     break;
                 case 4:
-                    this.shape.translate(-this.translationRate);
+                    this.shape.translate(-this.translationRate,undefined,this.pacPos[0],this.pacPos[1]);
                     this.position[0] += -this.translationRate;
                     break;
             }
