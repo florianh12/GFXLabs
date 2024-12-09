@@ -28,6 +28,10 @@ export class GhostShape extends Shape {
         
     }
 
+    async initShadow(gl, shader) {
+       await this.shape.initShadow(gl,shader);
+    }
+
     //exchange translation with tagetTo
     translate(x = 0.0, y = 0.0, pac_x = 0.0, pac_y = 0.0){
 
@@ -50,4 +54,14 @@ export class GhostShape extends Shape {
         
     }
 
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {ShadowShader} shader 
+     * @param {Global} global 
+     */
+    shadowPass(gl, shader, global) {
+        
+        this.shape.shadowPass(gl,shader,global, this.modelMatrix);
+    }
 }

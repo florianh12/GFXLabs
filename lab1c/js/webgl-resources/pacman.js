@@ -65,7 +65,6 @@ export class Pacman {
             this.jumpSteps.push(-this.jumpSteps[i]);
         }
 
-        console.log("JumpSteps", this.jumpSteps);
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
     }

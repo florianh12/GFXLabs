@@ -1,5 +1,6 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
 import { Shader } from './shader.js';
+import { ShadowShader } from './shadowShader.js';
 import { Shape } from "./shape.js";
 import { loadTexture } from './webgl-helper-functions.js';
 
@@ -93,6 +94,40 @@ export class PacmanShape extends Shape {
 
         gl.uniform1i(shader.uTextureActiveLocation, false);
         gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {ShadowShader} shader 
+     * @param {Global} global 
+     * @param {mat4} pacmanModelMatrix
+     */
+    shadowPass(gl, shader, global, pacmanModelMatrix) {
+        const adaptedModelMatrix = glm.mat4.create();
+
+        glm.mat4.mul(adaptedModelMatrix,pacmanModelMatrix,this.modelMatrix);
+
+        const modelViewMatrix = glm.mat4.create();
+
+        //calculate actual ModelViewMatrix with shape modelMatrix
+        glm.mat4.mul(modelViewMatrix,global.globalModelViewMatrix,adaptedModelMatrix);
+                
+        //shader Matrices
+        gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, global.projectionMatrix);
+        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
+        gl.uniformMatrix4fv(shader.uShadowMatrixLocation, false, global.calculateShadowMatrix());
+
+        gl.bindVertexArray(this.shadowVAO);
+
+
+
+        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+
+
+
+
+        
     }
 
 }
