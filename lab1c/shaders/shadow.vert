@@ -20,7 +20,7 @@ void main() {
    vec4 vertex_model_pos = u_model_matrix * a_position;
 
    vec3 lightdir = u_light_pos.xyz - vertex_model_pos.xyz;
-   float dist_scalar = vertex_model_pos.z / lightdir.z;
+   float dist_scalar = - vertex_model_pos.z / lightdir.z;
    float yp = vertex_model_pos.y + lightdir.y * dist_scalar;
    float xp = vertex_model_pos.x + lightdir.x * dist_scalar;
    vec4 shadow_pos = vec4(xp,yp,-0.5,1.0);
