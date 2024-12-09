@@ -78,16 +78,18 @@ const main = async () => {
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
 
+    //Labyrinth floor
+    objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
+    objects[0].scale(16.5,12.0);
+    objects[0].translate(u,u,-0.6);
+
+
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
-    objects[0].rotate("x",180);
-    objects[0].rotate("z",270);
+    objects[1].rotate("x",180);
+    objects[1].rotate("z",270);
     
-    //Labyrinth floor
-    // objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
-    // objects[1].scale(16.5,12.0);
-    // objects[1].translate(u,u,-0.5);
-
+    
     for (let i = 0; i < ghostShapes.length; i++) {
         objects.push(ghostShapes[i]);
     }
@@ -496,7 +498,7 @@ const main = async () => {
 
         gl.useProgram(shadowShader.program);
 
-        for (var i = 0; i < objects.length; i++) {
+        for (var i = 1; i < objects.length; i++) {
             objects[i].shadowPass(gl, shadowShader, global);
         }
 
