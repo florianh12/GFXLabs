@@ -8,6 +8,7 @@ import { PacmanShapeController } from './webgl-resources/pacman-shape-controller
 import { GhostShape } from './webgl-resources/ghost-shape.js';
 import { Ghost } from './webgl-resources/ghost.js';
 import * as glm from './gl-matrix/dist/esm/index.js';
+import { ShadowShader } from './webgl-resources/shadowShader.js';
 
 
 
@@ -63,12 +64,16 @@ const main = async () => {
     const global = new Global();
     let selected_shader = 0;
     const shader = new Shader("phong");
+    const shadowShader = new ShadowShader();
     //const defaultShader = new Shader("gouraud");
     const parser = new OBJParser();
     const objects = [];
     let walls = [];
     let dots = [];
     let selected = -1;
+
+    console.log(global.calculateShadowMatrix());
+    
 
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
@@ -79,9 +84,9 @@ const main = async () => {
     objects[0].rotate("z",270);
     
     //Labyrinth floor
-    objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
-    objects[1].scale(16.5,12.0);
-    objects[1].translate(u,u,-0.5);
+    // objects.push(await parser.parseObjectFromFile('./sampleModels/plane.obj',colorPlane));
+    // objects[1].scale(16.5,12.0);
+    // objects[1].translate(u,u,-0.5);
 
     for (let i = 0; i < ghostShapes.length; i++) {
         objects.push(ghostShapes[i]);
@@ -413,10 +418,12 @@ const main = async () => {
 
     
         await shader.init(gl);
+        await shadowShader.init(gl);
 
 
         for (let j = 0; j < objects.length; j++) {
             await objects[j].init(gl, shader);
+            await objects[j].initShadow(gl, shadowShader);
         }
 
     function onResize(entries) {
@@ -487,13 +494,16 @@ const main = async () => {
             objects[i].draw(gl, shader, global);
         }
 
+        gl.useProgram(shadowShader.program);
+
+        for (var i = 0; i < objects.length; i++) {
+            objects[i].shadowPass(gl, shadowShader, global);
+        }
+
         window.requestAnimationFrame(draw);
     }
 
     window.requestAnimationFrame(draw);
 }
-    try{
-     main();
-    } catch(e) {
 
-    }
+main();

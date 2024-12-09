@@ -185,6 +185,29 @@ export class Global {
             this.translationMatrix
         );
     }
+
+        /**
+         * @returns {mat4}
+         */
+    calculateShadowMatrix() {
+        const shadowMatrix = glm.mat4.create();
+        // -z light
+        shadowMatrix[0] = -this.light.position[2];
+        shadowMatrix[5] = -this.light.position[2];
+        shadowMatrix[15] = -this.light.position[2];
+
+        //set z row to 0
+        shadowMatrix[10] = 0.0;
+
+        //set w z entry to 1
+        shadowMatrix[11] = 1.0;
+
+        // set light x and y in z row
+        shadowMatrix[8] = this.light.position[0];
+        shadowMatrix[8] = this.light.position[1];
+
+        return shadowMatrix;
+    }
     /**
      * 
      * @param {WebGL2RenderingContext} gl 

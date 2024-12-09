@@ -1,10 +1,12 @@
 import * as glm from '../gl-matrix/dist/esm/index.js';
 import { Global } from './global.js';
 import { Shader } from './shader.js';
+import { ShadowShader } from './shadowShader.js';
 
 export class Shape {
     vao = -1;
     coordinateSystemVAO = -1;
+    shadowVAO = -1;
     vertices = -1;
     normals = -1;
     colors = -1;
@@ -46,6 +48,12 @@ export class Shape {
         this.bufferCoordinateSystem(gl,shader);
     }
 
+    async initShadow(gl, shader) {
+        this.initializeShadowVAO(gl);
+        this.bufferVertexData(gl, shader);
+        this.bufferIndices(gl);
+    }
+
     initializeVAO(gl) {
 
         this.vao = gl.createVertexArray();
@@ -53,6 +61,13 @@ export class Shape {
         this.coordinateSystemVAO = gl.createVertexArray();
         
         gl.bindVertexArray(this.vao);
+    }
+
+    initializeShadowVAO(gl) {
+
+        this.shadowVAO = gl.createVertexArray();
+
+        gl.bindVertexArray(this.shadowVAO);
     }
 
     bufferVertexData(gl, shader) {
@@ -257,6 +272,29 @@ export class Shape {
         global.applyUniforms(gl,shader,this.modelMatrix);
 
         gl.bindVertexArray(this.vao);
+
+        gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
+    }
+
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {ShadowShader} shader 
+     * @param {Global} global 
+     */
+    shadowPass(gl, shader, global) {
+        
+        const modelViewMatrix = glm.mat4.create();
+
+        //calculate actual ModelViewMatrix with shape modelMatrix
+        glm.mat4.mul(modelViewMatrix,global.globalModelViewMatrix,this.modelMatrix);
+                
+        //shader Matrices
+        gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, global.projectionMatrix);
+        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
+        gl.uniformMatrix4fv(shader.uShadowMatrixLocation, false, global.calculateShadowMatrix());
+
+        gl.bindVertexArray(this.shadowVAO);
 
         gl.drawElements(gl.TRIANGLES, this.indices.length, gl.UNSIGNED_SHORT, 0);
     }
