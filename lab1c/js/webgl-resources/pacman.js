@@ -16,7 +16,7 @@ export class Pacman {
     changeDir = 0;
     currentAngle = 0;
     targetAngle = 0;
-    rotationStepSize = 10;
+    rotationStepSize = 1;
     currentRowPos = 0.0;
     position = [0.0,0.0];
     ghosts = 0;

@@ -21,6 +21,7 @@ I did all requested tasks, except for the shadows. I tried shadow mapping and sh
 ## Tested environments
 - Ubuntu Linux with python webserver and Mozilla Firefox 132.0.2 (snap)
 - Ubuntu Linux with python webserver and Chromium Version 131.0.6778.85 (Official Build) snap (64-bit)
+- Windows 11 with python webserver (added option: --bind localhost) and Mozilla Firefox 133.0 (64-bit)
 
 ## Ghost model
 ghost model from: PacMan Ghost by Hatch on Thingiverse: https://www.thingiverse.com/thing:557527
