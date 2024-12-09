@@ -32,5 +32,6 @@ void main() {
     //-0.5 because my labyrinth floor is at -0.6 (a bit below to avoid clipping)
     vec4 shadow_pos = vec4(x_shadow,y_shadow,-0.5,1.0);
 
+    // include camera and project to 2d image
     gl_Position = u_projection_matrix * u_view_matrix * shadow_pos;
 }
