@@ -29,7 +29,7 @@ export class Pacman {
     jumpSteps = [];
     currentJumpStep = 0;
     //steps equal three grid cells
-    jumpStepCount = 200;
+    jumpStepCount = 150;
     jumpHeight = 5.5;
     
     
@@ -175,8 +175,14 @@ export class Pacman {
     }
 
     checkGameOver() {
+        //checks if all dots are eaten
         if(this.score == this.dots.length) {
             return true;
+        }
+
+        //checks if still jumping
+        if(!this.onGround) {
+            return false;
         }
 
         for(let i = 0; i < this.ghosts.length; i++) {
@@ -251,7 +257,7 @@ export class Pacman {
             console.log(this.jump);
             
         }
-        if(this.jump && this.onGround && this.currentRowPos == 0.0) {
+        if(this.jump && this.onGround) {
             this.jump = false;
             this.onGround = false;
             this.currentJumpStep = 0;
