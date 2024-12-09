@@ -69,22 +69,12 @@ const main = async () => {
     const parser = new OBJParser();
     const objects = [];
     let selected = -1;
-    let beingDragged = false;
-    let moveCamera = false;
-    let moveLight = false;
-    let xMouseLast, yMouseLast;
-    var moveCameraIndicator = document.getElementById("moveCameraIndicator");
-    var moveLightIndicator = document.getElementById("moveLightIndicator");
-    var objFileButton = document.getElementById("objFileButton");
-    var fileSource = document.getElementById("fileSource");
 
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
     
     const ghosts = [new Ghost(ghostShapes[0], objects, [c3,r1]),new Ghost(ghostShapes[1], objects, [-c4,r2])];
     const pacman = new Pacman(global,pacmanShape, objects, ghosts);
-
-    
     
 
     //manage drawcalls and starting position for pacman shape

@@ -119,39 +119,53 @@ export class Pacman {
                 collisionPosition[1] >= boundingRectangle[1][1]+objectPosition[1]) {
                     return true;
             }
-        }
+        }            
 
-            let endGame = false;
-            for(let i = 0; i < this.ghosts.length; i++) {
-                //0.75 is the width of the rectangle of the scaled ghost
-                if(collisionPosition[0] <= 0.75+this.ghosts[i].position[0] && 
-                    collisionPosition[0] >= -0.75+this.ghosts[i].position[0] &&
-                    collisionPosition[1] <= 0.75+this.ghosts[i].position[1] &&
-                    collisionPosition[1] >= -0.75+this.ghosts[i].position[1]) {
-                        endGame = true;
-                        break;
-                    }
-            }
-
-            if(endGame) {
-                this.clearIntervals();
-                for(let i = 0; i < this.ghosts.length; i++) {
-                    this.ghosts[i].clearIntervals();
-                }
-                this.reset();
-                for(let i = 0; i < this.ghosts.length; i++) {
-                    this.ghosts[i].reset();
-                }
-                this.restart();
-                for(let i = 0; i < this.ghosts.length; i++) {
-                    this.ghosts[i].restart();
-                }
-            }
+            
         
         return false;
     }
 
+    checkGameOver() {
+        for(let i = 0; i < this.ghosts.length; i++) {
+            //0.75 is the width of the rectangle of the scaled ghost
+            if(this.position[0] <= 0.75+this.ghosts[i].position[0] && 
+                this.position[0] >= -0.75+this.ghosts[i].position[0] &&
+                this.position[1] <= 0.75+this.ghosts[i].position[1] &&
+                this.position[1] >= -0.75+this.ghosts[i].position[1]) {
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    gameOver() {
+        this.clearIntervals();
+
+        for(let i = 0; i < this.ghosts.length; i++) {
+            this.ghosts[i].clearIntervals();
+        }
+            
+        setTimeout(this.newGame.bind(this),500);
+
+    }
+
+    newGame() {
+        this.reset();
+            for(let i = 0; i < this.ghosts.length; i++) {
+                this.ghosts[i].reset();
+            }
+            this.restart();
+            for(let i = 0; i < this.ghosts.length; i++) {
+                this.ghosts[i].restart();
+            }
+    }
+
     move() {
+        if(this.checkGameOver()) {
+            this.gameOver();
+            return;
+        }
         //1.5 is the spacing between rows, the following code prevents weird unintentional wall crashes
         if(this.currentRowPos >= 1.5 || this.currentRowPos < this.translationRate) {
             this.currentRowPos = 0.0;
