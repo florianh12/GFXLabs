@@ -7,7 +7,7 @@ import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 export class Pacman {
     shape;
     global;
-    objects;
+    walls;
     direction = 3;
     timer = -1;
     degreeMap = new Map();
@@ -30,7 +30,7 @@ export class Pacman {
      * @param {Global} global 
      * @param {Shape} shape 
      */
-    constructor(global, shape, objects, ghosts) {
+    constructor(global, shape, walls, ghosts) {
         this.shape = shape;
         this.global = global;
         this.direction = 3;
@@ -41,7 +41,7 @@ export class Pacman {
         this.degreeMap.set(4,180);
         this.degreeMap.set(2,90);
         this.rotationStepSize = 10;
-        this.objects = objects;
+        this.walls = walls;
         this.ghosts = ghosts;
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
@@ -108,10 +108,9 @@ export class Pacman {
         
         
 
-        //starts at 2, because the object 0 is the labyrinth floor and object 1 is the pacman shape
-        for( let i = 2+this.ghosts.length; i < this.objects.length; i++) {
-            let objectPosition = this.objects[i].position;
-            let boundingRectangle = this.objects[i].boundingRectangle;
+        for( let i = 0; i < this.walls.length; i++) {
+            let objectPosition = this.walls[i].position;
+            let boundingRectangle = this.walls[i].boundingRectangle;
 
             if(collisionPosition[0] <= boundingRectangle[0][0]+objectPosition[0] && 
                 collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&

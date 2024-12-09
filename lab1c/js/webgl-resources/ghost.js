@@ -6,7 +6,7 @@ import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 
 export class Ghost {
     shape;
-    objects;
+    walls;
     startPosition;
     direction = 3;
     timer = -1;
@@ -30,10 +30,10 @@ export class Ghost {
     /**
      *  
      * @param {Shape} shape
-     * @param {Shape[]} objects
+     * @param {Shape[]} walls
      * @param {[]} position
      */
-    constructor(shape, objects, position) {
+    constructor(shape, walls, position) {
         this.shape = shape;
         this.direction = 3;
 
@@ -43,7 +43,7 @@ export class Ghost {
         this.degreeMap.set(4,180);
         this.degreeMap.set(2,90);
         this.rotationStepSize = 10;
-        this.objects = objects;
+        this.walls = walls;
         this.position = [...position];
         this.startPosition = [...position];
 
@@ -104,10 +104,9 @@ export class Ghost {
         
         
 
-        //starts at 2, because the object 0 is the labyrinth floor and object 1 is the pacman shape
-        for( let i = 2; i < this.objects.length; i++) {
-            let objectPosition = this.objects[i].position;
-            let boundingRectangle = this.objects[i].boundingRectangle;
+        for( let i = 0; i < this.walls.length; i++) {
+            let objectPosition = this.walls[i].position;
+            let boundingRectangle = this.walls[i].boundingRectangle;
             if(collisionPosition[0] <= boundingRectangle[0][0]+objectPosition[0] && 
                 collisionPosition[0] >= boundingRectangle[0][1]+objectPosition[0] &&
                 collisionPosition[1] <= boundingRectangle[1][0]+objectPosition[1] &&
