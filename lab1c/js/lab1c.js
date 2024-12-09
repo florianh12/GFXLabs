@@ -1,15 +1,12 @@
 
-import { generateCube, generatePyramid, generatePlane } from './webgl-resources/webgl-helper-functions.js';
 import { Shader } from './webgl-resources/shader.js';
 import { Global } from './webgl-resources/global.js';
 //import Shape from './webgl-resources/shape.js';
 import { OBJParser } from './webgl-resources/obj-parser.js';
 import { Pacman } from './webgl-resources/pacman.js';
 import { PacmanShapeController } from './webgl-resources/pacman-shape-controller.js';
-import { PacmanShape } from './webgl-resources/pacman-shape.js';
 import { GhostShape } from './webgl-resources/ghost-shape.js';
 import { Ghost } from './webgl-resources/ghost.js';
-import { Game } from './webgl-resources/game.js';
 import * as glm from './gl-matrix/dist/esm/index.js';
 
 

@@ -1,7 +1,4 @@
-import { set } from "../gl-matrix/dist/esm/mat2.js";
-import { Game } from "./game.js";
 import { Shape } from "./shape.js";
-import { calculateRotationDegrees } from "./webgl-helper-functions.js";
 
 
 export class Ghost {

@@ -1,4 +1,3 @@
-import { set } from "../gl-matrix/dist/esm/mat2.js";
 import { Global } from "./global.js";
 import { Shape } from "./shape.js";
 import { calculateRotationDegrees } from "./webgl-helper-functions.js";
