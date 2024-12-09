@@ -70,14 +70,11 @@ const main = async () => {
     const parser = new OBJParser();
     const objects = [];
     let walls = [];
+    let dots = [];
     let selected = -1;
 
     var pacmanShape = new PacmanShapeController();
     var ghostShapes = [new GhostShape('Red'),new GhostShape()];
-    
-    const testTargetTo = glm.mat4.targetTo(glm.mat4.create(), glm.vec3.fromValues(1.0,1.0,0.0),glm.vec3.fromValues(0.0,0.0,0.0), glm.vec3.fromValues(0.0,0.0,1.0));
-    console.log("tagetTo Matrix:",testTargetTo);
-    
 
     //manage drawcalls and starting position for pacman shape
     objects.push(pacmanShape);
@@ -330,6 +327,80 @@ const main = async () => {
     }
 
     objects.push(...await createLabyrinth());
+
+    const instantiateDotColumn = async (fromRow,toRow, column) => {
+        //to prevent input order problems 
+        if(fromRow > toRow) {
+            let tmp = toRow;
+            toRow = fromRow;
+            fromRow = tmp;
+        }
+        for(let i = fromRow; i < toRow+1; i += 1.5) {
+            let temp = await parser.parseDot('./sampleModels/Pacman/Dot.obj',colorPacman);
+
+            temp.translate(column,i);
+            dots.push(temp);
+        }
+    } 
+
+    const instantiateDotRow = async (fromCol,toCol, row) => {
+        //to prevent input order problems 
+        if(fromCol > toCol) {
+            let tmp = toCol;
+            toCol = fromCol;
+            fromCol = tmp;
+        }
+        for(let i = fromCol; i < toCol+1; i += 1.5) {
+            let temp = await parser.parseDot('./sampleModels/Pacman/Dot.obj',colorPacman);
+
+            temp.translate(i,row);
+            dots.push(temp);
+        }
+    }
+    
+    const instantiateLabyrinthDots = async () => {
+        await instantiateDotColumn(r4,r6,-c9);
+        await instantiateDotColumn(-r4,-r5,-c9);
+        await instantiateDotColumn(r5,r3,-c8);
+        await instantiateDotColumn(-r6,r1,-c8);
+        await instantiateDotRow(-c7,-c4,r5);
+        await instantiateDotColumn(r3,r0,-c7);
+        await instantiateDotRow(-c7,c3,-r6);
+        await instantiateDotColumn(r0,-r1,-c6);
+        await instantiateDotRow(-c5,-c1,r6);
+        await instantiateDotColumn(r3,-r4,-c5);
+        await instantiateDotColumn(r4,r2,-c4);
+        await instantiateDotRow(-c4,c4,-r2);
+        await instantiateDotRow(-c4,-c1,-r4);
+        await instantiateDotRow(-c3,c0,r2);
+        await instantiateDotRow(-c3,-c1,r0);
+        await instantiateDotRow(-c2,-c2,-r1);
+        await instantiateDotRow(-c1,-c1,-r5);
+        await instantiateDotColumn(r4,r3,c0);
+        await instantiateDotColumn(r1,r1,c0);
+        await instantiateDotRow(c1,c2,r6);
+        await instantiateDotRow(c1,c2,r4);
+        await instantiateDotRow(c1,c4,r0);
+        await instantiateDotRow(c1,c8,-r4);
+        await instantiateDotRow(c1,c1,-r5);
+        await instantiateDotRow(c2,c6,r5);
+        await instantiateDotColumn(r3,r1,c2);
+        await instantiateDotRow(c3,c6,r1);
+        await instantiateDotRow(c3,c3,-r3);
+        await instantiateDotRow(c4,c4,-r1);
+        await instantiateDotRow(c5,c9,-r6);
+        await instantiateDotRow(c6,c9,r6);
+        await instantiateDotColumn(r4,r2,c6);
+        await instantiateDotColumn(r0,-r2,c6);
+        await instantiateDotRow(c7,c7,-r2);
+        await instantiateDotRow(c7,c7,-r5);
+        await instantiateDotColumn(r2,-r3,c8);
+        await instantiateDotColumn(r5,r2,c9);
+    }
+
+    await instantiateLabyrinthDots();
+
+    objects.push(...dots);
 
     const ghosts = [new Ghost(ghostShapes[0], walls, [c3,r1]),new Ghost(ghostShapes[1], walls, [-c4,r2])];
     const pacman = new Pacman(global,pacmanShape, walls, ghosts);

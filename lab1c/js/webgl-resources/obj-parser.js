@@ -1,4 +1,5 @@
 import { distance } from "../gl-matrix/dist/esm/vec3.js";
+import { Dot } from "./dot.js";
 import { PacmanShape } from "./pacman-shape.js";
 import { Shape } from "./shape.js";
 
@@ -215,6 +216,41 @@ export class OBJParser {
 
         this.generateIndicesFromMap(color);
         return new Shape(this.vertices,this.normals,this.colors,this.indices);
+        
+    }
+
+    /**
+     * 
+     * @param {String} string
+     * @param {[]} color 
+     * 
+     * @returns {Shape}
+     */
+    async parseDot(filePath,color=[1.0,1.0,0.0,1.0]) {
+
+        let string =  await (fetch(filePath).then(file => file.text()));
+        //clear all values
+        this.reset();
+
+        //split string into lines
+        const data = string.split('\n');
+
+        for (let i = 0; i < data.length; i++) {
+            const line = data[i].split(' ');
+
+            if (line[0] == 'v') {
+                this.parseVertex(line);
+
+            } else if (line[0] == 'vn') {
+                this.parseNormal(line);
+
+            } else if (line[0] == 'f') {
+                this.parseFace(line);
+            }
+        }
+
+        this.generateIndicesFromMap(color);
+        return new Dot(this.vertices,this.normals,this.colors,this.indices);
         
     }
 
