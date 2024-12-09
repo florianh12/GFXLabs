@@ -6,7 +6,9 @@ export class ShadowShader {
     aPositionLocation = -2;
     uViewMatrixLocation = -2;
     uProjectionMatrixLocation = -2;
-    uModelViewMatrixLocation = -2;
+    uViewMatrixLocation = -2;
+    uModelMatrixLocation = -2;
+    uLightPosLocation = -2;
 
     constructor(filename = 'shadow') {
         this.filename = filename;
@@ -22,8 +24,10 @@ export class ShadowShader {
 
         this.uProjectionMatrixLocation = gl.getUniformLocation(this.program, 'u_projection_matrix');
 
-        this.uModelViewMatrixLocation = gl.getUniformLocation(this.program, 'u_model_view_matrix');
+        this.uViewMatrixLocation = gl.getUniformLocation(this.program, 'u_view_matrix');
 
-        this.uShadowMatrixLocation = gl.getUniformLocation(this.program, 'u_shadow_matrix');
+        this.uModelMatrixLocation = gl.getUniformLocation(this.program, 'u_model_matrix');
+        
+        this.uLightPosLocation = gl.getUniformLocation(this.program, 'u_light_pos');
     }
 }

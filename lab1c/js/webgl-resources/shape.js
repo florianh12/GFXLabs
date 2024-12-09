@@ -284,15 +284,21 @@ export class Shape {
      */
     shadowPass(gl, shader, global) {
         
-        const modelViewMatrix = glm.mat4.create();
+        const totalModelMatrix = glm.mat4.create();
 
         //calculate actual ModelViewMatrix with shape modelMatrix
-        glm.mat4.mul(modelViewMatrix,global.globalModelViewMatrix,this.modelMatrix);
+        glm.mat4.mul(totalModelMatrix,totalModelMatrix,global.scalingMatrix);
+        glm.mat4.mul(totalModelMatrix,totalModelMatrix,global.rotationMatrix);
+        glm.mat4.mul(totalModelMatrix,totalModelMatrix,global.translationMatrix);
+        glm.mat4.mul(totalModelMatrix,totalModelMatrix,this.modelMatrix);
+        
                 
         //shader Matrices
         gl.uniformMatrix4fv(shader.uProjectionMatrixLocation, false, global.projectionMatrix);
-        gl.uniformMatrix4fv(shader.uModelViewMatrixLocation, false, modelViewMatrix);
-        gl.uniformMatrix4fv(shader.uShadowMatrixLocation, false, global.calculateShadowMatrix());
+        gl.uniformMatrix4fv(shader.uViewMatrixLocation, false, global.camera.viewMatrix);
+        gl.uniformMatrix4fv(shader.uModelMatrixLocation, false, totalModelMatrix);
+        gl.uniform4fv(shader.uLightPosLocation, global.light.position);
+
 
         gl.bindVertexArray(this.shadowVAO);
 

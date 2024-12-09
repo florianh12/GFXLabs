@@ -19,4 +19,16 @@ export class Dot extends Shape {
             super.draw(gl,shader,global);
         }
     }
+
+    /**
+     * 
+     * @param {WebGL2RenderingContext} gl 
+     * @param {Shader} shader 
+     * @param {Global} global 
+     */
+    shadowPass(gl, shader, global) {
+        if(this.visibility) {
+            super.shadowPass(gl,shader,global);
+        }
+    }
 }
