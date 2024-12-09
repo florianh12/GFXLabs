@@ -16,7 +16,7 @@ python3 -m http.server
 Then open the website in the Browser and open lab1c.html
 
 ## Claim
-I did all requested tasks, except for the shadows. I tried shadow mapping and shadow projections, but both didn't work at all, so I removed them from the final version.
+I did all requested tasks.
 
 ## Tested environments
 - Ubuntu Linux with python webserver and Mozilla Firefox 132.0.2 (snap)
