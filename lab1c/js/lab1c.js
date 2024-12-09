@@ -99,13 +99,13 @@ const main = async () => {
         let temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
 
         temp.scale(...defaultScale);
-        temp.scale(u,b15);
+        temp.scale(u,b13);
         temp.translate(c10,r0);
         walls.push(temp);
 
         temp = await parser.parseObjectFromFile('./sampleModels/cube.obj',colorWall1);
         temp.scale(...defaultScale);
-        temp.scale(u,b15);
+        temp.scale(u,b13);
         temp.translate(-c10,r0);
         walls.push(temp);
 
