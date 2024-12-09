@@ -5,7 +5,7 @@ export class Camera {
     //needs to be reset to 0.0,0.0,8.0 and 0.0,0.0,-1.0
     eye = glm.vec3.create();//20
     target = glm.vec3.create();
-    shearMatrix = shearXY(0.5,0.8);
+    shearMatrix = shearXY(0.6,0.6);
 
     constructor() {
         this.viewMatrix = glm.mat4.create();
