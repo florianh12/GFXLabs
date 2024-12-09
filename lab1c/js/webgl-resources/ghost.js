@@ -19,11 +19,13 @@ export class Ghost {
     currentRowPos = 0.0;
     position = [0.0,0.0];
     //for direction changes
-    maxCooldown = 10000;
+    maxCooldown = 5000;
     minCooldown = 1000;
-    stop = false;
+
     directionTimerID;
     movementIntervalID;
+    
+    //for rotation
     pacPos = [0.0,0.0];
     
     
@@ -53,7 +55,7 @@ export class Ghost {
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
         //random direction changes (cooldown to prevent stuck in wall bug)
-        //this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
+        this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
     }
 
     updatePacpos(pacpos) {
@@ -66,7 +68,7 @@ export class Ghost {
 
         this.translate(newDirection);
         
-        //this.directionTimerID = setTimeout(this.changeDirection.bind(this), delay);
+        this.directionTimerID = setTimeout(this.changeDirection.bind(this), delay);
     }
 
     /**
@@ -128,7 +130,7 @@ export class Ghost {
         return false;
     }
     clearIntervals() {
-        //clearTimeout(this.directionTimerID);
+        clearTimeout(this.directionTimerID);
         clearInterval(this.movementIntervalID);
     }
 
@@ -137,14 +139,13 @@ export class Ghost {
         this.shape.resetTranslation();
         this.shape.translate(this.startPosition[0],this.startPosition[1]);
         this.position = [...this.startPosition];
-        this.stop = false;
         this.direction = 3;
     }
 
     restart() {
         this.movementIntervalID = setInterval(this.move.bind(this),10);
         //random direction changes (cooldown to prevent stuck in wall bug)
-        //this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
+        this.directionTimerID = setTimeout(this.changeDirection.bind(this),100);
     }
 
     move() {

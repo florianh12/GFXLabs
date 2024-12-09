@@ -8,18 +8,19 @@ export class Pacman {
     shape;
     global;
     walls;
+    dots;
     direction = 3;
     timer = -1;
     degreeMap = new Map();
-    translationRate = 0.00;//0.03
+    translationRate = 0.03;//0.03
     changeDir = 0;
     currentAngle = 0;
     targetAngle = 0;
     rotationStepSize = 10;
     currentRowPos = 0.0;
     position = [0.0,0.0];
-    stop = false;
     ghosts = 0;
+    score = 0;
     movementIntervalID;
 
     
@@ -30,7 +31,7 @@ export class Pacman {
      * @param {Global} global 
      * @param {Shape} shape 
      */
-    constructor(global, shape, walls, ghosts) {
+    constructor(global, shape, walls, ghosts, dots) {
         this.shape = shape;
         this.global = global;
         this.direction = 3;
@@ -43,6 +44,8 @@ export class Pacman {
         this.rotationStepSize = 10;
         this.walls = walls;
         this.ghosts = ghosts;
+        this.dots = dots;
+        this.score = 0;
         //movement
         this.movementIntervalID = setInterval(this.move.bind(this),10);
     }
@@ -67,13 +70,23 @@ export class Pacman {
 
     reset() {
         
-        this.shape.resetTranslation();
+        //reset Camera
         this.global.translateCamera(-this.position[0], -this.position[1]);
+        
+        //reset position and movement direction
+        this.shape.resetTranslation();
         this.position = [0.0,0.0];
-        this.stop = false;
         this.direction = 3;
+
         this.targetAngle = this.degreeMap.get(3);
         this.currentRowPos = 0.0;
+
+        //reset dots and score
+        for(let i = 0; i < this.dots.length; i++) {
+            this.dots[i].setVisibility(true);
+        }
+
+        this.score = 0;
         
     }
 
@@ -120,12 +133,29 @@ export class Pacman {
             }
         }            
 
+        for (let i = 0; i < this.dots.length; i++) {
+            if(!this.dots[i].visibility)
+                continue;
+
+            const dotPos = this.dots[i].position;
+            if (dotPos[0] <= this.position[0]+0.1 &&
+                dotPos[0] >= this.position[0]-0.1 &&
+                dotPos[1] <= this.position[1]+0.1 &&
+                dotPos[1] >= this.position[1]-0.1) {
+                this.dots[i].setVisibility(false);
+                this.score += 1;
+            }
             
+        }
         
         return false;
     }
 
     checkGameOver() {
+        if(this.score == this.dots.length) {
+            return true;
+        }
+
         for(let i = 0; i < this.ghosts.length; i++) {
             //0.75 is the width of the rectangle of the scaled ghost
             if(this.position[0] <= 0.75+this.ghosts[i].position[0] && 

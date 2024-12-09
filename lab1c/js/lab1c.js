@@ -403,7 +403,7 @@ const main = async () => {
     objects.push(...dots);
 
     const ghosts = [new Ghost(ghostShapes[0], walls, [c3,r1]),new Ghost(ghostShapes[1], walls, [-c4,r2])];
-    const pacman = new Pacman(global,pacmanShape, walls, ghosts);
+    const pacman = new Pacman(global,pacmanShape, walls, ghosts, dots);
     
 
 
