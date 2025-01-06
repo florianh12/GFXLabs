@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/lab3a.dir/lab3a.cpp.o CMakeFiles/lab3a.dir/vec3.cpp.o -o lab3a 

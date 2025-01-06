@@ -8,21 +8,17 @@
 ## pngwriter
 
 
-
-
-## Build gl-matrix
-### Prerequisites
-- Ubuntu Linux (other OS not tested)
-- npm / node.js
-### Build Process
-Build glmatrix by cloning it from github (https://github.com/toji/gl-matrix) and going into the main directory of the repository and run: 
+## Build Lab3a
+Navigate into the lab3a/build directory and run:
 ```bash
-npm i gl-matrix
+cmake --build .
 ```
+
+
 ## Start Lab1c
-Navigate into the lab1c directory and run:
+Navigate into the lab3a/build directory and run:
 ```bash
-python3 -m http.server
+./lab3a #options to be added once the base classes are programmed WIP 
 ```
 Then open the website in the Browser and open lab1c.html
 
