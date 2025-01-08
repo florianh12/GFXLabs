@@ -1,5 +1,6 @@
 #include <iostream>
 #include "vec3.h"
+#include "point3d.h"
 
 int main(int argc, char *argv[]) {
     // std::cout << argv[1] << "\n";

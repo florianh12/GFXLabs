@@ -1,6 +1,7 @@
 #include "vec3.h"
 #include <string>
 #include <sstream>
+#include <stdexcept>
 
 Vec3::Vec3(long double x, long double y, long double z){
     coordinates[0] = x;
@@ -93,8 +94,11 @@ bool Vec3::operator==(const Vec3& other) const {
 }
 
 long double& Vec3::operator[](int index) {
-    // normalize index to coordinates length
-    index = index % 3;
+    double within_range = index / 3.0;
+
+    if(within_range > 1.0 || within_range < -1.0) {
+        throw std::runtime_error("Index: "+std::to_string(index)+" not in range 3 <-> -3!");
+    }
 
     // enable access to last elements with -x syntax 
     if (index < 0) {
@@ -105,8 +109,11 @@ long double& Vec3::operator[](int index) {
 }
 
 const long double& Vec3::operator[](int index) const {
-    // normalize index to coordinates length
-    index = index % 3;
+    double within_range = index / 3.0;
+    
+    if(within_range > 1.0 || within_range < -1.0) {
+        throw std::runtime_error("Index: "+std::to_string(index)+" not in range 3 <-> -3!");
+    }
 
     // enable access to last elements with -x syntax 
     if (index < 0) {

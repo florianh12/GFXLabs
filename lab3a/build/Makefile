@@ -153,6 +153,30 @@ lab3a.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/lab3a.cpp.s
 .PHONY : lab3a.cpp.s
 
+point3d.o: point3d.cpp.o
+.PHONY : point3d.o
+
+# target to build an object file
+point3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/point3d.cpp.o
+.PHONY : point3d.cpp.o
+
+point3d.i: point3d.cpp.i
+.PHONY : point3d.i
+
+# target to preprocess a source file
+point3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/point3d.cpp.i
+.PHONY : point3d.cpp.i
+
+point3d.s: point3d.cpp.s
+.PHONY : point3d.s
+
+# target to generate assembly for a file
+point3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/point3d.cpp.s
+.PHONY : point3d.cpp.s
+
 vec3.o: vec3.cpp.o
 .PHONY : vec3.o
 
@@ -189,6 +213,9 @@ help:
 	@echo "... lab3a.o"
 	@echo "... lab3a.i"
 	@echo "... lab3a.s"
+	@echo "... point3d.o"
+	@echo "... point3d.i"
+	@echo "... point3d.s"
 	@echo "... vec3.o"
 	@echo "... vec3.i"
 	@echo "... vec3.s"
