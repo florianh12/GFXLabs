@@ -11,5 +11,5 @@ int main(int argc, char *argv[]) {
    Vec3 test2 = Vec3(0.0, 1.0, 0.0);
 
 
-   std::cout << (test % test2).toString();
+   std::cout << test;
 }
