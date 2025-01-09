@@ -11,6 +11,10 @@ class Vec3  {
         //cross and dot product
         long double dot(const Vec3& other) const;
         Vec3 cross(const Vec3& other) const;
+        
+        //vector norm and normalize function
+        long double vec_norm();
+        void normalize();
 
         //Print method
         std::string toString() const;

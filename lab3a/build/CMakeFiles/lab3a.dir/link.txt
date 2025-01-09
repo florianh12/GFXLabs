@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/lab3a.dir/lab3a.cpp.o CMakeFiles/lab3a.dir/vec3.cpp.o CMakeFiles/lab3a.dir/point3d.cpp.o -o lab3a 
+/usr/bin/c++ CMakeFiles/lab3a.dir/lab3a.cpp.o CMakeFiles/lab3a.dir/vec3.cpp.o CMakeFiles/lab3a.dir/point3d.cpp.o CMakeFiles/lab3a.dir/tinyxml2.cpp.o -o lab3a 

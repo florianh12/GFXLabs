@@ -177,6 +177,30 @@ point3d.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/point3d.cpp.s
 .PHONY : point3d.cpp.s
 
+tinyxml2.o: tinyxml2.cpp.o
+.PHONY : tinyxml2.o
+
+# target to build an object file
+tinyxml2.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/tinyxml2.cpp.o
+.PHONY : tinyxml2.cpp.o
+
+tinyxml2.i: tinyxml2.cpp.i
+.PHONY : tinyxml2.i
+
+# target to preprocess a source file
+tinyxml2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/tinyxml2.cpp.i
+.PHONY : tinyxml2.cpp.i
+
+tinyxml2.s: tinyxml2.cpp.s
+.PHONY : tinyxml2.s
+
+# target to generate assembly for a file
+tinyxml2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/tinyxml2.cpp.s
+.PHONY : tinyxml2.cpp.s
+
 vec3.o: vec3.cpp.o
 .PHONY : vec3.o
 
@@ -216,6 +240,9 @@ help:
 	@echo "... point3d.o"
 	@echo "... point3d.i"
 	@echo "... point3d.s"
+	@echo "... tinyxml2.o"
+	@echo "... tinyxml2.i"
+	@echo "... tinyxml2.s"
 	@echo "... vec3.o"
 	@echo "... vec3.i"
 	@echo "... vec3.s"

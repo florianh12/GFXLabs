@@ -182,7 +182,21 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: ../lab3a.cpp \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
   ../vec3.h \
-  ../point3d.h
+  ../point3d.h \
+  ../tinyxml2.h \
+  /usr/include/c++/11/climits \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+  /usr/include/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+  /usr/include/linux/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/c++/11/cstring \
+  /usr/include/string.h \
+  /usr/include/strings.h
 
 CMakeFiles/lab3a.dir/point3d.cpp.o: ../point3d.cpp \
   /usr/include/stdc-predef.h \
@@ -502,36 +516,78 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
   /usr/include/c++/11/bits/cxxabi_init_exception.h \
   /usr/include/c++/11/typeinfo \
   /usr/include/c++/11/bits/nested_exception.h \
-  /usr/include/c++/11/iostream \
-  /usr/include/c++/11/ostream \
-  /usr/include/c++/11/ios \
-  /usr/include/c++/11/bits/ios_base.h \
-  /usr/include/c++/11/bits/locale_classes.h \
-  /usr/include/c++/11/bits/locale_classes.tcc \
-  /usr/include/c++/11/system_error \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
-  /usr/include/c++/11/streambuf \
-  /usr/include/c++/11/bits/streambuf.tcc \
-  /usr/include/c++/11/bits/basic_ios.h \
-  /usr/include/c++/11/bits/locale_facets.h \
-  /usr/include/c++/11/cwctype \
-  /usr/include/wctype.h \
-  /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
-  /usr/include/c++/11/bits/streambuf_iterator.h \
-  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h \
-  /usr/include/c++/11/bits/locale_facets.tcc \
-  /usr/include/c++/11/bits/basic_ios.tcc \
-  /usr/include/c++/11/bits/ostream.tcc \
-  /usr/include/c++/11/istream \
-  /usr/include/c++/11/bits/istream.tcc
+  /usr/include/c++/11/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/c++/11/bits/specfun.h \
+  /usr/include/c++/11/limits \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc
 
+
+/usr/include/c++/11/tr1/riemann_zeta.tcc:
+
+/usr/include/c++/11/tr1/legendre_function.tcc:
+
+/usr/include/c++/11/tr1/beta_function.tcc:
+
+/usr/include/c++/11/limits:
+
+/usr/include/c++/11/bits/specfun.h:
+
+/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
+
+/usr/include/math.h:
 
 ../vec3.cpp:
 
 ../point3d.cpp:
 
+/usr/include/string.h:
+
+/usr/include/c++/11/cstring:
+
+/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
+
+/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
+
+/usr/include/c++/11/climits:
+
 ../vec3.h:
+
+/usr/include/limits.h:
 
 /usr/include/c++/11/bits/istream.tcc:
 
@@ -547,9 +603,13 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/c++/11/cwctype:
 
+/usr/include/c++/11/tr1/poly_hermite.tcc:
+
 /usr/include/c++/11/bits/locale_facets.h:
 
 /usr/include/c++/11/bits/basic_ios.h:
+
+/usr/include/c++/11/tr1/bessel_function.tcc:
 
 /usr/include/c++/11/bits/streambuf.tcc:
 
@@ -559,13 +619,19 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/c++/11/system_error:
 
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
 /usr/include/c++/11/bits/locale_classes.tcc:
 
 /usr/include/c++/11/bits/basic_string.tcc:
 
 /usr/include/c++/11/bits/charconv.h:
 
+/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
+
+/usr/include/c++/11/tr1/ell_integral.tcc:
 
 /usr/include/asm-generic/errno.h:
 
@@ -607,6 +673,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/ctype.h:
 
+/usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
+
 ../point3d.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
@@ -641,15 +709,23 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/c++/11/bits/concept_check.h:
 
+/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+
+/usr/include/linux/limits.h:
+
 /usr/include/stdint.h:
 
 /usr/include/c++/11/bits/exception.h:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/cookie_io_functions_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
 
 /usr/include/c++/11/bits/range_access.h:
+
+/usr/include/c++/11/tr1/poly_laguerre.tcc:
 
 /usr/include/c++/11/cstdlib:
 
@@ -749,6 +825,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/pthread_stack_min-dynamic.h:
 
+/usr/include/c++/11/tr1/special_function_util.h:
+
 /usr/include/x86_64-linux-gnu/bits/waitstatus.h:
 
 /usr/include/c++/11/bits/postypes.h:
@@ -823,6 +901,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
+/usr/include/c++/11/tr1/hypergeometric.tcc:
+
 /usr/include/c++/11/bits/localefwd.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
@@ -831,7 +911,11 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
+/usr/include/c++/11/tr1/modified_bessel_func.tcc:
+
 /usr/include/x86_64-linux-gnu/bits/endianness.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
 /usr/include/c++/11/bits/ios_base.h:
 
@@ -865,6 +949,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/struct_mutex.h:
 
+/usr/include/strings.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
@@ -873,7 +959,13 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
+/usr/include/c++/11/tr1/gamma.tcc:
+
+../tinyxml2.h:
+
 /usr/include/c++/11/bits/locale_classes.h:
+
+/usr/include/c++/11/cmath:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
@@ -892,5 +984,7 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 /usr/include/c++/11/bits/cxxabi_forced.h:
 
 /usr/include/c++/11/ext/alloc_traits.h:
+
+/usr/include/c++/11/tr1/exp_integral.tcc:
 
 /usr/include/c++/11/bits/stl_construct.h:

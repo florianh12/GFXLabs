@@ -1,7 +1,7 @@
 #include "vec3.h"
 #include <string>
 #include <stdexcept>
-#include <iostream>
+#include <cmath>
 
 Vec3::Vec3(long double x, long double y, long double z){
     coordinates[0] = x;
@@ -24,6 +24,21 @@ Vec3 Vec3::cross(const Vec3& other) const {
         coordinates[0] * other.coordinates[1] - coordinates[1] * other.coordinates[0]
         );
 }
+
+//vector norm and normalize function
+long double Vec3::vec_norm() {
+    return std::sqrt(coordinates[0] * coordinates[0] 
+    + coordinates[1] * coordinates[1] 
+    + coordinates[2] * coordinates[2]);
+}
+void Vec3::normalize() {
+    long double norm = vec_norm();
+    
+    coordinates[0] /= norm;
+    coordinates[1] /= norm;
+    coordinates[2] /= norm;
+}
+
 
 std::string Vec3::toString() const {
 
@@ -104,7 +119,6 @@ long double& Vec3::operator[](int index) {
     if (index < 0) {
         index = 3 + index;
     }
-    std::cout << index << std::endl;
 
     return coordinates[index];
 }

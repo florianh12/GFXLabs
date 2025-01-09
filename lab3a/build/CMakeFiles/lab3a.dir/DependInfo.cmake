@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/hejzef44/GFX/GFXLabs/lab3a/lab3a.cpp" "CMakeFiles/lab3a.dir/lab3a.cpp.o" "gcc" "CMakeFiles/lab3a.dir/lab3a.cpp.o.d"
   "/home/hejzef44/GFX/GFXLabs/lab3a/point3d.cpp" "CMakeFiles/lab3a.dir/point3d.cpp.o" "gcc" "CMakeFiles/lab3a.dir/point3d.cpp.o.d"
+  "/home/hejzef44/GFX/GFXLabs/lab3a/tinyxml2.cpp" "CMakeFiles/lab3a.dir/tinyxml2.cpp.o" "gcc" "CMakeFiles/lab3a.dir/tinyxml2.cpp.o.d"
   "/home/hejzef44/GFX/GFXLabs/lab3a/vec3.cpp" "CMakeFiles/lab3a.dir/vec3.cpp.o" "gcc" "CMakeFiles/lab3a.dir/vec3.cpp.o.d"
   )
 
