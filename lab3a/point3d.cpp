@@ -1,6 +1,5 @@
 #include "point3d.h"
 #include <string>
-#include <sstream>
 #include <stdexcept>
 
 Point3D::Point3D(long double x, long double y, long double z){
@@ -11,11 +10,9 @@ Point3D::Point3D(long double x, long double y, long double z){
 
 
 std::string Point3D::toString() const {
-    std::stringstream s;
-
-    s << "(" <<coordinates[0] << ", " << coordinates[1] << ", " << coordinates[2] << ")" << std::endl;
-
-    return s.str();
+    return "(" + std::to_string(coordinates[0]) + ", " 
+    + std::to_string(coordinates[1]) + ", " 
+    + std::to_string(coordinates[2]) + ")\n";
 }
 
 
@@ -94,3 +91,9 @@ const long double& Point3D::operator[](int index) const {
 
 
 Point3D::~Point3D() {}
+
+std::ostream& operator<<(std::ostream& o, const Point3D& point) {
+    o << point.toString();
+
+    return o;
+}

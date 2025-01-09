@@ -33,4 +33,6 @@ class Vec3  {
         ~Vec3();
 };
 
+std::ostream& operator<<(std::ostream& o, const Vec3& vec);
+
 #endif // VEC3_H

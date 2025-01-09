@@ -1,6 +1,5 @@
 #include "vec3.h"
 #include <string>
-#include <sstream>
 #include <stdexcept>
 
 Vec3::Vec3(long double x, long double y, long double z){
@@ -26,11 +25,11 @@ Vec3 Vec3::cross(const Vec3& other) const {
 }
 
 std::string Vec3::toString() const {
-    std::stringstream s;
 
-    s << "[" <<coordinates[0] << ", " << coordinates[1] << ", " << coordinates[2] << "]" << std::endl;
+    return "[" + std::to_string(coordinates[0]) + ", " 
+    + std::to_string(coordinates[1]) + ", " 
+    + std::to_string(coordinates[2]) + "]\n";
 
-    return s.str();
 }
 
 
@@ -128,3 +127,9 @@ Vec3 operator*(long double scalar, const Vec3& vec) {
 }
 
 Vec3::~Vec3() {}
+
+std::ostream& operator<<(std::ostream& o, const Vec3& vec) {
+    o << vec.toString();
+
+    return o;
+}

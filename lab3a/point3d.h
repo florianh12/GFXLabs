@@ -25,4 +25,6 @@ class Point3D {
         ~Point3D();
 };
 
+std::ostream& operator<<(std::ostream& o, const Point3D& point);
+
 #endif //POINT3D_H
