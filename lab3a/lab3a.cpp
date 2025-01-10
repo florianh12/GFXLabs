@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "vec3.h"
 #include "point3d.h"
 #include "ray3d.h"
@@ -10,6 +11,29 @@
 #include "stb_image_write.h"
 
 using namespace tinyxml2;
+
+Point3D extractPosition(XMLElement* parent_element, const char* pos_element_name) {
+    XMLElement* pos = parent_element->FirstChildElement(pos_element_name);
+
+    return Point3D(std::stold(pos->Attribute("x")), 
+    std::stold(pos->Attribute("y")), 
+    std::stold(pos->Attribute("z")));
+}
+
+Camera extractCamera(XMLElement* scene) {
+    XMLElement* camera = scene->FirstChildElement("camera");
+    XMLElement* h_fov = camera->FirstChildElement("horizontal_fov");
+    XMLElement* res = camera->FirstChildElement("resolution");
+    XMLElement* bounces = camera->FirstChildElement("max_bounces");
+
+    return Camera(extractPosition(camera,"position"),
+    extractPosition(camera,"lookat"), 
+    static_cast<unsigned int>(std::stoul(h_fov->Attribute("angle"))), 
+    static_cast<unsigned int>(std::stoul(res->Attribute("horizontal"))),
+    static_cast<unsigned int>(std::stoul(res->Attribute("vertical"))),
+    static_cast<unsigned int>(std::stoul(bounces->Attribute("n")))
+    );
+}
 
 int main(int argc, char *argv[]) {
     // std::cout << argv[1] << "\n";
@@ -27,7 +51,12 @@ int main(int argc, char *argv[]) {
 
     doc.Print(&printer);
 
+    XMLElement* scene = doc.FirstChildElement("scene");
+
+    Camera camera = extractCamera(scene);
+
     std::cout << printer.CStr();
+    std::cout << camera.fov << std::endl;
 
     int image_width = 256, image_height = 256;
 

@@ -442,6 +442,7 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: ../lab3a.cpp \
   ../point3d.h \
   ../ray3d.h \
   ../color.h \
+  ../camera.h \
   ../tinyxml2.h \
   /usr/include/c++/11/climits \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \

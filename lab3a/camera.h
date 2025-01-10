@@ -7,10 +7,10 @@ struct Camera {
     Point3D position;
     Point3D lookat;
     unsigned int fov;
-    unsigned int* resolution;
+    unsigned int resolution[2];
     unsigned int max_bounces;
 
-    Camera(Point3D position, Point3D lookat, unsigned int fov, unsigned int resolution[2], unsigned int max_bounces);
+    Camera(Point3D position, Point3D lookat, unsigned int fov, unsigned int width, unsigned int height, unsigned int max_bounces);
     
     ~Camera();
 };
