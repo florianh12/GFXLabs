@@ -125,12 +125,57 @@ CMakeFiles/lab3a.dir/tinyxml2.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab3a.dir/tinyxml2.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hejzef44/GFX/GFXLabs/lab3a/tinyxml2.cpp -o CMakeFiles/lab3a.dir/tinyxml2.cpp.s
 
+CMakeFiles/lab3a.dir/ray3d.cpp.o: CMakeFiles/lab3a.dir/flags.make
+CMakeFiles/lab3a.dir/ray3d.cpp.o: ../ray3d.cpp
+CMakeFiles/lab3a.dir/ray3d.cpp.o: CMakeFiles/lab3a.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hejzef44/GFX/GFXLabs/lab3a/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/lab3a.dir/ray3d.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab3a.dir/ray3d.cpp.o -MF CMakeFiles/lab3a.dir/ray3d.cpp.o.d -o CMakeFiles/lab3a.dir/ray3d.cpp.o -c /home/hejzef44/GFX/GFXLabs/lab3a/ray3d.cpp
+
+CMakeFiles/lab3a.dir/ray3d.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lab3a.dir/ray3d.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hejzef44/GFX/GFXLabs/lab3a/ray3d.cpp > CMakeFiles/lab3a.dir/ray3d.cpp.i
+
+CMakeFiles/lab3a.dir/ray3d.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab3a.dir/ray3d.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hejzef44/GFX/GFXLabs/lab3a/ray3d.cpp -o CMakeFiles/lab3a.dir/ray3d.cpp.s
+
+CMakeFiles/lab3a.dir/color.cpp.o: CMakeFiles/lab3a.dir/flags.make
+CMakeFiles/lab3a.dir/color.cpp.o: ../color.cpp
+CMakeFiles/lab3a.dir/color.cpp.o: CMakeFiles/lab3a.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hejzef44/GFX/GFXLabs/lab3a/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/lab3a.dir/color.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab3a.dir/color.cpp.o -MF CMakeFiles/lab3a.dir/color.cpp.o.d -o CMakeFiles/lab3a.dir/color.cpp.o -c /home/hejzef44/GFX/GFXLabs/lab3a/color.cpp
+
+CMakeFiles/lab3a.dir/color.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lab3a.dir/color.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hejzef44/GFX/GFXLabs/lab3a/color.cpp > CMakeFiles/lab3a.dir/color.cpp.i
+
+CMakeFiles/lab3a.dir/color.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab3a.dir/color.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hejzef44/GFX/GFXLabs/lab3a/color.cpp -o CMakeFiles/lab3a.dir/color.cpp.s
+
+CMakeFiles/lab3a.dir/camera.cpp.o: CMakeFiles/lab3a.dir/flags.make
+CMakeFiles/lab3a.dir/camera.cpp.o: ../camera.cpp
+CMakeFiles/lab3a.dir/camera.cpp.o: CMakeFiles/lab3a.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/hejzef44/GFX/GFXLabs/lab3a/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/lab3a.dir/camera.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/lab3a.dir/camera.cpp.o -MF CMakeFiles/lab3a.dir/camera.cpp.o.d -o CMakeFiles/lab3a.dir/camera.cpp.o -c /home/hejzef44/GFX/GFXLabs/lab3a/camera.cpp
+
+CMakeFiles/lab3a.dir/camera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/lab3a.dir/camera.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/hejzef44/GFX/GFXLabs/lab3a/camera.cpp > CMakeFiles/lab3a.dir/camera.cpp.i
+
+CMakeFiles/lab3a.dir/camera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/lab3a.dir/camera.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/hejzef44/GFX/GFXLabs/lab3a/camera.cpp -o CMakeFiles/lab3a.dir/camera.cpp.s
+
 # Object files for target lab3a
 lab3a_OBJECTS = \
 "CMakeFiles/lab3a.dir/lab3a.cpp.o" \
 "CMakeFiles/lab3a.dir/vec3.cpp.o" \
 "CMakeFiles/lab3a.dir/point3d.cpp.o" \
-"CMakeFiles/lab3a.dir/tinyxml2.cpp.o"
+"CMakeFiles/lab3a.dir/tinyxml2.cpp.o" \
+"CMakeFiles/lab3a.dir/ray3d.cpp.o" \
+"CMakeFiles/lab3a.dir/color.cpp.o" \
+"CMakeFiles/lab3a.dir/camera.cpp.o"
 
 # External object files for target lab3a
 lab3a_EXTERNAL_OBJECTS =
@@ -139,9 +184,12 @@ lab3a: CMakeFiles/lab3a.dir/lab3a.cpp.o
 lab3a: CMakeFiles/lab3a.dir/vec3.cpp.o
 lab3a: CMakeFiles/lab3a.dir/point3d.cpp.o
 lab3a: CMakeFiles/lab3a.dir/tinyxml2.cpp.o
+lab3a: CMakeFiles/lab3a.dir/ray3d.cpp.o
+lab3a: CMakeFiles/lab3a.dir/color.cpp.o
+lab3a: CMakeFiles/lab3a.dir/camera.cpp.o
 lab3a: CMakeFiles/lab3a.dir/build.make
 lab3a: CMakeFiles/lab3a.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hejzef44/GFX/GFXLabs/lab3a/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable lab3a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/hejzef44/GFX/GFXLabs/lab3a/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable lab3a"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/lab3a.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

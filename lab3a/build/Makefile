@@ -129,6 +129,54 @@ lab3a/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/build
 .PHONY : lab3a/fast
 
+camera.o: camera.cpp.o
+.PHONY : camera.o
+
+# target to build an object file
+camera.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/camera.cpp.o
+.PHONY : camera.cpp.o
+
+camera.i: camera.cpp.i
+.PHONY : camera.i
+
+# target to preprocess a source file
+camera.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/camera.cpp.i
+.PHONY : camera.cpp.i
+
+camera.s: camera.cpp.s
+.PHONY : camera.s
+
+# target to generate assembly for a file
+camera.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/camera.cpp.s
+.PHONY : camera.cpp.s
+
+color.o: color.cpp.o
+.PHONY : color.o
+
+# target to build an object file
+color.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/color.cpp.o
+.PHONY : color.cpp.o
+
+color.i: color.cpp.i
+.PHONY : color.i
+
+# target to preprocess a source file
+color.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/color.cpp.i
+.PHONY : color.cpp.i
+
+color.s: color.cpp.s
+.PHONY : color.s
+
+# target to generate assembly for a file
+color.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/color.cpp.s
+.PHONY : color.cpp.s
+
 lab3a.o: lab3a.cpp.o
 .PHONY : lab3a.o
 
@@ -176,6 +224,30 @@ point3d.s: point3d.cpp.s
 point3d.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/point3d.cpp.s
 .PHONY : point3d.cpp.s
+
+ray3d.o: ray3d.cpp.o
+.PHONY : ray3d.o
+
+# target to build an object file
+ray3d.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/ray3d.cpp.o
+.PHONY : ray3d.cpp.o
+
+ray3d.i: ray3d.cpp.i
+.PHONY : ray3d.i
+
+# target to preprocess a source file
+ray3d.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/ray3d.cpp.i
+.PHONY : ray3d.cpp.i
+
+ray3d.s: ray3d.cpp.s
+.PHONY : ray3d.s
+
+# target to generate assembly for a file
+ray3d.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/ray3d.cpp.s
+.PHONY : ray3d.cpp.s
 
 tinyxml2.o: tinyxml2.cpp.o
 .PHONY : tinyxml2.o
@@ -234,12 +306,21 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... lab3a"
+	@echo "... camera.o"
+	@echo "... camera.i"
+	@echo "... camera.s"
+	@echo "... color.o"
+	@echo "... color.i"
+	@echo "... color.s"
 	@echo "... lab3a.o"
 	@echo "... lab3a.i"
 	@echo "... lab3a.s"
 	@echo "... point3d.o"
 	@echo "... point3d.i"
 	@echo "... point3d.s"
+	@echo "... ray3d.o"
+	@echo "... ray3d.i"
+	@echo "... ray3d.s"
 	@echo "... tinyxml2.o"
 	@echo "... tinyxml2.i"
 	@echo "... tinyxml2.s"

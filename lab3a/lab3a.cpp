@@ -1,6 +1,10 @@
 #include <iostream>
 #include "vec3.h"
 #include "point3d.h"
+#include "ray3d.h"
+#include "color.h"
+#include "camera.h"
+
 #include "tinyxml2.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
@@ -39,14 +43,18 @@ int main(int argc, char *argv[]) {
     }
 
     stbi_write_png("test.png",image_width, image_height, 3, image, image_width * 3);
-
+    Point3D test_origin = Point3D(); 
     Vec3 test = Vec3(1.0, 0.0, 0.0);
     Vec3 test2 = Vec3(0.0, 1.0, 0.0);
     Vec3 test3 = Vec3(2.0, 0.0, 0.0);
+    Ray3D test_ray = Ray3D(test_origin,test,0.1L,1.1L);
+    std::cout << test_ray.calculatePoint(1.0L);
    
     std::cout << test3;
     test3.normalize();
     std::cout << test3;
 
+    Color col = Color(1.0,0.8,0.3);
 
+    std::cout << static_cast<int>(col.b) << std::endl;
 }

@@ -148,6 +148,9 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: \
  /usr/include/c++/11/bits/istream.tcc \
  /home/hejzef44/GFX/GFXLabs/lab3a/vec3.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/point3d.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/ray3d.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/camera.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/tinyxml2.h /usr/include/c++/11/climits \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
