@@ -273,6 +273,54 @@ ray3d.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/ray3d.cpp.s
 .PHONY : ray3d.cpp.s
 
+sphere.o: sphere.cpp.o
+.PHONY : sphere.o
+
+# target to build an object file
+sphere.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/sphere.cpp.o
+.PHONY : sphere.cpp.o
+
+sphere.i: sphere.cpp.i
+.PHONY : sphere.i
+
+# target to preprocess a source file
+sphere.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/sphere.cpp.i
+.PHONY : sphere.cpp.i
+
+sphere.s: sphere.cpp.s
+.PHONY : sphere.s
+
+# target to generate assembly for a file
+sphere.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/sphere.cpp.s
+.PHONY : sphere.cpp.s
+
+surface.o: surface.cpp.o
+.PHONY : surface.o
+
+# target to build an object file
+surface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/surface.cpp.o
+.PHONY : surface.cpp.o
+
+surface.i: surface.cpp.i
+.PHONY : surface.i
+
+# target to preprocess a source file
+surface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/surface.cpp.i
+.PHONY : surface.cpp.i
+
+surface.s: surface.cpp.s
+.PHONY : surface.s
+
+# target to generate assembly for a file
+surface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/surface.cpp.s
+.PHONY : surface.cpp.s
+
 tinyxml2.o: tinyxml2.cpp.o
 .PHONY : tinyxml2.o
 
@@ -348,6 +396,12 @@ help:
 	@echo "... ray3d.o"
 	@echo "... ray3d.i"
 	@echo "... ray3d.s"
+	@echo "... sphere.o"
+	@echo "... sphere.i"
+	@echo "... sphere.s"
+	@echo "... surface.o"
+	@echo "... surface.i"
+	@echo "... surface.s"
 	@echo "... tinyxml2.o"
 	@echo "... tinyxml2.i"
 	@echo "... tinyxml2.s"
