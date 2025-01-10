@@ -201,6 +201,30 @@ lab3a.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/lab3a.cpp.s
 .PHONY : lab3a.cpp.s
 
+parallellight.o: parallellight.cpp.o
+.PHONY : parallellight.o
+
+# target to build an object file
+parallellight.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/parallellight.cpp.o
+.PHONY : parallellight.cpp.o
+
+parallellight.i: parallellight.cpp.i
+.PHONY : parallellight.i
+
+# target to preprocess a source file
+parallellight.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/parallellight.cpp.i
+.PHONY : parallellight.cpp.i
+
+parallellight.s: parallellight.cpp.s
+.PHONY : parallellight.s
+
+# target to generate assembly for a file
+parallellight.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/parallellight.cpp.s
+.PHONY : parallellight.cpp.s
+
 point3d.o: point3d.cpp.o
 .PHONY : point3d.o
 
@@ -315,6 +339,9 @@ help:
 	@echo "... lab3a.o"
 	@echo "... lab3a.i"
 	@echo "... lab3a.s"
+	@echo "... parallellight.o"
+	@echo "... parallellight.i"
+	@echo "... parallellight.s"
 	@echo "... point3d.o"
 	@echo "... point3d.i"
 	@echo "... point3d.s"

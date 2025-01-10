@@ -31,8 +31,13 @@ long double Vec3::vec_norm() {
     + coordinates[1] * coordinates[1] 
     + coordinates[2] * coordinates[2]);
 }
+
 void Vec3::normalize() {
     long double norm = vec_norm();
+
+    if (norm == 0.0L) {
+        throw std::runtime_error("Nullvector cannot be normalized!");
+    }
     
     coordinates[0] /= norm;
     coordinates[1] /= norm;

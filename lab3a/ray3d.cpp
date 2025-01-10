@@ -5,10 +5,6 @@
 
 Ray3D::Ray3D(Point3D origin, Vec3 direction, long double min_dist, long double max_dist) : origin{origin}, direction{direction}, min_dist{min_dist}, max_dist{max_dist} {
     direction.normalize();
-
-    if (direction.vec_norm() != 1.0L) {
-        throw std::runtime_error("Ray3D has no direction!");
-    }
 }
 
 //calculates a point on the ray

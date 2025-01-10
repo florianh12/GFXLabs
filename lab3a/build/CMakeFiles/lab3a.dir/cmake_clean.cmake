@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/lab3a.dir/color.cpp.o.d"
   "CMakeFiles/lab3a.dir/lab3a.cpp.o"
   "CMakeFiles/lab3a.dir/lab3a.cpp.o.d"
+  "CMakeFiles/lab3a.dir/parallellight.cpp.o"
+  "CMakeFiles/lab3a.dir/parallellight.cpp.o.d"
   "CMakeFiles/lab3a.dir/point3d.cpp.o"
   "CMakeFiles/lab3a.dir/point3d.cpp.o.d"
   "CMakeFiles/lab3a.dir/ray3d.cpp.o"

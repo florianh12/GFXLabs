@@ -5,6 +5,7 @@
 #include "ray3d.h"
 #include "color.h"
 #include "camera.h"
+#include "parallellight.h"
 
 #include "tinyxml2.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -20,8 +21,8 @@ Point3D extractPosition(XMLElement* parent_element, const char* pos_element_name
     std::stold(pos->Attribute("z")));
 }
 
-Camera extractCamera(XMLElement* scene) {
-    XMLElement* camera = scene->FirstChildElement("camera");
+Camera extractCamera(XMLElement* xml_scene) {
+    XMLElement* camera = xml_scene->FirstChildElement("camera");
     XMLElement* h_fov = camera->FirstChildElement("horizontal_fov");
     XMLElement* res = camera->FirstChildElement("resolution");
     XMLElement* bounces = camera->FirstChildElement("max_bounces");
@@ -51,9 +52,9 @@ int main(int argc, char *argv[]) {
 
     doc.Print(&printer);
 
-    XMLElement* scene = doc.FirstChildElement("scene");
+    XMLElement* xml_scene = doc.FirstChildElement("xml_scene");
 
-    Camera camera = extractCamera(scene);
+    Camera camera = extractCamera(xml_scene);
 
     std::cout << printer.CStr();
     std::cout << camera.fov << std::endl;
