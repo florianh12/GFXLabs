@@ -5,9 +5,9 @@
 
 struct Light
 {
-    Color col;
+    Color color;
 
-    Light(Color col) : col{col} {}
+    Light(Color color) : color{color} {}
 
     virtual ~Light() = 0;
 };

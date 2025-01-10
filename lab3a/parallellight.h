@@ -10,7 +10,7 @@ struct ParallelLight : public Light
 {
     Vec3 direction;
 
-    ParallelLight(Color col, Vec3 direction);
+    ParallelLight(Color color, Vec3 direction);
 
     ~ParallelLight();
 };
