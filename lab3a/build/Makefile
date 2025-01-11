@@ -273,6 +273,30 @@ ray3d.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/ray3d.cpp.s
 .PHONY : ray3d.cpp.s
 
+scene.o: scene.cpp.o
+.PHONY : scene.o
+
+# target to build an object file
+scene.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/scene.cpp.o
+.PHONY : scene.cpp.o
+
+scene.i: scene.cpp.i
+.PHONY : scene.i
+
+# target to preprocess a source file
+scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/scene.cpp.i
+.PHONY : scene.cpp.i
+
+scene.s: scene.cpp.s
+.PHONY : scene.s
+
+# target to generate assembly for a file
+scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/lab3a.dir/build.make CMakeFiles/lab3a.dir/scene.cpp.s
+.PHONY : scene.cpp.s
+
 sphere.o: sphere.cpp.o
 .PHONY : sphere.o
 
@@ -396,6 +420,9 @@ help:
 	@echo "... ray3d.o"
 	@echo "... ray3d.i"
 	@echo "... ray3d.s"
+	@echo "... scene.o"
+	@echo "... scene.i"
+	@echo "... scene.s"
 	@echo "... sphere.o"
 	@echo "... sphere.i"
 	@echo "... sphere.s"

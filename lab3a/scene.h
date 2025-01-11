@@ -5,21 +5,24 @@
 #include "color.h"
 #include "light.h"
 #include "surface.h"
+#include "sphere.h"
+#include "parallellight.h"
 #include <vector>
 
 class Scene {
     Camera camera;
+    Color background;
     Color ambient;
-    std::vector<Light> lights;
+    std::vector<ParallelLight> parallel_lights;
 
 
-    std::vector<Surface> surfaces;
+    std::vector<Sphere> spheres;
 
     unsigned int* picture;
 
     bool rendered;
 public:
-    Scene(Camera camera, Color ambient, std::vector<Light> lights, std::vector<Surface> surfaces);
+    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres);
 
     void render();
 

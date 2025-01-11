@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/lab3a.dir/point3d.cpp.o.d"
   "CMakeFiles/lab3a.dir/ray3d.cpp.o"
   "CMakeFiles/lab3a.dir/ray3d.cpp.o.d"
+  "CMakeFiles/lab3a.dir/scene.cpp.o"
+  "CMakeFiles/lab3a.dir/scene.cpp.o.d"
   "CMakeFiles/lab3a.dir/sphere.cpp.o"
   "CMakeFiles/lab3a.dir/sphere.cpp.o.d"
   "CMakeFiles/lab3a.dir/surface.cpp.o"
