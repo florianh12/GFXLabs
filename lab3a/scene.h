@@ -5,23 +5,21 @@
 #include "color.h"
 #include "light.h"
 #include "surface.h"
+#include <vector>
 
 class Scene {
     Camera camera;
     Color ambient;
-    Light* lights;
-    unsigned int light_count;
+    std::vector<Light> lights;
 
 
-    Surface* surfaces;
-    unsigned int surface_count;
+    std::vector<Surface> surfaces;
 
     unsigned int* picture;
 
     bool rendered;
 public:
-    Scene(Camera camera, Color ambient, Light* lights,
-    unsigned int light_count, Surface* surfaces, unsigned int surface_count);
+    Scene(Camera camera, Color ambient, std::vector<Light> lights, std::vector<Surface> surfaces);
 
     void render();
 
