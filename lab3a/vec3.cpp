@@ -102,6 +102,14 @@ Vec3 Vec3::operator*(long double scalar) const {
     );
 } 
 
+Vec3 Vec3::operator/(long double scalar) const {
+    return Vec3(
+        coordinates[0] / scalar,
+        coordinates[1] / scalar,
+        coordinates[2] / scalar
+    );
+} 
+
 //cross product
 Vec3 Vec3::operator%(const Vec3& other) const {
     return cross(other);

@@ -78,6 +78,7 @@ Scene extractScene(XMLElement* xml_scene) {
     
 
     return Scene(extractCamera(xml_scene),
+    extractColor(xml_scene, "background_color"),
     extractColor(xml_scene->FirstChildElement("lights")->FirstChildElement("ambient_light"),"color"),
     extractParalellLights(xml_scene), extractSpheres(xml_scene));
 }

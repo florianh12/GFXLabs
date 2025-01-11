@@ -3,6 +3,7 @@
 
 #include "point3d.h"
 #include "vec3.h"
+#include "raysphereintersection.h"
 
 struct Ray3D {
     Point3D origin;
@@ -14,6 +15,8 @@ struct Ray3D {
 
     //calculates a point on the ray
     Point3D calculatePoint(long double t);
+
+    RaySphereIntersection intersect(Sphere& sphere);
 
 };
 
