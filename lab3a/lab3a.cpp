@@ -11,8 +11,7 @@
 #include "scene.h"
 
 #include "tinyxml2.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+
 
 using namespace tinyxml2;
 
@@ -27,9 +26,9 @@ Point3D extractPosition(XMLElement* parent_element, const char* pos_element_name
 Color extractColor(XMLElement* parent_element, const char* pos_element_name) {
     XMLElement* pos = parent_element->FirstChildElement(pos_element_name);
 
-    return Color(std::stod(pos->Attribute("r")), 
-    std::stod(pos->Attribute("g")), 
-    std::stod(pos->Attribute("b")));
+    return Color(std::stold(pos->Attribute("r")), 
+    std::stold(pos->Attribute("g")), 
+    std::stold(pos->Attribute("b")));
 }
 
 Camera extractCamera(XMLElement* xml_scene) {
@@ -65,10 +64,18 @@ std::vector<ParallelLight> extractParalellLights(XMLElement* xml_scene) {
 std::vector<Sphere> extractSpheres(XMLElement* xml_scene) {
     std::vector<Sphere> spheres = std::vector<Sphere>();
     XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
+    
     for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; sphere = sphere->NextSiblingElement("sphere")) {
         XMLElement* material = sphere->FirstChildElement("material_solid");
-
-        spheres.push_back(Sphere(extractColor(material,"color"),extractPosition(sphere, "position"), std::stold(sphere->Attribute("radius"))));
+        XMLElement* phong = material->FirstChildElement("phong");
+        
+        spheres.push_back(Sphere(Material(extractColor(material,"color"),
+        std::stold(phong->Attribute("ka")),
+        std::stold(phong->Attribute("kd")),
+        std::stold(phong->Attribute("ks")),
+        std::stold(phong->Attribute("exponent"))),
+        extractPosition(sphere, "position"), 
+        std::stold(sphere->Attribute("radius"))));
     }
 
     return spheres;
@@ -80,7 +87,7 @@ Scene extractScene(XMLElement* xml_scene) {
     return Scene(extractCamera(xml_scene),
     extractColor(xml_scene, "background_color"),
     extractColor(xml_scene->FirstChildElement("lights")->FirstChildElement("ambient_light"),"color"),
-    extractParalellLights(xml_scene), extractSpheres(xml_scene));
+    extractParalellLights(xml_scene), extractSpheres(xml_scene),xml_scene->Attribute("output_file"));
 }
 
 int main(int argc, char *argv[]) {
@@ -120,5 +127,5 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    stbi_write_png("test.png",image_width, image_height, 3, image, image_width * 3);
+    
 }

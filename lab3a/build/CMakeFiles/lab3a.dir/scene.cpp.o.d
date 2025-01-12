@@ -135,6 +135,7 @@ CMakeFiles/lab3a.dir/scene.cpp.o: \
  /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/surface.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/material.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h /usr/include/c++/11/vector \
  /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
@@ -184,4 +185,7 @@ CMakeFiles/lab3a.dir/scene.cpp.o: \
  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
  /usr/include/c++/11/tr1/poly_hermite.tcc \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
- /usr/include/c++/11/tr1/riemann_zeta.tcc
+ /usr/include/c++/11/tr1/riemann_zeta.tcc \
+ /home/hejzef44/GFX/GFXLabs/lab3a/stb_image_write.h \
+ /usr/include/c++/11/stdlib.h /usr/include/string.h \
+ /usr/include/strings.h /usr/include/c++/11/math.h /usr/include/assert.h

@@ -18,17 +18,18 @@ class Scene {
 
     std::vector<Sphere> spheres;
 
-    unsigned int* picture;
+    char* picture;
+    const char* file_name;
 
     bool rendered;
 public:
-    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres);
+    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name);
 
     void render();
     Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
 
     unsigned int* getResolution();
-    unsigned int* getPicture();
+    char* getPicture();
 
 
     ~Scene();

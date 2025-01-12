@@ -131,10 +131,12 @@ CMakeFiles/lab3a.dir/sphere.cpp.o: \
  /usr/include/c++/11/bits/charconv.h \
  /usr/include/c++/11/bits/basic_string.tcc \
  /home/hejzef44/GFX/GFXLabs/lab3a/vec3.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/light.h /usr/include/c++/11/stdexcept \
- /usr/include/c++/11/exception /usr/include/c++/11/bits/exception_ptr.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/material.h \
+ /usr/include/c++/11/stdexcept /usr/include/c++/11/exception \
+ /usr/include/c++/11/bits/exception_ptr.h \
  /usr/include/c++/11/bits/cxxabi_init_exception.h \
  /usr/include/c++/11/typeinfo /usr/include/c++/11/bits/nested_exception.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/raysphereintersection.h \

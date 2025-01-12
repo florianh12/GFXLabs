@@ -11,11 +11,11 @@ struct Color
 
     Color& operator+=(const Color& other);
     Color operator+(const Color& other) const;
-    
+    Color operator*(const Color& other) const;
 
-    unsigned char getR();
-    unsigned char getG();
-    unsigned char getB();
+    char getR();
+    char getG();
+    char getB();
 
     friend Color operator*(long double scalar, Color& col);
 };

@@ -6,23 +6,26 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
 
-Scene::Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres) 
+Scene::Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name) 
     : camera{camera}, background{background}, ambient{ambient}, parallel_lights{parallel_lights},
-    spheres{spheres}, rendered{false}, picture{new unsigned int[camera.resolution[0] * camera.resolution[1] * 3]} {} //3 because we always have alpha 1 and can therefore ignore it
+    spheres{spheres}, rendered{false}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
 void Scene::render() {
-    //WIP
+    int ct = 0;
+    bool intersect = false;
+    std::cout << camera.fov_x << " " << camera.fov_y << std::endl;
+    for(const ParallelLight& light : parallel_lights) {
+        std::cout << light.color.r_normalized << " " << light.color.g_normalized << " " << light.color.b_normalized << std::endl;
+    }
+
+    //WIP,
     //TODO: Render scene
     std::cout << "paralell Lights size:" << parallel_lights.size() << std::endl;
     std::cout << "Spheres size:" << spheres.size() << std::endl;
-    long double viewport[2] = {2.0 * camera.resolution[0]/camera.resolution[1], 2.0,};
-    //Vec3 viewport_u = Vec3(viewport[0], 0, 0);
-    //Vec3 viewport_v = Vec3(0, -viewport[1],0);
-    //Vec3 delta_u = viewport_u / camera.resolution[0];
-    //Vec3 delta_v = viewport_v / camera.resolution[1];
-    //Point3D viewport_upper_left = Point3D() - Vec3(0,0,1.0) - viewport_u/2 - viewport_v/2;
-    //Point3D pixel_00 = viewport_upper_left + 0.5 * (delta_u + delta_v);
+
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
         for (unsigned int v = 0; v < camera.resolution[1]; v++) {
             long double x_n = (u + 0.5) / camera.resolution[0];
@@ -30,7 +33,7 @@ void Scene::render() {
             long double x_i = (2 * x_n - 1) * std::tan(camera.fov_x);
             long double y_i = (2 * y_n -1) * std::tan(camera.fov_y);
 
-            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,1000);
+            Ray3D ray = Ray3D(Point3D(0,0,1),Vec3(x_i,y_i,-1),0,1000);
 
             RaySphereIntersection* intersection = nullptr;
             long double min_t = std::numeric_limits<long double>::max();
@@ -57,73 +60,82 @@ void Scene::render() {
             Color ray_col = background;
 
             if(intersection != nullptr) {
-                ray_col = ambient;
-            }
+                ray_col =  intersection->sphere->material.ka * ambient * intersection->sphere->material.color;
 
-            //Deal with parallel lights
-            for(ParallelLight& light : parallel_lights) {
-                Ray3D shadow_ray = Ray3D(intersection->intersection_point,light.direction*(-1.0),0.001,1000);
-                RaySphereIntersection* tmp = nullptr;
-                for (Sphere& sphere: spheres) {
-                    try
-                    {
-                        tmp = shadow_ray.intersect(sphere);
-                        break;
-                    }
-                    catch(const std::exception& e)
-                    {
-                        continue;
-                    }
-
+                if(u == 88 && v == 45) {
+                    intersect = true;
+                    std::cout << intersection->t << " " << u << " " << v << std::endl;
                 }
+                
 
-                if (tmp == nullptr) {
-                    ray_col += illuminate((*intersection),light);
+                //Deal with parallel lights
+                for(ParallelLight& light : parallel_lights) {
+                    Ray3D shadow_ray = Ray3D(intersection->intersection_point,light.direction*(-1.0),0.001,1000);
+                    RaySphereIntersection* tmp = nullptr;
+                    for (Sphere& sphere: spheres) {
+                        try
+                        {
+                            tmp = shadow_ray.intersect(sphere);
+                            break;
+                        }
+                        catch(const std::exception& e)
+                        {
+                            continue;
+                        }
+
+                    }
+
+                    if (tmp == nullptr) {
+                        ray_col += illuminate((*intersection),light);
+                    }
                 }
             }
 
 
             //prepare picture array
-            size_t index = ((v * camera.resolution[0]) + u) * 3;
-            picture[index] = ray_col.getR();
-            picture[index + 1] = ray_col.getG();
-            picture[index + 2] = ray_col.getB();
-
+            size_t index = (((camera.resolution[1] - v - 1) * camera.resolution[0]) + u) * 3;
+            picture[index] = static_cast<char>(ray_col.r_normalized*255.0L);
+            picture[index + 1] = static_cast<char>(ray_col.g_normalized*255.0L);
+            picture[index + 2] = static_cast<char>(ray_col.b_normalized*255.0L);
+            if(static_cast<int>(ray_col.getR()) != 0)
+               ct++;
             //cleanup
             delete intersection;
             intersection = nullptr;
         }
 
     }
+    std::cout << "Counter: " << ct;
+    stbi_write_png(file_name,camera.resolution[0], camera.resolution[1], 3, picture, camera.resolution[0] * 3);
 }
 
 Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& light) {
-    double ks = 1.0;
-    double kd = 0.9;
-    double exponent = 200;
+
     Vec3 normal = intersection.intersection_point - intersection.sphere->position;
     
     normal.normalize();
 
-    long double diffuse = kd * std::max((light.direction * normal),0.0L);
+    long double diffuse = intersection.sphere->material.kd * std::max(((light.direction*(-1)) * normal),0.0L);
 
     Vec3 reflection = 2 * (normal * light.direction) * normal - light.direction;
 
     reflection.normalize();
     
     Vec3 eye = camera.position - intersection.intersection_point;
+
+    eye.normalize();
     
-    long double specular = std::pow(std::max((reflection * eye),0.0L),exponent);
+    long double specular = intersection.sphere->material.ks * std::pow(std::max((reflection * eye),0.0L),intersection.sphere->material.exponent);
     
 
-    return ((diffuse * intersection.sphere->color) + (specular * light.color));
+    return ((diffuse * intersection.sphere->material.color) + (specular * light.color));
 
 }
 
 unsigned int* Scene::getResolution() {
     return camera.resolution;
 }
-unsigned int* Scene::getPicture() {
+char* Scene::getPicture() {
     if (rendered) {
         return picture;
     }

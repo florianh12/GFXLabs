@@ -160,7 +160,32 @@ CMakeFiles/lab3a.dir/camera.cpp.o: ../camera.cpp \
   /usr/include/c++/11/bits/exception_ptr.h \
   /usr/include/c++/11/bits/cxxabi_init_exception.h \
   /usr/include/c++/11/typeinfo \
-  /usr/include/c++/11/bits/nested_exception.h
+  /usr/include/c++/11/bits/nested_exception.h \
+  /usr/include/c++/11/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/c++/11/bits/specfun.h \
+  /usr/include/c++/11/limits \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc
 
 CMakeFiles/lab3a.dir/color.cpp.o: ../color.cpp \
   /usr/include/stdc-predef.h \
@@ -449,9 +474,10 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: ../lab3a.cpp \
   ../raysphereintersection.h \
   ../sphere.h \
   ../surface.h \
-  ../color.h \
   ../parallellight.h \
+  ../color.h \
   ../light.h \
+  ../material.h \
   ../camera.h \
   ../scene.h \
   ../tinyxml2.h \
@@ -467,36 +493,7 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: ../lab3a.cpp \
   /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/include/c++/11/cstring \
   /usr/include/string.h \
-  /usr/include/strings.h \
-  ../stb_image_write.h \
-  /usr/include/c++/11/stdlib.h \
-  /usr/include/c++/11/math.h \
-  /usr/include/c++/11/cmath \
-  /usr/include/math.h \
-  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
-  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
-  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
-  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
-  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
-  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
-  /usr/include/c++/11/bits/specfun.h \
-  /usr/include/c++/11/limits \
-  /usr/include/c++/11/tr1/gamma.tcc \
-  /usr/include/c++/11/tr1/special_function_util.h \
-  /usr/include/c++/11/tr1/bessel_function.tcc \
-  /usr/include/c++/11/tr1/beta_function.tcc \
-  /usr/include/c++/11/tr1/ell_integral.tcc \
-  /usr/include/c++/11/tr1/exp_integral.tcc \
-  /usr/include/c++/11/tr1/hypergeometric.tcc \
-  /usr/include/c++/11/tr1/legendre_function.tcc \
-  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
-  /usr/include/c++/11/tr1/poly_hermite.tcc \
-  /usr/include/c++/11/tr1/poly_laguerre.tcc \
-  /usr/include/c++/11/tr1/riemann_zeta.tcc \
-  /usr/include/assert.h
+  /usr/include/strings.h
 
 CMakeFiles/lab3a.dir/parallellight.cpp.o: ../parallellight.cpp \
   /usr/include/stdc-predef.h \
@@ -971,9 +968,10 @@ CMakeFiles/lab3a.dir/ray3d.cpp.o: ../ray3d.cpp \
   ../raysphereintersection.h \
   ../sphere.h \
   ../surface.h \
-  ../color.h \
   ../parallellight.h \
+  ../color.h \
   ../light.h \
+  ../material.h \
   /usr/include/c++/11/stdexcept \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception_ptr.h \
@@ -1188,6 +1186,7 @@ CMakeFiles/lab3a.dir/scene.cpp.o: ../scene.cpp \
   ../light.h \
   ../surface.h \
   ../parallellight.h \
+  ../material.h \
   ../sphere.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_uninitialized.h \
@@ -1249,7 +1248,13 @@ CMakeFiles/lab3a.dir/scene.cpp.o: ../scene.cpp \
   /usr/include/c++/11/tr1/modified_bessel_func.tcc \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
-  /usr/include/c++/11/tr1/riemann_zeta.tcc
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  ../stb_image_write.h \
+  /usr/include/c++/11/stdlib.h \
+  /usr/include/string.h \
+  /usr/include/strings.h \
+  /usr/include/c++/11/math.h \
+  /usr/include/assert.h
 
 CMakeFiles/lab3a.dir/sphere.cpp.o: ../sphere.cpp \
   /usr/include/stdc-predef.h \
@@ -1406,9 +1411,10 @@ CMakeFiles/lab3a.dir/sphere.cpp.o: ../sphere.cpp \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
   ../vec3.h \
-  ../color.h \
   ../parallellight.h \
+  ../color.h \
   ../light.h \
+  ../material.h \
   /usr/include/c++/11/stdexcept \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception_ptr.h \
@@ -1596,9 +1602,10 @@ CMakeFiles/lab3a.dir/surface.cpp.o: ../surface.cpp \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
   ../vec3.h \
-  ../color.h \
   ../parallellight.h \
+  ../color.h \
   ../light.h \
+  ../material.h \
   ../raysphereintersection.h \
   ../sphere.h
 
@@ -1881,11 +1888,11 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 
 ../tinyxml2.cpp:
 
+/usr/include/c++/11/stdlib.h:
+
 ../scene.cpp:
 
 ../parallellight.cpp:
-
-/usr/include/c++/11/stdlib.h:
 
 /usr/include/string.h:
 
@@ -1910,6 +1917,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 ../sphere.h:
 
 ../point3d.cpp:
+
+../material.h:
 
 /usr/include/c++/11/bits/vector.tcc:
 
@@ -1946,6 +1955,8 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 /usr/include/c++/11/system_error:
 
 /usr/include/c++/11/ostream:
+
+../color.h:
 
 /usr/include/c++/11/tr1/riemann_zeta.tcc:
 
@@ -1996,8 +2007,6 @@ CMakeFiles/lab3a.dir/vec3.cpp.o: ../vec3.cpp \
 /usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
 /usr/include/math.h:
-
-../color.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
 

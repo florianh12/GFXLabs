@@ -36,6 +36,8 @@ RaySphereIntersection* Ray3D::intersect(Sphere& sphere) {
 
             t -= std::sqrt(disc);
     }
+    if(t < 1.0L)
+        std::cout << t << " disc:" << disc << " ";
 
     return new RaySphereIntersection(&sphere,&(*this),calculatePoint(t), t);
 

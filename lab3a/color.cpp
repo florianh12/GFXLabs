@@ -31,16 +31,16 @@ Color& Color::operator+=(const Color& other) {
     return *this;
 }
 
-unsigned char Color::getR() {
-    return static_cast<unsigned char>(std::round(r_normalized * 255));
+char Color::getR() {
+    return (int)(r_normalized * 255.0L);
 }
  
-unsigned char Color::getG() {
-    return static_cast<unsigned char>(std::round(g_normalized * 255));
+char Color::getG() {
+    return (int)(r_normalized * 255.0L);
 }
 
-unsigned char Color::getB() {
-    return static_cast<unsigned char>(std::round(b_normalized * 255));
+char Color::getB() {
+    return (int)(r_normalized * 255.0L);
 }
 
 Color Color::operator+(const Color& other) const {
@@ -53,4 +53,10 @@ Color operator*(long double scalar, Color& col) {
    return Color(scalar * col.r_normalized,
     scalar * col.g_normalized,
     scalar * col.b_normalized);
+}
+
+Color Color::operator*(const Color& other) const {
+   return Color(r_normalized* other.r_normalized,
+    g_normalized * other.g_normalized,
+    b_normalized * other.b_normalized);
 }

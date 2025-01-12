@@ -130,8 +130,9 @@ CMakeFiles/lab3a.dir/surface.cpp.o: \
  /usr/include/c++/11/bits/charconv.h \
  /usr/include/c++/11/bits/basic_string.tcc \
  /home/hejzef44/GFX/GFXLabs/lab3a/vec3.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/material.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/raysphereintersection.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h

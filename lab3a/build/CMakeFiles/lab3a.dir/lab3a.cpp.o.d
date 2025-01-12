@@ -156,9 +156,10 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: \
  /home/hejzef44/GFX/GFXLabs/lab3a/raysphereintersection.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/surface.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/material.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/camera.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/scene.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/tinyxml2.h /usr/include/c++/11/climits \
@@ -170,29 +171,4 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/c++/11/cstring \
- /usr/include/string.h /usr/include/strings.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/stb_image_write.h \
- /usr/include/c++/11/stdlib.h /usr/include/c++/11/math.h \
- /usr/include/c++/11/cmath /usr/include/math.h \
- /usr/include/x86_64-linux-gnu/bits/math-vector.h \
- /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
- /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
- /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
- /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
- /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
- /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
- /usr/include/c++/11/bits/specfun.h /usr/include/c++/11/limits \
- /usr/include/c++/11/tr1/gamma.tcc \
- /usr/include/c++/11/tr1/special_function_util.h \
- /usr/include/c++/11/tr1/bessel_function.tcc \
- /usr/include/c++/11/tr1/beta_function.tcc \
- /usr/include/c++/11/tr1/ell_integral.tcc \
- /usr/include/c++/11/tr1/exp_integral.tcc \
- /usr/include/c++/11/tr1/hypergeometric.tcc \
- /usr/include/c++/11/tr1/legendre_function.tcc \
- /usr/include/c++/11/tr1/modified_bessel_func.tcc \
- /usr/include/c++/11/tr1/poly_hermite.tcc \
- /usr/include/c++/11/tr1/poly_laguerre.tcc \
- /usr/include/c++/11/tr1/riemann_zeta.tcc /usr/include/assert.h
+ /usr/include/string.h /usr/include/strings.h

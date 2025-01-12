@@ -6,8 +6,8 @@
 struct Camera {
     Point3D position;
     Point3D lookat;
-    unsigned int fov_x;
-    unsigned int fov_y;
+    long double fov_x;
+    long double fov_y;
     unsigned int resolution[2];
     unsigned int max_bounces;
 
