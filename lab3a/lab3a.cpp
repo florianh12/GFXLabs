@@ -91,10 +91,6 @@ Scene extractScene(XMLElement* xml_scene) {
 }
 
 int main(int argc, char *argv[]) {
-    // std::cout << argv[1] << "\n";
-    /*std::cout << argv[2] << "\n";
-
-    */
    XMLDocument doc;
    const XMLError err = doc.LoadFile(argv[1]);
 
@@ -102,16 +98,10 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("File not loaded!");
     }
 
-    XMLPrinter printer;
-
-    doc.Print(&printer);
-
     XMLElement* xml_scene = doc.FirstChildElement("scene");
 
     Scene scene = extractScene(xml_scene);
 
-    std::cout << printer.CStr();
-    std::cout << "Test" << std::endl;
     scene.render();
 
     int image_width = 256, image_height = 256;

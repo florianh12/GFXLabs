@@ -14,17 +14,6 @@ Scene::Scene(Camera camera, Color background, Color ambient, std::vector<Paralle
     spheres{spheres}, rendered{false}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
 void Scene::render() {
-    int ct = 0;
-    bool intersect = false;
-    std::cout << camera.fov_x << " " << camera.fov_y << std::endl;
-    for(const ParallelLight& light : parallel_lights) {
-        std::cout << light.color.r_normalized << " " << light.color.g_normalized << " " << light.color.b_normalized << std::endl;
-    }
-
-    //WIP,
-    //TODO: Render scene
-    std::cout << "paralell Lights size:" << parallel_lights.size() << std::endl;
-    std::cout << "Spheres size:" << spheres.size() << std::endl;
 
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
         for (unsigned int v = 0; v < camera.resolution[1]; v++) {
@@ -39,10 +28,8 @@ void Scene::render() {
             long double min_t = std::numeric_limits<long double>::max();
 
             for (Sphere& sphere: spheres) {
-                try
-                {
-                    RaySphereIntersection* tmp = ray.intersect(sphere);
-                    
+                RaySphereIntersection* tmp = ray.intersect(sphere);
+                if(tmp != nullptr) {
                     if (tmp->t < min_t) {
                         min_t = tmp->t;
                         if(intersection != nullptr)
@@ -51,21 +38,12 @@ void Scene::render() {
                         
                     }
                 }
-                catch(const std::runtime_error& e)
-                {
-                    continue;
-                }
             }
 
             Color ray_col = background;
 
             if(intersection != nullptr) {
                 ray_col =  intersection->sphere->material.ka * ambient * intersection->sphere->material.color;
-
-                if(u == 88 && v == 45) {
-                    intersect = true;
-                    std::cout << intersection->t << " " << u << " " << v << std::endl;
-                }
                 
 
                 //Deal with parallel lights
@@ -97,15 +75,13 @@ void Scene::render() {
             picture[index] = static_cast<char>(ray_col.r_normalized*255.0L);
             picture[index + 1] = static_cast<char>(ray_col.g_normalized*255.0L);
             picture[index + 2] = static_cast<char>(ray_col.b_normalized*255.0L);
-            if(static_cast<int>(ray_col.getR()) != 0)
-               ct++;
+
             //cleanup
             delete intersection;
             intersection = nullptr;
         }
 
     }
-    std::cout << "Counter: " << ct;
     stbi_write_png(file_name,camera.resolution[0], camera.resolution[1], 3, picture, camera.resolution[0] * 3);
 }
 
@@ -117,7 +93,7 @@ Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& ligh
 
     long double diffuse = intersection.sphere->material.kd * std::max(((light.direction*(-1)) * normal),0.0L);
 
-    Vec3 reflection = 2 * (normal * light.direction) * normal - light.direction;
+    Vec3 reflection = 2 * (normal * (light.direction*(-1))) * normal - (light.direction*(-1));
 
     reflection.normalize();
     
@@ -128,7 +104,7 @@ Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& ligh
     long double specular = intersection.sphere->material.ks * std::pow(std::max((reflection * eye),0.0L),intersection.sphere->material.exponent);
     
 
-    return ((diffuse * intersection.sphere->material.color) + (specular * light.color));
+    return ((specular * light.color));//(diffuse * intersection.sphere->material.color) + 
 
 }
 

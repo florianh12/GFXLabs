@@ -26,18 +26,18 @@ RaySphereIntersection* Ray3D::intersect(Sphere& sphere) {
    long double disc = std::pow(direction*(origin - sphere.position),2)
     - ((direction*direction)*((origin-sphere.position)*(origin-sphere.position)-std::pow(sphere.radius,2)));
     
-    if (disc < 0) {
-        throw std::runtime_error("No intersection between Sphere and ray!");
+    if (disc < 0.0L) {
+        return nullptr;
     }
 
     long double t = -(direction*(origin-sphere.position));
     
-    if (disc != 0) {
+    if (disc != 0.0L) {
 
             t -= std::sqrt(disc);
-    }
-    if(t < 1.0L)
-        std::cout << t << " disc:" << disc << " ";
+    } 
+    if (t < 0)
+        return nullptr;
 
     return new RaySphereIntersection(&sphere,&(*this),calculatePoint(t), t);
 
