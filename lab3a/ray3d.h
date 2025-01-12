@@ -16,7 +16,7 @@ struct Ray3D {
     //calculates a point on the ray
     Point3D calculatePoint(long double t);
 
-    RaySphereIntersection intersect(Sphere& sphere);
+    RaySphereIntersection* intersect(Sphere& sphere);
 
 };
 

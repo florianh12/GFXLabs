@@ -114,9 +114,9 @@ int main(int argc, char *argv[]) {
     for(size_t x = 0; x < image_width; x++) {
         for(size_t y = 0; y < image_height; y++) {
             int index = ((y * image_width) + x) * 3;
-            image[index] = static_cast<char>(x);
-            image[index + 1] = static_cast<char>(y);
-            image[index + 2] = static_cast<char>(255);
+            image[index] = 255;
+            image[index + 1] = 0;
+            image[index + 2] = 0;
         }
     }
 
