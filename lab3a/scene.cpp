@@ -1,6 +1,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "ray3d.h"
+#include "raysphereintersection.h"
 #include <stdexcept>
 #include <iostream>
 #include <cmath>
@@ -38,14 +39,16 @@ void Scene::render() {
                 try
                 {
                     RaySphereIntersection* tmp = ray.intersect(sphere);
+                    
                     if (tmp->t < min_t) {
                         min_t = tmp->t;
                         if(intersection != nullptr)
                             delete intersection;
                         intersection = tmp;
+                        
                     }
                 }
-                catch(const std::exception& e)
+                catch(const std::runtime_error& e)
                 {
                     continue;
                 }
@@ -58,16 +61,33 @@ void Scene::render() {
             }
 
             //Deal with parallel lights
-            for(const Light& light : parallel_lights) {
-                //WIP
+            for(ParallelLight& light : parallel_lights) {
+                Ray3D shadow_ray = Ray3D(intersection->intersection_point,light.direction*(-1.0),0.001,1000);
+                RaySphereIntersection* tmp = nullptr;
+                for (Sphere& sphere: spheres) {
+                    try
+                    {
+                        tmp = shadow_ray.intersect(sphere);
+                        break;
+                    }
+                    catch(const std::exception& e)
+                    {
+                        continue;
+                    }
+
+                }
+
+                if (tmp == nullptr) {
+                    ray_col += illuminate((*intersection),light);
+                }
             }
 
 
             //prepare picture array
             size_t index = ((v * camera.resolution[0]) + u) * 3;
-            picture[index] = ray_col.r;
-            picture[index + 1] = ray_col.g;
-            picture[index + 2] = ray_col.b;
+            picture[index] = ray_col.getR();
+            picture[index + 1] = ray_col.getG();
+            picture[index + 2] = ray_col.getB();
 
             //cleanup
             delete intersection;
@@ -75,6 +95,29 @@ void Scene::render() {
         }
 
     }
+}
+
+Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& light) {
+    double ks = 1.0;
+    double kd = 0.9;
+    double exponent = 200;
+    Vec3 normal = intersection.intersection_point - intersection.sphere->position;
+    
+    normal.normalize();
+
+    long double diffuse = kd * std::max((light.direction * normal),0.0L);
+
+    Vec3 reflection = 2 * (normal * light.direction) * normal - light.direction;
+
+    reflection.normalize();
+    
+    Vec3 eye = camera.position - intersection.intersection_point;
+    
+    long double specular = std::pow(std::max((reflection * eye),0.0L),exponent);
+    
+
+    return ((diffuse * intersection.sphere->color) + (specular * light.color));
+
 }
 
 unsigned int* Scene::getResolution() {

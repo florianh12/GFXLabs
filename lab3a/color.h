@@ -3,11 +3,21 @@
 
 struct Color
 {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
+    long double r_normalized;
+    long double g_normalized;
+    long double b_normalized;
 
-    Color(double r_normalized, double g_normalized, double b_normalized);
+    Color(long double r_normalized, long double g_normalized, long double b_normalized);
+
+    Color& operator+=(const Color& other);
+    Color operator+(const Color& other) const;
+    
+
+    unsigned char getR();
+    unsigned char getG();
+    unsigned char getB();
+
+    friend Color operator*(long double scalar, Color& col);
 };
 
 

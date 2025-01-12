@@ -3,6 +3,7 @@
 #include "vec3.h"
 #include <stdexcept>
 #include <cmath>
+#include <iostream>
 //#include <optional> for some reason does not import std::optional
 
 Ray3D::Ray3D(Point3D origin, Vec3 direction, long double min_dist, long double max_dist) : origin{origin}, direction{direction}, min_dist{min_dist}, max_dist{max_dist} {
@@ -18,13 +19,12 @@ Point3D Ray3D::calculatePoint(long double t) {
     if (t > max_dist) {
         throw std::runtime_error("t is larger than max_dist");
     }
-
     return origin + t * direction;
 }
 
 RaySphereIntersection* Ray3D::intersect(Sphere& sphere) {
-   long double disc = std::sqrt(std::pow(direction*(origin - sphere.position),2)
-    - ((direction*direction)*((origin-sphere.position)*(origin-sphere.position)-std::pow(sphere.radius,2))));
+   long double disc = std::pow(direction*(origin - sphere.position),2)
+    - ((direction*direction)*((origin-sphere.position)*(origin-sphere.position)-std::pow(sphere.radius,2)));
     
     if (disc < 0) {
         throw std::runtime_error("No intersection between Sphere and ray!");
@@ -34,7 +34,7 @@ RaySphereIntersection* Ray3D::intersect(Sphere& sphere) {
     
     if (disc != 0) {
 
-            t -= disc;
+            t -= std::sqrt(disc);
     }
 
     return new RaySphereIntersection(&sphere,&(*this),calculatePoint(t), t);

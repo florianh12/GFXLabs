@@ -450,9 +450,9 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: ../lab3a.cpp \
   ../sphere.h \
   ../surface.h \
   ../color.h \
-  ../camera.h \
   ../parallellight.h \
   ../light.h \
+  ../camera.h \
   ../scene.h \
   ../tinyxml2.h \
   /usr/include/c++/11/climits \
@@ -972,6 +972,8 @@ CMakeFiles/lab3a.dir/ray3d.cpp.o: ../ray3d.cpp \
   ../sphere.h \
   ../surface.h \
   ../color.h \
+  ../parallellight.h \
+  ../light.h \
   /usr/include/c++/11/stdexcept \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception_ptr.h \
@@ -1002,7 +1004,30 @@ CMakeFiles/lab3a.dir/ray3d.cpp.o: ../ray3d.cpp \
   /usr/include/c++/11/tr1/modified_bessel_func.tcc \
   /usr/include/c++/11/tr1/poly_hermite.tcc \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
-  /usr/include/c++/11/tr1/riemann_zeta.tcc
+  /usr/include/c++/11/tr1/riemann_zeta.tcc \
+  /usr/include/c++/11/iostream \
+  /usr/include/c++/11/ostream \
+  /usr/include/c++/11/ios \
+  /usr/include/c++/11/bits/ios_base.h \
+  /usr/include/c++/11/bits/locale_classes.h \
+  /usr/include/c++/11/bits/locale_classes.tcc \
+  /usr/include/c++/11/system_error \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/error_constants.h \
+  /usr/include/c++/11/streambuf \
+  /usr/include/c++/11/bits/streambuf.tcc \
+  /usr/include/c++/11/bits/basic_ios.h \
+  /usr/include/c++/11/bits/locale_facets.h \
+  /usr/include/c++/11/cwctype \
+  /usr/include/wctype.h \
+  /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_base.h \
+  /usr/include/c++/11/bits/streambuf_iterator.h \
+  /usr/include/x86_64-linux-gnu/c++/11/bits/ctype_inline.h \
+  /usr/include/c++/11/bits/locale_facets.tcc \
+  /usr/include/c++/11/bits/basic_ios.tcc \
+  /usr/include/c++/11/bits/ostream.tcc \
+  /usr/include/c++/11/istream \
+  /usr/include/c++/11/bits/istream.tcc
 
 CMakeFiles/lab3a.dir/scene.cpp.o: ../scene.cpp \
   /usr/include/stdc-predef.h \
@@ -1162,8 +1187,8 @@ CMakeFiles/lab3a.dir/scene.cpp.o: ../scene.cpp \
   ../color.h \
   ../light.h \
   ../surface.h \
-  ../sphere.h \
   ../parallellight.h \
+  ../sphere.h \
   /usr/include/c++/11/vector \
   /usr/include/c++/11/bits/stl_uninitialized.h \
   /usr/include/c++/11/bits/stl_vector.h \
@@ -1382,12 +1407,40 @@ CMakeFiles/lab3a.dir/sphere.cpp.o: ../sphere.cpp \
   /usr/include/c++/11/bits/basic_string.tcc \
   ../vec3.h \
   ../color.h \
+  ../parallellight.h \
+  ../light.h \
   /usr/include/c++/11/stdexcept \
   /usr/include/c++/11/exception \
   /usr/include/c++/11/bits/exception_ptr.h \
   /usr/include/c++/11/bits/cxxabi_init_exception.h \
   /usr/include/c++/11/typeinfo \
-  /usr/include/c++/11/bits/nested_exception.h
+  /usr/include/c++/11/bits/nested_exception.h \
+  ../raysphereintersection.h \
+  /usr/include/c++/11/cmath \
+  /usr/include/math.h \
+  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+  /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+  /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+  /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+  /usr/include/c++/11/bits/specfun.h \
+  /usr/include/c++/11/limits \
+  /usr/include/c++/11/tr1/gamma.tcc \
+  /usr/include/c++/11/tr1/special_function_util.h \
+  /usr/include/c++/11/tr1/bessel_function.tcc \
+  /usr/include/c++/11/tr1/beta_function.tcc \
+  /usr/include/c++/11/tr1/ell_integral.tcc \
+  /usr/include/c++/11/tr1/exp_integral.tcc \
+  /usr/include/c++/11/tr1/hypergeometric.tcc \
+  /usr/include/c++/11/tr1/legendre_function.tcc \
+  /usr/include/c++/11/tr1/modified_bessel_func.tcc \
+  /usr/include/c++/11/tr1/poly_hermite.tcc \
+  /usr/include/c++/11/tr1/poly_laguerre.tcc \
+  /usr/include/c++/11/tr1/riemann_zeta.tcc
 
 CMakeFiles/lab3a.dir/surface.cpp.o: ../surface.cpp \
   /usr/include/stdc-predef.h \
@@ -1543,7 +1596,11 @@ CMakeFiles/lab3a.dir/surface.cpp.o: ../surface.cpp \
   /usr/include/c++/11/bits/charconv.h \
   /usr/include/c++/11/bits/basic_string.tcc \
   ../vec3.h \
-  ../color.h
+  ../color.h \
+  ../parallellight.h \
+  ../light.h \
+  ../raysphereintersection.h \
+  ../sphere.h
 
 CMakeFiles/lab3a.dir/tinyxml2.cpp.o: ../tinyxml2.cpp \
   /usr/include/stdc-predef.h \

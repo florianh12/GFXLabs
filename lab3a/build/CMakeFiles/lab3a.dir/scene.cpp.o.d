@@ -134,9 +134,9 @@ CMakeFiles/lab3a.dir/scene.cpp.o: \
  /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/surface.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
- /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_uninitialized.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h /usr/include/c++/11/vector \
+ /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
  /usr/include/c++/11/bits/vector.tcc \

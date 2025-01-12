@@ -157,9 +157,9 @@ CMakeFiles/lab3a.dir/lab3a.cpp.o: \
  /home/hejzef44/GFX/GFXLabs/lab3a/sphere.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/surface.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/color.h \
- /home/hejzef44/GFX/GFXLabs/lab3a/camera.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/parallellight.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/light.h \
+ /home/hejzef44/GFX/GFXLabs/lab3a/camera.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/scene.h \
  /home/hejzef44/GFX/GFXLabs/lab3a/tinyxml2.h /usr/include/c++/11/climits \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \

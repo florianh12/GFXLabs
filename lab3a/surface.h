@@ -2,14 +2,20 @@
 #define SURFACE_H
 
 #include "point3d.h"
-#include "color.h"
+#include "parallellight.h"
+#include "material.h"
+
+struct RaySphereIntersection;
+
 
 struct Surface {
-    Color color;
+    Material material;
     Point3D position;
 
-    Surface(Color color, Point3D position);
+    Surface(Material material, Point3D position);
+    
     ~Surface();
+
 };
 
 

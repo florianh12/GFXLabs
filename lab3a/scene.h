@@ -25,6 +25,7 @@ public:
     Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres);
 
     void render();
+    Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
 
     unsigned int* getResolution();
     unsigned int* getPicture();

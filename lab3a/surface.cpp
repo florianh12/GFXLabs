@@ -1,5 +1,6 @@
 #include "surface.h"
+#include "raysphereintersection.h"
 
-Surface::Surface(Color color, Point3D position) : color{color}, position{position} {}
+Surface::Surface(Material material, Point3D position) : material{material}, position{position} {}
 
 Surface::~Surface() {}
