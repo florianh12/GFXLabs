@@ -103,19 +103,4 @@ int main(int argc, char *argv[]) {
     Scene scene = extractScene(xml_scene);
 
     scene.render();
-
-    int image_width = 256, image_height = 256;
-
-    char image[image_width * image_height * 3];
-
-    for(size_t x = 0; x < image_width; x++) {
-        for(size_t y = 0; y < image_height; y++) {
-            int index = ((y * image_width) + x) * 3;
-            image[index] = 255;
-            image[index + 1] = 0;
-            image[index + 2] = 0;
-        }
-    }
-
-    
 }

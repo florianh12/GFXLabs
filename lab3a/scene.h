@@ -7,6 +7,8 @@
 #include "surface.h"
 #include "sphere.h"
 #include "parallellight.h"
+#include "raysphereintersection.h"
+#include "ray3d.h"
 #include <vector>
 
 class Scene {
@@ -27,6 +29,7 @@ public:
 
     void render();
     Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
+    RaySphereIntersection intersect(Ray3D& ray, Sphere& sphere, unsigned int u,unsigned int v);
 
     unsigned int* getResolution();
     char* getPicture();

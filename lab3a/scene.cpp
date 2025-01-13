@@ -22,18 +22,16 @@ void Scene::render() {
             long double x_i = (2 * x_n - 1) * std::tan(camera.fov_x);
             long double y_i = (2 * y_n -1) * std::tan(camera.fov_y);
 
-            Ray3D ray = Ray3D(Point3D(0,0,1),Vec3(x_i,y_i,-1),0,1000);
+            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,1000);
 
-            RaySphereIntersection* intersection = nullptr;
+            RaySphereIntersection intersection = RaySphereIntersection();
             long double min_t = std::numeric_limits<long double>::max();
 
             for (Sphere& sphere: spheres) {
-                RaySphereIntersection* tmp = ray.intersect(sphere);
-                if(tmp != nullptr) {
-                    if (tmp->t < min_t) {
-                        min_t = tmp->t;
-                        if(intersection != nullptr)
-                            delete intersection;
+                RaySphereIntersection tmp = intersect(ray, sphere,u,v);
+                if(tmp.intersection) {
+                    if (tmp.t < min_t) {
+                        min_t = tmp.t;
                         intersection = tmp;
                         
                     }
@@ -42,29 +40,29 @@ void Scene::render() {
 
             Color ray_col = background;
 
-            if(intersection != nullptr) {
-                ray_col =  intersection->sphere->material.ka * ambient * intersection->sphere->material.color;
+            if(intersection.intersection) {
+                ray_col =  intersection.sphere.material.ka * ambient * intersection.sphere.material.color;
+                
+                if (u == 88 && v == 45)
+                {
+                    std::cout << intersection.t << " " << intersection.intersection_point << " Sphere: " << intersection.sphere.radius << " " << intersection.sphere.position;
+                    std::cout << (intersection.intersection_point - intersection.sphere.position).vec_norm() << " " << intersection.intersection << std::endl;
+                }
                 
 
                 //Deal with parallel lights
                 for(ParallelLight& light : parallel_lights) {
-                    Ray3D shadow_ray = Ray3D(intersection->intersection_point,light.direction*(-1.0),0.001,1000);
-                    RaySphereIntersection* tmp = nullptr;
+                    Ray3D shadow_ray = Ray3D(intersection.intersection_point,light.direction*(-1.0),0.001,1000);
+                    RaySphereIntersection tmp = RaySphereIntersection();
                     for (Sphere& sphere: spheres) {
-                        try
-                        {
-                            tmp = shadow_ray.intersect(sphere);
-                            break;
-                        }
-                        catch(const std::exception& e)
-                        {
-                            continue;
-                        }
-
+                            tmp = intersect(shadow_ray, sphere,u,v);
+                            
+                            if(tmp.intersection)
+                                break;
                     }
 
-                    if (tmp == nullptr) {
-                        ray_col += illuminate((*intersection),light);
+                    if (!tmp.intersection) {
+                        ray_col += illuminate(intersection,light);
                     }
                 }
             }
@@ -76,22 +74,46 @@ void Scene::render() {
             picture[index + 1] = static_cast<char>(ray_col.g_normalized*255.0L);
             picture[index + 2] = static_cast<char>(ray_col.b_normalized*255.0L);
 
-            //cleanup
-            delete intersection;
-            intersection = nullptr;
         }
 
     }
     stbi_write_png(file_name,camera.resolution[0], camera.resolution[1], 3, picture, camera.resolution[0] * 3);
 }
 
+
+RaySphereIntersection Scene::intersect(Ray3D& ray, Sphere& sphere, unsigned int u,unsigned int v) {
+   long double disc = std::pow(ray.direction*(ray.origin - sphere.position),2)
+    - ((ray.direction*ray.direction)*((ray.origin-sphere.position)*(ray.origin-sphere.position)-(sphere.radius * sphere.radius)));
+    
+    if (disc < 0.0L) {
+        return RaySphereIntersection();
+    }
+
+    long double t = -(ray.direction*(ray.origin-sphere.position));
+    
+    if (disc != 0.0L) {
+
+            t += std::sqrt(disc);
+    } 
+    if (t <= ray.min_dist)
+        return RaySphereIntersection();
+
+    if (u == 88 && v == 45) {
+        std::cout << "real t-value: " << t << " " << ray.origin << " " << ray.direction << std::endl;
+    }
+
+    return RaySphereIntersection(sphere,ray,ray.calculatePoint(t), t);
+
+}
+
+
 Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& light) {
 
-    Vec3 normal = intersection.intersection_point - intersection.sphere->position;
+    Vec3 normal = intersection.intersection_point - intersection.sphere.position;
     
     normal.normalize();
 
-    long double diffuse = intersection.sphere->material.kd * std::max(((light.direction*(-1)) * normal),0.0L);
+    long double diffuse = intersection.sphere.material.kd * std::max(((light.direction*(-1)) * normal),0.0L);
 
     Vec3 reflection = 2 * (normal * (light.direction*(-1))) * normal - (light.direction*(-1));
 
@@ -101,12 +123,14 @@ Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& ligh
 
     eye.normalize();
     
-    long double specular = intersection.sphere->material.ks * std::pow(std::max((reflection * eye),0.0L),intersection.sphere->material.exponent);
+    long double specular = intersection.sphere.material.ks * std::pow(std::max((reflection * eye),0.0L),intersection.sphere.material.exponent);
     
 
-    return ((diffuse * intersection.sphere->material.color) + (specular * light.color));
+    return ((diffuse * intersection.sphere.material.color) + (specular * light.color));
 
 }
+
+
 
 unsigned int* Scene::getResolution() {
     return camera.resolution;

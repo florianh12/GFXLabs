@@ -7,13 +7,13 @@
 //#include <optional> for some reason does not import std::optional
 
 Ray3D::Ray3D(Point3D origin, Vec3 direction, long double min_dist, long double max_dist) : origin{origin}, direction{direction}, min_dist{min_dist}, max_dist{max_dist} {
-    direction.normalize();
+    this->direction.normalize();
 }
 
 //calculates a point on the ray
-Point3D Ray3D::calculatePoint(long double t) {
+Point3D Ray3D::calculatePoint(const long double t) const {
     if(t < min_dist) {
-        throw std::runtime_error("t is smaller than min_dist");
+        throw std::runtime_error("t is smaller than min_dist t:"+std::to_string(t));
     }
 
     if (t > max_dist) {
@@ -22,23 +22,3 @@ Point3D Ray3D::calculatePoint(long double t) {
     return origin + t * direction;
 }
 
-RaySphereIntersection* Ray3D::intersect(Sphere& sphere) {
-   long double disc = std::pow(direction*(origin - sphere.position),2)
-    - ((direction*direction)*((origin-sphere.position)*(origin-sphere.position)-std::pow(sphere.radius,2)));
-    
-    if (disc < 0.0L) {
-        return nullptr;
-    }
-
-    long double t = -(direction*(origin-sphere.position));
-    
-    if (disc != 0.0L) {
-
-            t -= std::sqrt(disc);
-    } 
-    if (t < 0)
-        return nullptr;
-
-    return new RaySphereIntersection(&sphere,&(*this),calculatePoint(t), t);
-
-}
