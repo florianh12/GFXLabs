@@ -1,9 +1,9 @@
 #ifndef PARALLELLIGHT_H
 #define PARALLELLIGHT_H
 
+#include "vec3.h"
 #include "color.h"
 #include "light.h"
-#include "vec3.h"
 
 
 struct ParallelLight : public Light

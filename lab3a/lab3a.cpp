@@ -1,15 +1,16 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include "vec3.h"
+//my code
 #include "point3d.h"
-#include "ray3d.h"
 #include "color.h"
 #include "camera.h"
 #include "parallellight.h"
+#include "vec3.h"
 #include "sphere.h"
+#include "material.h"
 #include "scene.h"
 
+//used libraries
+#include <vector>
+#include <stdexcept>
 #include "tinyxml2.h"
 
 

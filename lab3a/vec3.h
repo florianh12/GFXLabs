@@ -1,6 +1,7 @@
 #ifndef VEC3_H
 #define VEC3_H
 
+//used library
 #include <string>
 
 class Vec3  {
@@ -22,13 +23,19 @@ class Vec3  {
         //Operator Overrides
         Vec3 operator+(const Vec3& other) const;
         Vec3& operator+=(const Vec3& other);
+
         Vec3 operator-(const Vec3& other) const;
         Vec3& operator-=(const Vec3& other);
+
         long double operator*(const Vec3& other) const; //will be the dot product
         Vec3 operator*(long double scalar) const; //will be the scalar poduct left
+
         Vec3 operator/(long double scalar) const;
+
         Vec3 operator%(const Vec3& other) const; //will be the cross product
+
         bool operator==(const Vec3& other) const;
+        
         long double& operator[](int index);
         const long double& operator[](int index) const; 
 

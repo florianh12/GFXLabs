@@ -2,15 +2,15 @@
 #define SURFACE_H
 
 #include "point3d.h"
-#include "parallellight.h"
 #include "material.h"
-
-struct RaySphereIntersection;
 
 
 struct Surface {
     Material material;
     Point3D position;
+
+    //for no intersection in intersection class only
+    Surface();
 
     Surface(Material material, Point3D position);
     

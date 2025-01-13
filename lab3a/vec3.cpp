@@ -1,4 +1,7 @@
+//my code
 #include "vec3.h"
+
+//used libraries
 #include <string>
 #include <stdexcept>
 #include <cmath>

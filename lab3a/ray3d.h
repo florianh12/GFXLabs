@@ -9,6 +9,9 @@ struct Ray3D {
     Vec3 direction;
     long double min_dist;
     long double max_dist;
+   
+    //for no intersection in intersection class only
+    Ray3D();
 
     Ray3D(Point3D origin, Vec3 direction, long double min_dist, long double max_dist);
 
