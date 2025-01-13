@@ -28,7 +28,7 @@ public:
     Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name);
 
     void render();
-    Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
+    Color illuminate(RaySphereIntersection& intersection, ParallelLight& light, unsigned int u,unsigned int v);
     RaySphereIntersection intersect(Ray3D& ray, Sphere& sphere, unsigned int u,unsigned int v);
 
     unsigned int* getResolution();
