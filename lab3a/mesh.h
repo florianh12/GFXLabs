@@ -12,6 +12,10 @@ struct Mesh : Surface {
     std::vector<Point3D> vertices;
     std::vector<Vec3> normals;
     std::vector<Point2D> texture_coordinates;
+    //Has the from of vertex_index, texture_coordinate_index, normal_index x3 per face/triangle
+    std::vector<int> indices;
+
+    Material material;
 
     //for no intersection in intersection class only
     Mesh();
