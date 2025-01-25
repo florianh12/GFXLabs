@@ -10,6 +10,7 @@
 #include "sphere.h"
 #include "raysphereintersection.h"
 #include "ray3d.h"
+#include "mesh.h"
 
 //used libraries
 #include <vector>
@@ -22,12 +23,13 @@ class Scene {
 
 
     std::vector<Sphere> spheres;
+    std::vector<Mesh> meshes;
 
     char* picture;
     const char* file_name;
 
 public:
-    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name);
+    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, std::vector<Mesh> meshes, const char* file_name);
 
     void render();
     Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);

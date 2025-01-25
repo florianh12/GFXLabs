@@ -7,12 +7,17 @@
 #include "sphere.h"
 #include "material.h"
 #include "scene.h"
+#include "mesh.h"
 
 //used libraries
 #include <vector>
 #include <stdexcept>
 #include "tinyxml2.h"
+#include <string>
+#include <filesystem>
 
+//debug
+#include <iostream>
 
 using namespace tinyxml2;
 
@@ -82,13 +87,32 @@ std::vector<Sphere> extractSpheres(XMLElement* xml_scene) {
     return spheres;
 }
 
-Scene extractScene(XMLElement* xml_scene) {
+std::vector<Mesh> extractMeshes(XMLElement* xml_scene, std::string dir) {
+    std::vector<Mesh> meshes = std::vector<Mesh>();
+    XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
+    
+    for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("sphere")) {
+        XMLElement* material = mesh->FirstChildElement("material_solid");
+        XMLElement* phong = material->FirstChildElement("phong");
+        
+        meshes.push_back(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
+        std::stold(phong->Attribute("ka")),
+        std::stold(phong->Attribute("kd")),
+        std::stold(phong->Attribute("ks")),
+        std::stold(phong->Attribute("exponent")))));
+    }
+
+    return meshes;
+}
+
+Scene extractScene(XMLElement* xml_scene, std::string dir) {
     
 
     return Scene(extractCamera(xml_scene),
     extractColor(xml_scene, "background_color"),
     extractColor(xml_scene->FirstChildElement("lights")->FirstChildElement("ambient_light"),"color"),
-    extractParalellLights(xml_scene), extractSpheres(xml_scene),xml_scene->Attribute("output_file"));
+    extractParalellLights(xml_scene), extractSpheres(xml_scene), extractMeshes(xml_scene,dir),
+    xml_scene->Attribute("output_file"));
 }
 
 int main(int argc, char *argv[]) {
@@ -99,9 +123,17 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("File not loaded!");
     }
 
+    std::filesystem::path filepath(argv[1]);
+
+    std::string dir = filepath.parent_path();
+
+    if(dir == "") {
+        dir = ".";
+    }
+
     XMLElement* xml_scene = doc.FirstChildElement("scene");
 
-    Scene scene = extractScene(xml_scene);
+    Scene scene = extractScene(xml_scene, dir);
 
     scene.render();
 }

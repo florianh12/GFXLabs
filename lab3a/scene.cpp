@@ -17,9 +17,10 @@
 #include "stb_image_write.h"
 
 
-Scene::Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name) 
+Scene::Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, 
+std::vector<Mesh> meshes, const char* file_name)
     : camera{camera}, background{background}, ambient{ambient}, parallel_lights{parallel_lights},
-    spheres{spheres}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
+    spheres{spheres}, meshes{meshes}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
 void Scene::render() {
 
@@ -141,5 +142,5 @@ char* Scene::getPicture() {
 
 
 Scene::~Scene() {
-    delete picture;
+    delete[] picture;
 }

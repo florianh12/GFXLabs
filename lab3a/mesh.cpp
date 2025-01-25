@@ -126,29 +126,33 @@ std::string Mesh::toString() const  {
         retstring << "\t\t" << vertex;
     } 
 
-    retstring << "\t]\n\tnormals: [\n";
+    retstring << "\t]\n\n\tnormals: [\n";
 
     for(const Vec3& normal : normals) {
         retstring << "\t\t" << normal;
     }
 
-    retstring << "\t]\n\ttexture coordinates: [\n";
+    retstring << "\t]\n\n\ttexture coordinates: [\n";
 
     for(const Point2D& texture_coordinate : texture_coordinates) {
         retstring << "\t\t" << texture_coordinate;
     }
 
-    retstring << "\t]\n\tindices(vertex/texture/normal): [\n";
+    retstring << "\t]\n\n\tindices(vertex/texture/normal): [\n";
 
     for (size_t i = 0; i < vertex_indices.size(); i++) {
-        retstring << vertex_indices[i] << "/" << texture_coordinate_indices[i] << "/" << normal_indices[i] << " ";
+        if(i%3 == 0) {
+            retstring << "\t\t";
+        }
+        //added 1 for .obj file comparisons
+        retstring << vertex_indices[i]+1 << "/" << texture_coordinate_indices[i]+1 << "/" << normal_indices[i]+1 << " ";
 
         if(i%3 == 2) {
             retstring << "\n";
         }
     }
 
-    retstring << "\t]\n\tMaterial: " << material << "}\n";
+    retstring << "\t]\n\tmaterial:\n" << material.toString("\t\t") << "}\n";
 
     return retstring.str();
 }
