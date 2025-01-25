@@ -13,6 +13,16 @@ struct PointLight : public Light
 
     PointLight(Color color, Point3D position): Light{color}, position{position} {}
 
+    Vec3 getDirection(Point3D point) {
+        Vec3 dir = point - position;
+        
+        //normalize calculated light direction
+        dir.normalize();
+
+        return dir;
+    }
+
+
     ~PointLight() {}
 };
 

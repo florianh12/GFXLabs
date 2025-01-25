@@ -14,6 +14,11 @@ struct ParallelLight : public Light
         this->direction.normalize();
     }
 
+    Vec3 getDirection(Point3D point) {
+        return direction;
+    }
+
+
     ~ParallelLight() {}
 };
 

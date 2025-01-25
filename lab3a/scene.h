@@ -14,12 +14,13 @@
 
 //used libraries
 #include <vector>
+#include <memory>
 
 class Scene {
     Camera camera;
     Color background;
     Color ambient;
-    std::vector<ParallelLight> parallel_lights;
+    std::vector<std::unique_ptr<Light>> lights;
 
 
     std::vector<Sphere> spheres;
@@ -29,10 +30,10 @@ class Scene {
     const char* file_name;
 
 public:
-    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, std::vector<Mesh> meshes, const char* file_name);
+    Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<Sphere> spheres, std::vector<Mesh> meshes, const char* file_name);
 
     void render();
-    Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
+    Color illuminate(RaySphereIntersection& intersection, Light& light);
     RaySphereIntersection intersect(Ray3D& ray, Sphere& sphere);
 
     unsigned int* getResolution();
