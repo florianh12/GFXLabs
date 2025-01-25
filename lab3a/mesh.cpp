@@ -13,7 +13,8 @@
 #include <stdexcept>
 
 
-Mesh::Mesh() : vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, indices{std::vector<int>()} {}
+Mesh::Mesh() : vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, 
+vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_coordinate_indices{std::vector<int>()} {}
 
 Mesh::Mesh(std::string obj_file_path, Material material) : Mesh() {
     this->material = material;
@@ -80,30 +81,82 @@ Mesh::Mesh(std::string obj_file_path, Material material) : Mesh() {
 
                 std::string entry;
 
-                while ( std::getline(splitter, entry, delimiter)) {
+                while (std::getline(splitter, entry, delimiter)) {
 
                     std::stringstream entry_splitter;
-                    std::string index;
+                    std::string vertex_index;
+                    std::string normal_index;
+                    std::string texture_coordinate_index;
 
                     //feed entry into stringstream for splitting
                     entry_splitter << entry;
 
-                    while (std::getline(entry_splitter, index, '/')) {
-                        
-                        //convert to integer and push_back into indices
-                        indices.push_back(std::stoi(index));
-                    }
+                    std::getline(entry_splitter, vertex_index, '/');
+                    std::getline(entry_splitter, texture_coordinate_index, '/');
+                    std::getline(entry_splitter, normal_index, '/');
+                    
+                    //subtract 1 to start at index 0
+                    vertex_indices.push_back(std::stoi(vertex_index)-1);
+                    texture_coordinate_indices.push_back(std::stoi(texture_coordinate_index)-1);
+                    normal_indices.push_back(std::stoi(normal_index)-1);
 
                 }
-
-            }
-            
-
+            }   
         }
 
+        if (vertex_indices.size() != texture_coordinate_indices.size() 
+        || vertex_indices.size() != normal_indices.size())  {
+            throw std::runtime_error("Indices sizes don't match, vertices: "+
+            std::to_string(vertex_indices.size())+", normals: "+
+            std::to_string(normal_indices.size())+", texture: "+std::to_string(texture_coordinate_indices.size()));
+        }
+        
+
     } else {
-        throw new std::runtime_error("Couldn't open file: "+obj_file_path);
+        throw std::runtime_error("Couldn't open file: "+obj_file_path);
     }
+}
+
+std::string Mesh::toString() const  {
+    std::stringstream retstring;
+
+    retstring << "Mesh{\n\tvertices: [\n";
+    
+    for(const Point3D& vertex : vertices) {
+        retstring << "\t\t" << vertex;
+    } 
+
+    retstring << "\t]\n\tnormals: [\n";
+
+    for(const Vec3& normal : normals) {
+        retstring << "\t\t" << normal;
+    }
+
+    retstring << "\t]\n\ttexture coordinates: [\n";
+
+    for(const Point2D& texture_coordinate : texture_coordinates) {
+        retstring << "\t\t" << texture_coordinate;
+    }
+
+    retstring << "\t]\n\tindices(vertex/texture/normal): [\n";
+
+    for (size_t i = 0; i < vertex_indices.size(); i++) {
+        retstring << vertex_indices[i] << "/" << texture_coordinate_indices[i] << "/" << normal_indices[i] << " ";
+
+        if(i%3 == 2) {
+            retstring << "\n";
+        }
+    }
+
+    retstring << "\t]\n\tMaterial: " << material << "}\n";
+
+    return retstring.str();
+}
+
+std::ostream& operator<<(std::ostream& o, const Mesh& mesh) {
+    o << mesh.toString();
+
+    return o;
 }
 
 Mesh::~Mesh() {}

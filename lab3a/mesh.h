@@ -12,8 +12,9 @@ struct Mesh : Surface {
     std::vector<Point3D> vertices;
     std::vector<Vec3> normals;
     std::vector<Point2D> texture_coordinates;
-    //Has the from of vertex_index, texture_coordinate_index, normal_index x3 per face/triangle
-    std::vector<int> indices;
+    std::vector<int> vertex_indices;
+    std::vector<int> normal_indices;
+    std::vector<int> texture_coordinate_indices;
 
     Material material;
 
@@ -22,8 +23,12 @@ struct Mesh : Surface {
 
     Mesh(std::string obj_file_path, Material material);
 
+    std::string toString() const; 
+
     ~Mesh();
 };
+
+std::ostream& operator<<(std::ostream& o, const Mesh& mesh);
 
 
 #endif //MESH_H
