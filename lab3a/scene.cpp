@@ -54,7 +54,7 @@ void Scene::render() {
                 ray_col =  intersection.sphere.material.ka * ambient * intersection.sphere.material.color;
                 
 
-                //Deal with lights TODO: create stopping mechanism for point lights, when the ray reaches the point, change to unique ptrs for abstraction
+                //Deal with lights TODO: create stopping mechanism for point lights, when the ray reaches the point
                 for(std::unique_ptr<Light>& light : lights) {
                     //1e-5 is the epsilon value to prevent shadow acne
                     Ray3D shadow_ray = Ray3D(intersection.intersection_point,
