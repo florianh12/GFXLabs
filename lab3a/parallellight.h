@@ -10,9 +10,11 @@ struct ParallelLight : public Light
 {
     Vec3 direction;
 
-    ParallelLight(Color color, Vec3 direction);
+    ParallelLight(Color color, Vec3 direction) : Light{color}, direction{direction} {
+        this->direction.normalize();
+    }
 
-    ~ParallelLight();
+    ~ParallelLight() {}
 };
 
 
