@@ -22,6 +22,10 @@ struct PointLight : public Light
         return dir;
     }
 
+    //stop shadow ray when reaching light source
+    long double maxT(Point3D point) {
+        return (point - position).vec_norm();
+    }
 
     ~PointLight() {}
 };

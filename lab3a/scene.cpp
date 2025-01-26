@@ -32,7 +32,7 @@ void Scene::render() {
             long double x_i = (2 * x_n - 1) * std::tan(camera.fov_x);
             long double y_i = (2 * y_n -1) * std::tan(camera.fov_y);
 
-            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,1000);
+            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
 
             RaySphereIntersection intersection = RaySphereIntersection();
             long double min_t = std::numeric_limits<long double>::max();
@@ -58,7 +58,8 @@ void Scene::render() {
                 for(std::unique_ptr<Light>& light : lights) {
                     //1e-5 is the epsilon value to prevent shadow acne
                     Ray3D shadow_ray = Ray3D(intersection.intersection_point,
-                    light->getDirection(intersection.intersection_point)*(-1.0),1e-5,1000);
+                    light->getDirection(intersection.intersection_point)*(-1.0),
+                    1e-5,light->maxT(intersection.intersection_point));//ray t limits
 
                     RaySphereIntersection tmp = RaySphereIntersection();
                     for (Sphere& sphere: spheres) {

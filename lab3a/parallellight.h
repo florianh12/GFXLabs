@@ -5,6 +5,8 @@
 #include "color.h"
 #include "light.h"
 
+//lib depenedencies
+#include <limits>
 
 struct ParallelLight : public Light
 {
@@ -17,6 +19,8 @@ struct ParallelLight : public Light
     Vec3 getDirection(Point3D point) {
         return direction;
     }
+
+    long double maxT(Point3D point) { return std::numeric_limits<long double>::infinity();}
 
 
     ~ParallelLight() {}

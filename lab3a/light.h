@@ -4,6 +4,9 @@
 #include "color.h"
 #include "vec3.h"
 
+//lib depenedencies
+#include <limits>
+
 struct Light
 {
     Color color;
@@ -12,12 +15,16 @@ struct Light
 
     virtual Vec3 getDirection(Point3D point) = 0;
 
+    virtual long double maxT(Point3D point) = 0;
+
     virtual ~Light() = 0;
 };
 
 inline Light::~Light() {}
 
 inline Vec3 Light::getDirection(Point3D point) { return Vec3(); }
+
+inline long double Light::maxT(Point3D point) { return std::numeric_limits<long double>::infinity();}
 
 
 #endif //LIGHT_H
