@@ -5,10 +5,12 @@
 #include "material.h"
 #include "point3d.h"
 #include "point2d.h"
+#include "ray3d.h"
 #include <string>
 #include <vector>
+#include <memory>
 
-struct Mesh : Surface {
+struct Mesh : Surface, public std::enable_shared_from_this<Mesh> {
     std::vector<Point3D> vertices;
     std::vector<Vec3> normals;
     std::vector<Point2D> texture_coordinates;
@@ -16,19 +18,21 @@ struct Mesh : Surface {
     std::vector<int> normal_indices;
     std::vector<int> texture_coordinate_indices;
 
-    Material material;
 
     //for no intersection in intersection class only
     Mesh();
 
     Mesh(std::string obj_file_path, Material material);
 
-    std::string toString() const; 
+    std::string toString() const;
+
+    RaySurfaceIntersection intersect(Ray3D& ray);
+
+    Vec3 getNormal(Point3D& point, int mesh_index=0); 
 
     ~Mesh();
 };
 
 std::ostream& operator<<(std::ostream& o, const Mesh& mesh);
-
 
 #endif //MESH_H

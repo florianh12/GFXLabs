@@ -8,7 +8,6 @@
 #include "parallellight.h"
 #include "surface.h"
 #include "sphere.h"
-#include "raysphereintersection.h"
 #include "ray3d.h"
 #include "mesh.h"
 
@@ -33,8 +32,7 @@ public:
     Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<Sphere> spheres, std::vector<Mesh> meshes, const char* file_name);
 
     void render();
-    Color illuminate(RaySphereIntersection& intersection, Light& light);
-    RaySphereIntersection intersect(Ray3D& ray, Sphere& sphere);
+    Color illuminate(RaySurfaceIntersection& intersection, Light& light);
 
     unsigned int* getResolution();
     char* getPicture();
