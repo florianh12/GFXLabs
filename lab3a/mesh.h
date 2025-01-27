@@ -10,6 +10,7 @@
 #include <vector>
 #include <memory>
 
+//shared_from_this needs existing shared ptr
 struct Mesh : Surface, public std::enable_shared_from_this<Mesh> {
     std::vector<Point3D> vertices;
     std::vector<Vec3> normals;

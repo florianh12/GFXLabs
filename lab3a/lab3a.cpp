@@ -91,8 +91,8 @@ std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
     return lights;
 }
 
-std::vector<Sphere> extractSpheres(XMLElement* xml_scene) {
-    std::vector<Sphere> spheres = std::vector<Sphere>();
+std::vector<std::shared_ptr<Sphere>> extractSpheres(XMLElement* xml_scene) {
+    std::vector<std::shared_ptr<Sphere>> spheres = std::vector<std::shared_ptr<Sphere>>();
     XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
     
     for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; 
@@ -101,13 +101,13 @@ std::vector<Sphere> extractSpheres(XMLElement* xml_scene) {
         XMLElement* material = sphere->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        spheres.push_back(Sphere(Material(extractColor(material,"color"),
+        spheres.push_back(std::make_shared<Sphere>(Sphere(Material(extractColor(material,"color"),
         std::stold(phong->Attribute("ka")),
         std::stold(phong->Attribute("kd")),
         std::stold(phong->Attribute("ks")),
         std::stold(phong->Attribute("exponent"))),
         extractPosition(sphere, "position"), 
-        std::stold(sphere->Attribute("radius"))));
+        std::stold(sphere->Attribute("radius")))));
     }
 
     return spheres;

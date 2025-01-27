@@ -11,6 +11,7 @@
 
 struct RaySurfaceIntersection;
 
+//inheritance: Surface, public std::enable_shared_from_this<Subclass>, shared_from_this needs existing shared_ptr to work
 struct Surface {
     Material material;
     Point3D position;

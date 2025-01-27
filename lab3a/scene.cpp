@@ -22,7 +22,7 @@
 #include <iostream>
 
 
-Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<Sphere> spheres, 
+Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<std::shared_ptr<Sphere>> spheres, 
 std::vector<Mesh> meshes, const char* file_name)
     : camera{camera}, background{background}, ambient{ambient}, lights{std::move(lights)},
     spheres{spheres}, meshes{meshes}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
@@ -38,12 +38,12 @@ void Scene::render() {
 
             Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
 
-            //Ray sphere intersection tests
+            //Ray sphere intersection tests, TODO: test intersection for Mesh, then integrate meshes into sphere/surface intersection tests
             RaySurfaceIntersection intersection = RaySurfaceIntersection();
             long double min_t = std::numeric_limits<long double>::max();
 
-            for (Sphere& sphere: spheres) {
-                RaySurfaceIntersection tmp = sphere.intersect(ray);
+            for (std::shared_ptr<Sphere>& sphere: spheres) {
+                RaySurfaceIntersection tmp = sphere->intersect(ray);
                 if(tmp.intersection) {
                     if (tmp.t < min_t) {
                         min_t = tmp.t;
@@ -55,12 +55,10 @@ void Scene::render() {
 
 
             Color ray_col = background;
-
             if(intersection.intersection) {
                 ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
                 
 
-                //Deal with lights TODO: create stopping mechanism for point lights, when the ray reaches the point
                 for(std::unique_ptr<Light>& light : lights) {
                     //1e-5 is the epsilon value to prevent shadow acne
                     Ray3D shadow_ray = Ray3D(intersection.intersection_point,
@@ -68,9 +66,9 @@ void Scene::render() {
                     1e-5,light->maxT(intersection.intersection_point));//ray t limits
 
                     RaySurfaceIntersection tmp = RaySurfaceIntersection();
-                    for (Sphere& sphere: spheres) {
+                    for (std::shared_ptr<Sphere>& sphere: spheres) {
 
-                            tmp = sphere.intersect(shadow_ray);
+                            tmp = sphere->intersect(shadow_ray);
                             
                             if(tmp.intersection)
                                 break;

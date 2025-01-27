@@ -11,6 +11,9 @@
 #include <sstream>
 #include <memory>
 
+//debug
+#include <iostream>
+
 //for no intersection in intersection class only
 Sphere::Sphere() {}
 

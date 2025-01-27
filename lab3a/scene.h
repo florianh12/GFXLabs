@@ -22,14 +22,15 @@ class Scene {
     std::vector<std::unique_ptr<Light>> lights;
 
 
-    std::vector<Sphere> spheres;
+    std::vector<std::shared_ptr<Sphere>> spheres;
     std::vector<Mesh> meshes;
 
     char* picture;
     const char* file_name;
 
 public:
-    Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<Sphere> spheres, std::vector<Mesh> meshes, const char* file_name);
+    Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, 
+    std::vector<std::shared_ptr<Sphere>> spheres, std::vector<Mesh> meshes, const char* file_name);
 
     void render();
     Color illuminate(RaySurfaceIntersection& intersection, Light& light);

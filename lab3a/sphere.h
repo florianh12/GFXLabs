@@ -9,6 +9,7 @@
 //lib dependencies
 #include <memory>
 
+//shared_from_this needs existing shared ptr
 struct Sphere : Surface, public std::enable_shared_from_this<Sphere> {
     long double radius;
 
