@@ -91,17 +91,18 @@ std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
     return lights;
 }
 
-std::vector<std::shared_ptr<Sphere>> extractSpheres(XMLElement* xml_scene) {
-    std::vector<std::shared_ptr<Sphere>> spheres = std::vector<std::shared_ptr<Sphere>>();
+std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std::string dir) {
+    std::vector<std::shared_ptr<Surface>> surfaces = std::vector<std::shared_ptr<Surface>>();
     XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
-    
+
+    //iterate over spheres
     for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; 
     sphere = sphere->NextSiblingElement("sphere")) {
 
         XMLElement* material = sphere->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        spheres.push_back(std::make_shared<Sphere>(Sphere(Material(extractColor(material,"color"),
+        surfaces.push_back(std::make_shared<Sphere>(Sphere(Material(extractColor(material,"color"),
         std::stold(phong->Attribute("ka")),
         std::stold(phong->Attribute("kd")),
         std::stold(phong->Attribute("ks")),
@@ -109,26 +110,20 @@ std::vector<std::shared_ptr<Sphere>> extractSpheres(XMLElement* xml_scene) {
         extractPosition(sphere, "position"), 
         std::stold(sphere->Attribute("radius")))));
     }
-
-    return spheres;
-}
-
-std::vector<std::shared_ptr<Mesh>> extractMeshes(XMLElement* xml_scene, std::string dir) {
-    std::vector<std::shared_ptr<Mesh>> meshes = std::vector<std::shared_ptr<Mesh>>();
-    XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
     
+    //iterate over meshes
     for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("sphere")) {
         XMLElement* material = mesh->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        meshes.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
+        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
         std::stold(phong->Attribute("ka")),
         std::stold(phong->Attribute("kd")),
         std::stold(phong->Attribute("ks")),
         std::stold(phong->Attribute("exponent"))))));
     }
 
-    return meshes;
+    return surfaces;
 }
 
 Scene extractScene(XMLElement* xml_scene, std::string dir) {
@@ -137,7 +132,7 @@ Scene extractScene(XMLElement* xml_scene, std::string dir) {
     return Scene(extractCamera(xml_scene),
     extractColor(xml_scene, "background_color"),
     extractColor(xml_scene->FirstChildElement("lights")->FirstChildElement("ambient_light"),"color"),
-    extractLights(xml_scene), extractSpheres(xml_scene), extractMeshes(xml_scene,dir),
+    extractLights(xml_scene), extractSurfaces(xml_scene, dir),
     xml_scene->Attribute("output_file"));
 }
 

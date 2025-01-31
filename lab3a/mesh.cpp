@@ -166,7 +166,7 @@ Vec3 Mesh::getNormal(Point3D& point, int mesh_index)  {
 
     Vec3 normal = (alpha * normals[normal_indices[mesh_index]] + 
     beta * normals[normal_indices[mesh_index+1]] + 
-    gamma * normals[normal_indices[mesh_index+3]]);
+    gamma * normals[normal_indices[mesh_index+2]]);
 
     normal.normalize();
 
