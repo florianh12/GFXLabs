@@ -117,6 +117,12 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
 }
 
+Ray3D Scene::reflect(Ray3D ray, RaySurfaceIntersection intersection) {
+    //WIP write reflect code
+
+    return Ray3D();
+}
+
 Color Scene::trace(Ray3D ray, int depth) {
     Color ray_col;
 
@@ -160,10 +166,16 @@ Color Scene::trace(Ray3D ray, int depth) {
                         ray_col += illuminate(intersection,*light);
                     }
                 }
-
+                //if tracing depth is reached return intersection color
                 if (depth > camera.max_bounces)
                     return ray_col;
 
+                //do reflectance if surface reflects
+                if(intersection.surface->material.reflectance > 0.0L) {
+                    Ray3D reflected_ray = reflect(ray,intersection);
+                    Color reflected_color = trace(ray, depth + 1);
+                }
+                
 
             } else {
                 ray_col = background;
@@ -172,6 +184,8 @@ Color Scene::trace(Ray3D ray, int depth) {
             //needs reflectance and transmittance components
             return ray_col;
 }
+
+
 
 
 

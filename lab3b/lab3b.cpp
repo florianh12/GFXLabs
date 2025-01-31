@@ -39,6 +39,23 @@ Color extractColor(XMLElement* parent_element, const char* pos_element_name) {
     std::stold(pos->Attribute("b")));
 }
 
+Material extractMaterial(XMLElement* parent_element, const char* pos_element_name) {
+    XMLElement* material = parent_element->FirstChildElement(pos_element_name);
+
+    XMLElement* phong = material->FirstChildElement("phong");
+    XMLElement* reflectance = material->FirstChildElement("reflectance");
+    XMLElement* transmittance = material->FirstChildElement("transmittance");
+    
+    
+    return Material(extractColor(material,"color"),
+    std::stold(phong->Attribute("ka")),
+    std::stold(phong->Attribute("kd")),
+    std::stold(phong->Attribute("ks")),
+    std::stold(phong->Attribute("exponent")),
+    std::stold(reflectance->Attribute("r")),
+    std::stold(transmittance->Attribute("t")));
+}
+
 Camera extractCamera(XMLElement* xml_scene) {
     XMLElement* camera = xml_scene->FirstChildElement("camera");
     XMLElement* h_fov = camera->FirstChildElement("horizontal_fov");
@@ -99,14 +116,9 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
     for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; 
     sphere = sphere->NextSiblingElement("sphere")) {
 
-        XMLElement* material = sphere->FirstChildElement("material_solid");
-        XMLElement* phong = material->FirstChildElement("phong");
         
-        surfaces.push_back(std::make_shared<Sphere>(Sphere(Material(extractColor(material,"color"),
-        std::stold(phong->Attribute("ka")),
-        std::stold(phong->Attribute("kd")),
-        std::stold(phong->Attribute("ks")),
-        std::stold(phong->Attribute("exponent"))),
+        surfaces.push_back(std::make_shared<Sphere>(Sphere(
+            extractMaterial(sphere, "material_solid"),
         extractPosition(sphere, "position"), 
         std::stold(sphere->Attribute("radius")))));
     }
@@ -116,11 +128,7 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
         XMLElement* material = mesh->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
-        std::stold(phong->Attribute("ka")),
-        std::stold(phong->Attribute("kd")),
-        std::stold(phong->Attribute("ks")),
-        std::stold(phong->Attribute("exponent"))))));
+        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), extractMaterial(mesh, "material_solid"))));
     }
 
     return surfaces;
