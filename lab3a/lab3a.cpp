@@ -3,23 +3,16 @@
 #include "color.h"
 #include "camera.h"
 #include "parallellight.h"
-#include "pointlight.h"
 #include "vec3.h"
 #include "sphere.h"
 #include "material.h"
 #include "scene.h"
-#include "mesh.h"
 
 //used libraries
 #include <vector>
 #include <stdexcept>
 #include "tinyxml2.h"
-#include <string>
-#include <filesystem>
-#include <memory>
 
-//debug
-#include <iostream>
 
 using namespace tinyxml2;
 
@@ -53,87 +46,49 @@ Camera extractCamera(XMLElement* xml_scene) {
     static_cast<unsigned int>(std::stoul(bounces->Attribute("n")))
     );
 }
-
-std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
-    std::vector<std::unique_ptr<Light>> lights = std::vector<std::unique_ptr<Light>>();
+std::vector<ParallelLight> extractParalellLights(XMLElement* xml_scene) {
+    std::vector<ParallelLight> lights = std::vector<ParallelLight>();
     XMLElement* xml_lights = xml_scene->FirstChildElement("lights");
     
-    //iterate over and extract parallel lights
-    for (XMLElement* parallel_light = xml_lights->FirstChildElement("parallel_light"); parallel_light != nullptr; 
-    parallel_light = parallel_light->NextSiblingElement("parallel_light")) {
-
+    //iterate over paralell lights
+    for (XMLElement* parallel_light = xml_lights->FirstChildElement("parallel_light"); parallel_light != nullptr; parallel_light = parallel_light->NextSiblingElement("parallel_light")) {
         XMLElement* xml_col = parallel_light->FirstChildElement("color");
         XMLElement* xml_dir = parallel_light->FirstChildElement("direction");
-
-        Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),
-        std::stod(xml_col->Attribute("b")));
-        Vec3 direction = Vec3(std::stold(xml_dir->Attribute("x")),std::stold(xml_dir->Attribute("y")),
-        std::stold(xml_dir->Attribute("z")));
-        
-        lights.push_back(std::make_unique<ParallelLight>(ParallelLight(color, direction)));
-    }
-
-    //iterate over and extract point lights
-    for (XMLElement* point_light = xml_lights->FirstChildElement("point_light"); point_light != nullptr; 
-    point_light = point_light->NextSiblingElement("point_light")) {
-
-        XMLElement* xml_col = point_light->FirstChildElement("color");
-        XMLElement* xml_pos = point_light->FirstChildElement("position");
-
-        Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),
-        std::stod(xml_col->Attribute("b")));
-        Point3D position = Point3D(std::stold(xml_pos->Attribute("x")),std::stold(xml_pos->Attribute("y")),
-        std::stold(xml_pos->Attribute("z")));
-        
-        lights.push_back(std::make_unique<PointLight>(PointLight(color, position)));
+        Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),std::stod(xml_col->Attribute("b")));
+        Vec3 direction = Vec3(std::stold(xml_dir->Attribute("x")),std::stold(xml_dir->Attribute("y")),std::stold(xml_dir->Attribute("z")));
+        lights.push_back(ParallelLight(color, direction));
     }
 
     return lights;
 }
 
-std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std::string dir) {
-    std::vector<std::shared_ptr<Surface>> surfaces = std::vector<std::shared_ptr<Surface>>();
+std::vector<Sphere> extractSpheres(XMLElement* xml_scene) {
+    std::vector<Sphere> spheres = std::vector<Sphere>();
     XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
-
-    //iterate over spheres
-    for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; 
-    sphere = sphere->NextSiblingElement("sphere")) {
-
+    
+    for (XMLElement* sphere = xml_surfaces->FirstChildElement("sphere"); sphere != nullptr; sphere = sphere->NextSiblingElement("sphere")) {
         XMLElement* material = sphere->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        surfaces.push_back(std::make_shared<Sphere>(Sphere(Material(extractColor(material,"color"),
+        spheres.push_back(Sphere(Material(extractColor(material,"color"),
         std::stold(phong->Attribute("ka")),
         std::stold(phong->Attribute("kd")),
         std::stold(phong->Attribute("ks")),
         std::stold(phong->Attribute("exponent"))),
         extractPosition(sphere, "position"), 
-        std::stold(sphere->Attribute("radius")))));
-    }
-    
-    //iterate over meshes
-    for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("sphere")) {
-        XMLElement* material = mesh->FirstChildElement("material_solid");
-        XMLElement* phong = material->FirstChildElement("phong");
-        
-        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
-        std::stold(phong->Attribute("ka")),
-        std::stold(phong->Attribute("kd")),
-        std::stold(phong->Attribute("ks")),
-        std::stold(phong->Attribute("exponent"))))));
+        std::stold(sphere->Attribute("radius"))));
     }
 
-    return surfaces;
+    return spheres;
 }
 
-Scene extractScene(XMLElement* xml_scene, std::string dir) {
+Scene extractScene(XMLElement* xml_scene) {
     
 
     return Scene(extractCamera(xml_scene),
     extractColor(xml_scene, "background_color"),
     extractColor(xml_scene->FirstChildElement("lights")->FirstChildElement("ambient_light"),"color"),
-    extractLights(xml_scene), extractSurfaces(xml_scene, dir),
-    xml_scene->Attribute("output_file"));
+    extractParalellLights(xml_scene), extractSpheres(xml_scene),xml_scene->Attribute("output_file"));
 }
 
 int main(int argc, char *argv[]) {
@@ -144,17 +99,9 @@ int main(int argc, char *argv[]) {
         throw std::runtime_error("File not loaded!");
     }
 
-    std::filesystem::path filepath(argv[1]);
-
-    std::string dir = filepath.parent_path();
-
-    if(dir == "") {
-        dir = ".";
-    }
-
     XMLElement* xml_scene = doc.FirstChildElement("scene");
 
-    Scene scene = extractScene(xml_scene, dir);
+    Scene scene = extractScene(xml_scene);
 
     scene.render();
 }

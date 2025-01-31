@@ -3,28 +3,23 @@
 #include "camera.h"
 #include "color.h"
 #include "parallellight.h"
-#include "surface.h"
 #include "sphere.h"
-#include "mesh.h"
 #include "ray3d.h"
+#include "raysphereintersection.h"
 
 
 
 //used libraries
 #include <cmath>
 #include <algorithm>
-#include <memory>
 #include <limits>
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
-//debug
-#include <iostream>
 
-
-Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<std::shared_ptr<Surface>> surfaces, const char* file_name)
-    : camera{camera}, background{background}, ambient{ambient}, lights{std::move(lights)},
-    surfaces{surfaces}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
+Scene::Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name) 
+    : camera{camera}, background{background}, ambient{ambient}, parallel_lights{parallel_lights},
+    spheres{spheres}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
 void Scene::render() {
 
@@ -35,14 +30,13 @@ void Scene::render() {
             long double x_i = (2 * x_n - 1) * std::tan(camera.fov_x);
             long double y_i = (2 * y_n -1) * std::tan(camera.fov_y);
 
-            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
+            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,1000);
 
-            //Ray sphere intersection tests, TODO: test intersection for Mesh, then integrate meshes into sphere/surface intersection tests
-            RaySurfaceIntersection intersection = RaySurfaceIntersection();
+            RaySphereIntersection intersection = RaySphereIntersection();
             long double min_t = std::numeric_limits<long double>::max();
 
-            for (std::shared_ptr<Surface>& surface: surfaces) {
-                RaySurfaceIntersection tmp = surface->intersect(ray);
+            for (Sphere& sphere: spheres) {
+                RaySphereIntersection tmp = intersect(ray, sphere);
                 if(tmp.intersection) {
                     if (tmp.t < min_t) {
                         min_t = tmp.t;
@@ -52,29 +46,26 @@ void Scene::render() {
                 }
             }
 
-
             Color ray_col = background;
+
             if(intersection.intersection) {
-                ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
+                ray_col =  intersection.sphere.material.ka * ambient * intersection.sphere.material.color;
                 
 
-                for(std::unique_ptr<Light>& light : lights) {
+                //Deal with parallel lights
+                for(ParallelLight& light : parallel_lights) {
                     //1e-5 is the epsilon value to prevent shadow acne
-                    Ray3D shadow_ray = Ray3D(intersection.intersection_point,
-                    light->getDirection(intersection.intersection_point)*(-1.0),
-                    1e-5,light->maxT(intersection.intersection_point));//ray t limits
-
-                    RaySurfaceIntersection tmp = RaySurfaceIntersection();
-                    for (std::shared_ptr<Surface>& surface: surfaces) {
-
-                            tmp = surface->intersect(shadow_ray);
+                    Ray3D shadow_ray = Ray3D(intersection.intersection_point,light.direction*(-1.0),1e-5,1000);
+                    RaySphereIntersection tmp = RaySphereIntersection();
+                    for (Sphere& sphere: spheres) {
+                            tmp = intersect(shadow_ray, sphere);
                             
                             if(tmp.intersection)
                                 break;
                     }
 
                     if (!tmp.intersection) {
-                        ray_col += illuminate(intersection,*light);
+                        ray_col += illuminate(intersection,light);
                     }
                 }
             }
@@ -93,16 +84,39 @@ void Scene::render() {
 }
 
 
-Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
-
+RaySphereIntersection Scene::intersect(Ray3D& ray, Sphere& sphere) {
+    Vec3 o = ray.origin - sphere.position;
+    long double b = ray.direction*(ray.origin - sphere.position);
+    long double c = (ray.direction * ray.direction) * ((o*o)-(sphere.radius*sphere.radius));
+    long double disc = (b * b) - c;
     
-    intersection.normal.normalize();
+    if (disc < 0.0L) {
+        return RaySphereIntersection();
+    }
 
-    long double diffuse = intersection.surface->material.kd * 
-    std::max(((light.getDirection(intersection.intersection_point)*(-1)) * intersection.normal),0.0L);
+    long double t = -(ray.direction*(ray.origin-sphere.position));
+    
+    if (disc != 0.0L) {
 
-    Vec3 reflection = 2 * (intersection.normal * (light.getDirection(intersection.intersection_point)*(-1)))
-     * intersection.normal - (light.getDirection(intersection.intersection_point)*(-1));
+            t -= std::sqrt(disc);
+    } 
+    if (t <= ray.min_dist)
+        return RaySphereIntersection();
+
+    return RaySphereIntersection(sphere,ray,ray.calculatePoint(t), t);
+
+}
+
+
+Color Scene::illuminate(RaySphereIntersection& intersection, ParallelLight& light) {
+
+    Vec3 normal = intersection.intersection_point - intersection.sphere.position;
+    
+    normal.normalize();
+
+    long double diffuse = intersection.sphere.material.kd * std::max(((light.direction*(-1)) * normal),0.0L);
+
+    Vec3 reflection = 2 * (normal * (light.direction*(-1))) * normal - (light.direction*(-1));
 
     reflection.normalize();
     
@@ -110,10 +124,9 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
     eye.normalize();
     
-    long double specular = intersection.surface->material.ks * 
-    std::pow(std::max((reflection * eye),0.0L),intersection.surface->material.exponent);
+    long double specular = intersection.sphere.material.ks * std::pow(std::max((reflection * eye),0.0L),intersection.sphere.material.exponent);
 
-    return ((diffuse * intersection.surface->material.color) + (specular * light.color));//  
+    return ((diffuse * intersection.sphere.material.color) + (specular * light.color));//  
 
 }
 
@@ -128,5 +141,5 @@ char* Scene::getPicture() {
 
 
 Scene::~Scene() {
-    delete[] picture;
+    delete picture;
 }

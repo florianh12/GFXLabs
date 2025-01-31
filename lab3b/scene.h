@@ -8,30 +8,32 @@
 #include "parallellight.h"
 #include "surface.h"
 #include "sphere.h"
-#include "raysphereintersection.h"
 #include "ray3d.h"
+#include "mesh.h"
 
 //used libraries
 #include <vector>
+#include <memory>
 
 class Scene {
     Camera camera;
     Color background;
     Color ambient;
-    std::vector<ParallelLight> parallel_lights;
+    std::vector<std::unique_ptr<Light>> lights;
 
 
-    std::vector<Sphere> spheres;
+    std::vector<std::shared_ptr<Surface>> surfaces;
 
     char* picture;
     const char* file_name;
 
 public:
-    Scene(Camera camera, Color background, Color ambient, std::vector<ParallelLight> parallel_lights, std::vector<Sphere> spheres, const char* file_name);
+    Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, 
+    std::vector<std::shared_ptr<Surface>> surfaces, const char* file_name);
 
     void render();
-    Color illuminate(RaySphereIntersection& intersection, ParallelLight& light);
-    RaySphereIntersection intersect(Ray3D& ray, Sphere& sphere);
+    Color illuminate(RaySurfaceIntersection& intersection, Light& light);
+    Color trace(Ray3D ray, int depth);
 
     unsigned int* getResolution();
     char* getPicture();

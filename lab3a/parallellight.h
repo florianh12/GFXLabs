@@ -5,25 +5,14 @@
 #include "color.h"
 #include "light.h"
 
-//lib depenedencies
-#include <limits>
 
 struct ParallelLight : public Light
 {
     Vec3 direction;
 
-    ParallelLight(Color color, Vec3 direction) : Light{color}, direction{direction} {
-        this->direction.normalize();
-    }
+    ParallelLight(Color color, Vec3 direction);
 
-    Vec3 getDirection(Point3D point) {
-        return direction;
-    }
-
-    long double maxT(Point3D point) { return std::numeric_limits<long double>::infinity();}
-
-
-    ~ParallelLight() {}
+    ~ParallelLight();
 };
 
 
