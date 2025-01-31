@@ -43,7 +43,8 @@ RaySurfaceIntersection Sphere::intersect(Ray3D& ray) {
     if (t <= ray.min_dist)
         return RaySurfaceIntersection();
 
-    return RaySurfaceIntersection(shared_from_this(),ray,ray.calculatePoint(t), t);
+    Point3D point = ray.calculatePoint(t);
+    return RaySurfaceIntersection(shared_from_this(),ray, point, getNormal(point), t);
 }
 
 Vec3 Sphere::getNormal(Point3D& point, int mesh_index) {

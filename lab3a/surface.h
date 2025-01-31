@@ -35,6 +35,7 @@ struct RaySurfaceIntersection {
     std::shared_ptr<Surface> surface;
     Ray3D ray;
     Point3D intersection_point;
+    Vec3 normal;
     int mesh_index;
     
     long double t;
@@ -44,7 +45,7 @@ struct RaySurfaceIntersection {
     //for no intersection only
     RaySurfaceIntersection() : intersection{false} {}
 
-    RaySurfaceIntersection(std::shared_ptr<Surface> surface, Ray3D ray, Point3D intersection_point, long double t, int mesh_index=0) : surface{surface}, ray{ray}, intersection_point{intersection_point}, t{t}, mesh_index{mesh_index}, intersection{true} {}
+    RaySurfaceIntersection(std::shared_ptr<Surface> surface, Ray3D ray, Point3D intersection_point, Vec3 normal, long double t, int mesh_index=0) : surface{surface}, ray{ray}, intersection_point{intersection_point}, normal{normal}, t{t}, mesh_index{mesh_index}, intersection{true} {}
 
 };
 

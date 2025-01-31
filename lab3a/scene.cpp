@@ -95,15 +95,14 @@ void Scene::render() {
 
 Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
-    Vec3 normal = intersection.surface->getNormal(intersection.intersection_point, intersection.mesh_index);
     
-    normal.normalize();
+    intersection.normal.normalize();
 
     long double diffuse = intersection.surface->material.kd * 
-    std::max(((light.getDirection(intersection.intersection_point)*(-1)) * normal),0.0L);
+    std::max(((light.getDirection(intersection.intersection_point)*(-1)) * intersection.normal),0.0L);
 
-    Vec3 reflection = 2 * (normal * (light.getDirection(intersection.intersection_point)*(-1)))
-     * normal - (light.getDirection(intersection.intersection_point)*(-1));
+    Vec3 reflection = 2 * (intersection.normal * (light.getDirection(intersection.intersection_point)*(-1)))
+     * intersection.normal - (light.getDirection(intersection.intersection_point)*(-1));
 
     reflection.normalize();
     
