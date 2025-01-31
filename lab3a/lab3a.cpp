@@ -113,19 +113,19 @@ std::vector<std::shared_ptr<Sphere>> extractSpheres(XMLElement* xml_scene) {
     return spheres;
 }
 
-std::vector<Mesh> extractMeshes(XMLElement* xml_scene, std::string dir) {
-    std::vector<Mesh> meshes = std::vector<Mesh>();
+std::vector<std::shared_ptr<Mesh>> extractMeshes(XMLElement* xml_scene, std::string dir) {
+    std::vector<std::shared_ptr<Mesh>> meshes = std::vector<std::shared_ptr<Mesh>>();
     XMLElement* xml_surfaces = xml_scene->FirstChildElement("surfaces");
     
     for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("sphere")) {
         XMLElement* material = mesh->FirstChildElement("material_solid");
         XMLElement* phong = material->FirstChildElement("phong");
         
-        meshes.push_back(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
+        meshes.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), Material(extractColor(material,"color"),
         std::stold(phong->Attribute("ka")),
         std::stold(phong->Attribute("kd")),
         std::stold(phong->Attribute("ks")),
-        std::stold(phong->Attribute("exponent")))));
+        std::stold(phong->Attribute("exponent"))))));
     }
 
     return meshes;

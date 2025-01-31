@@ -131,7 +131,7 @@ RaySurfaceIntersection Mesh::intersect(Ray3D& ray) {
         // t is x, a is y, b is z -> tab
         Vec3 tab = (1.0L/((ray.direction % e2) *e1)) * Vec3((s % e1) * e2,(ray.direction % e2) * s,(s % e1) * ray.direction); 
 
-        if (tab[0] > 0.0L && tab[1] >= 0.0L && tab[2] >= 0.0L && (tab[1] + tab[2]) <= 1.0L) {
+        if (tab[0] > 0.0L && tab[0] > ray.min_dist && tab[0] < ray.max_dist && tab[1] >= 0.0L && tab[2] >= 0.0L && (tab[1] + tab[2]) <= 1.0L) {
             return RaySurfaceIntersection(shared_from_this(), 
             ray, ray.calculatePoint(tab[0]), tab[0], i);
         }

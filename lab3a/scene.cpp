@@ -23,7 +23,7 @@
 
 
 Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<std::shared_ptr<Sphere>> spheres, 
-std::vector<Mesh> meshes, const char* file_name)
+std::vector<std::shared_ptr<Mesh>> meshes, const char* file_name)
     : camera{camera}, background{background}, ambient{ambient}, lights{std::move(lights)},
     spheres{spheres}, meshes{meshes}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
@@ -42,8 +42,8 @@ void Scene::render() {
             RaySurfaceIntersection intersection = RaySurfaceIntersection();
             long double min_t = std::numeric_limits<long double>::max();
 
-            for (std::shared_ptr<Sphere>& sphere: spheres) {
-                RaySurfaceIntersection tmp = sphere->intersect(ray);
+            for (std::shared_ptr<Mesh>& mesh: meshes) {
+                RaySurfaceIntersection tmp = mesh->intersect(ray);
                 if(tmp.intersection) {
                     if (tmp.t < min_t) {
                         min_t = tmp.t;
@@ -66,9 +66,9 @@ void Scene::render() {
                     1e-5,light->maxT(intersection.intersection_point));//ray t limits
 
                     RaySurfaceIntersection tmp = RaySurfaceIntersection();
-                    for (std::shared_ptr<Sphere>& sphere: spheres) {
+                    for (std::shared_ptr<Mesh>& mesh: meshes) {
 
-                            tmp = sphere->intersect(shadow_ray);
+                            tmp = mesh->intersect(shadow_ray);
                             
                             if(tmp.intersection)
                                 break;
