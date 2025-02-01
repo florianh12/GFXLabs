@@ -40,8 +40,11 @@ RaySurfaceIntersection Sphere::intersect(Ray3D& ray) {
 
             t -= std::sqrt(disc);
     } 
-    if (t <= ray.min_dist)
+    if (t <= ray.min_dist || t >= ray.max_dist) {
+        if (t >= ray.max_dist)
+            std::cout << t << std::endl;
         return RaySurfaceIntersection();
+    }
 
     Point3D point = ray.calculatePoint(t);
     return RaySurfaceIntersection(shared_from_this(),ray, point, getNormal(point), t);

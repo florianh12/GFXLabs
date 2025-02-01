@@ -46,6 +46,29 @@ Color Color::operator+(const Color& other) const {
     b_normalized + other.b_normalized);
 }
 
+Color& Color::operator*=(const long double scalar) {
+    //normalized values
+    r_normalized *= scalar;
+    g_normalized *= scalar;
+    b_normalized *= scalar;
+
+    //clamp to 1.0
+    if (r_normalized > 1.0L)
+    {
+        r_normalized = 1.0L;
+    }
+    if (g_normalized > 1.0L)
+    {
+        g_normalized = 1.0L;
+    }
+    if (b_normalized > 1.0L)
+    {
+        b_normalized = 1.0L;
+    }
+
+    return *this;
+}
+
 Color operator*(long double scalar, Color& col) {
    return Color(scalar * col.r_normalized,
     scalar * col.g_normalized,

@@ -21,6 +21,8 @@
 //debug
 #include <iostream>
 
+constexpr long double SHADOW_ACNE_BIAS = 1e-5;
+
 
 Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::unique_ptr<Light>>&& lights, std::vector<std::shared_ptr<Surface>> surfaces, const char* file_name)
     : camera{camera}, background{background}, ambient{ambient}, lights{std::move(lights)},
@@ -37,47 +39,7 @@ void Scene::render() {
 
             Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
 
-            //Ray sphere intersection tests, TODO: test intersection for Mesh, then integrate meshes into sphere/surface intersection tests
-            RaySurfaceIntersection intersection = RaySurfaceIntersection();
-            long double min_t = std::numeric_limits<long double>::max();
-
-            for (std::shared_ptr<Surface>& surface: surfaces) {
-                RaySurfaceIntersection tmp = surface->intersect(ray);
-                if(tmp.intersection) {
-                    if (tmp.t < min_t) {
-                        min_t = tmp.t;
-                        intersection = tmp;
-                        
-                    }
-                }
-            }
-
-
-            Color ray_col = background;
-            if(intersection.intersection) {
-                ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
-                
-
-                for(std::unique_ptr<Light>& light : lights) {
-                    //1e-5 is the epsilon value to prevent shadow acne
-                    Ray3D shadow_ray = Ray3D(intersection.intersection_point,
-                    light->getDirection(intersection.intersection_point)*(-1.0),
-                    1e-5,light->maxT(intersection.intersection_point));//ray t limits
-
-                    RaySurfaceIntersection tmp = RaySurfaceIntersection();
-                    for (std::shared_ptr<Surface>& surface: surfaces) {
-
-                            tmp = surface->intersect(shadow_ray);
-                            
-                            if(tmp.intersection)
-                                break;
-                    }
-
-                    if (!tmp.intersection) {
-                        ray_col += illuminate(intersection,*light);
-                    }
-                }
-            }
+            Color ray_col = trace(ray, 0);
 
 
             //prepare picture array
@@ -113,18 +75,16 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
     long double specular = intersection.surface->material.ks * 
     std::pow(std::max((reflection * eye),0.0L),intersection.surface->material.exponent);
 
-    return ((diffuse * intersection.surface->material.color) + (specular * light.color));//  
+    return ((diffuse * intersection.surface->material.color) + (specular * light.color));
 
 }
 
 Ray3D Scene::reflect(Ray3D ray, RaySurfaceIntersection intersection) {
-    //WIP write reflect code
-
-    return Ray3D();
+    Vec3 dir = 2 * (((-1)*ray.direction)*intersection.normal) * intersection.normal + ray.direction;
+    return Ray3D(intersection.intersection_point,dir,SHADOW_ACNE_BIAS, std::numeric_limits<long double>::infinity());
 }
 
 Color Scene::trace(Ray3D ray, int depth) {
-    Color ray_col;
 
     RaySurfaceIntersection intersection = RaySurfaceIntersection();
             long double min_t = std::numeric_limits<long double>::max();
@@ -143,14 +103,14 @@ Color Scene::trace(Ray3D ray, int depth) {
 
             
             if(intersection.intersection) {
-                ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
+               Color ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
                 
                 //lighting logic
                 for(std::unique_ptr<Light>& light : lights) {
                     //1e-5 is the epsilon value to prevent shadow acne
                     Ray3D shadow_ray = Ray3D(intersection.intersection_point,
                     light->getDirection(intersection.intersection_point)*(-1.0),
-                    1e-5,light->maxT(intersection.intersection_point));//ray t limits
+                    SHADOW_ACNE_BIAS,light->maxT(intersection.intersection_point));//ray t limits
 
                     RaySurfaceIntersection tmp = RaySurfaceIntersection();
                     for (std::shared_ptr<Surface>& surface: surfaces) {
@@ -170,19 +130,24 @@ Color Scene::trace(Ray3D ray, int depth) {
                 if (depth > camera.max_bounces)
                     return ray_col;
 
+                //Modulate object color intensity based on the reflectance (done) and refractance (WIP)
+                ray_col *= (1 - intersection.surface->material.reflectance);
+
                 //do reflectance if surface reflects
                 if(intersection.surface->material.reflectance > 0.0L) {
-                    Ray3D reflected_ray = reflect(ray,intersection);
-                    Color reflected_color = trace(ray, depth + 1);
+                    //generate reflected ray and trace it to get reflected color, 
+                    Color reflected_color = trace(reflect(ray,intersection), depth + 1);
+                    //then add it to the original color proportional to the reflectance factor 
+                    ray_col += intersection.surface->material.reflectance * reflected_color;
                 }
                 
+                return ray_col;
 
             } else {
-                ray_col = background;
+                return background;
             }
 
             //needs reflectance and transmittance components
-            return ray_col;
 }
 
 

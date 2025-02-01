@@ -17,6 +17,7 @@ struct Color
 
     Color& operator+=(const Color& other);
     Color operator+(const Color& other) const;
+    Color& operator*=(const long double scalar);
     Color operator*(const Color& other) const;
 
     friend Color operator*(long double scalar, Color& col);

@@ -24,7 +24,8 @@ struct PointLight : public Light
 
     //stop shadow ray when reaching light source
     long double maxT(Point3D point) {
-        return (point - position).vec_norm();
+        //return (point - position).vec_norm();
+        return std::numeric_limits<long double>::infinity();
     }
 
     ~PointLight() {}
