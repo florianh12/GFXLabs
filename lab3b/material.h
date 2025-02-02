@@ -3,6 +3,8 @@
 
 #include "color.h"
 #include <string>
+#include <vector>
+#include <iostream>
 
 struct Material
 {
@@ -13,28 +15,26 @@ struct Material
     long double exponent;
     long double reflectance;
     long double transmittance;
+    long double refraction;
+
+    bool uses_texture;
+
+    std::vector<Color> texture;
 
     //for no intersection in intersection class only
-    Material() {}
+    Material();
 
     Material(Color color, long double ka, long double kd, long double ks, long double exponent, 
-    long double reflectance, long double transmittance) : color{color}, ka{ka}, kd{kd}, 
-    ks{ks}, exponent{exponent}, reflectance{reflectance}, transmittance{transmittance} {}
+    long double reflectance, long double transmittance, long double refraction);
 
-    std::string toString(std::string offset = "") const {
-        return offset+"Material{\n"+offset+"\tcolor: "+color.toString()+offset+"\tka: "+
-        std::to_string(ka)+"\n"+offset+"\tkd: "+std::to_string(kd)+"\n"+offset+"\tks: "+
-        std::to_string(ks)+"\n"+offset+"\texponent: "+std::to_string(exponent)+"\n"+
-        offset+"\treflectance: "+std::to_string(reflectance)+"\n"+
-        offset+"\ttransmittance: "+std::to_string(transmittance)+"\n"+offset+"}\n";
-    }
+    Material(long double ka, long double kd, long double ks, long double exponent, 
+    long double reflectance, long double transmittance, long double refraction, 
+    std::string texture_file);
+
+    std::string toString(std::string offset = "") const;
 };
 
-inline std::ostream& operator<<(std::ostream& o, const Material& material) {
-    o << material.toString();
-
-    return o;
-}
+inline std::ostream& operator<<(std::ostream& o, const Material& material);
 
 
 #endif //MATERIAL_H

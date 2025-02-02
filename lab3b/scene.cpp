@@ -72,9 +72,9 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
     long double diffuse = intersection.surface->material.kd *
     std::max(((light.getDirection(intersection.intersection_point)*(-1)) * intersection.normal),0.0L);
 
-    if(intersection.intersection_point[0] > 3 && intersection.intersection_point[1] > 7 && intersection.intersection_point[2] <= -10) {
-        std::cout << "Diffuse: " << diffuse << intersection.intersection_point;
-    }
+    // if(intersection.intersection_point[0] > 3 && intersection.intersection_point[1] > 7 && intersection.intersection_point[2] <= -10) {
+    //     std::cout << "Diffuse: " << diffuse << intersection.intersection_point;
+    // }
     Vec3 reflection = 2 * (intersection.normal * (light.getDirection(intersection.intersection_point)*(-1)))
      * intersection.normal - (light.getDirection(intersection.intersection_point)*(-1));
 
@@ -92,7 +92,44 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
 Ray3D Scene::reflect(Ray3D ray, RaySurfaceIntersection intersection) {
     Vec3 dir = 2 * (((-1)*ray.direction)*intersection.normal) * intersection.normal + ray.direction;
-    return Ray3D(intersection.intersection_point,dir,SHADOW_ACNE_BIAS, std::numeric_limits<long double>::infinity());
+    return Ray3D(intersection.intersection_point,dir,SHADOW_ACNE_BIAS, ray.max_dist);
+}
+
+
+Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
+    long double n1, nt;
+    //if smaller than 0, then ray hits from outside else inside, 
+    //1.0L refraction index for air
+    if(ray.direction * intersection.normal < 0.0L) {
+        n1 = 1.0L;
+        nt = intersection.surface->material.refraction;
+    } else {
+        n1 = intersection.surface->material.refraction;
+        nt = 1.0L;
+    }
+
+    
+
+    long double vn = ray.direction * intersection.normal;
+    long double n1_nt = n1/nt;
+    //calculate frist part of t
+    Vec3 t = (n1_nt) * (ray.direction + intersection.normal * (vn));
+
+    //calculate value under root
+    long double disc = 1.0L - ((n1_nt * n1_nt) * (1.0L - (vn * vn)));
+
+    //Total internal refraction
+    if(disc < 0) {
+        return reflect(ray,intersection);
+    }
+
+    //calculate second part of t (see tutorial slides)
+    t -= (intersection.normal * std::sqrt(disc));
+
+    t.normalize();
+
+    //shadow acne bias prevents surface acne
+    return Ray3D(intersection.intersection_point, t,SHADOW_ACNE_BIAS,ray.max_dist);
 }
 
 Color Scene::trace(Ray3D ray, int depth) {
@@ -141,12 +178,21 @@ Color Scene::trace(Ray3D ray, int depth) {
                 if (depth > camera.max_bounces)
                     return ray_col;
 
+                ray_col *= (1 - (intersection.surface->material.reflectance + intersection.surface->material.transmittance));
+
                 //do reflectance if surface reflects
                 if(intersection.surface->material.reflectance > 0.0L) {
                     //generate reflected ray and trace it to get reflected color, 
                     Color reflected_color = trace(reflect(ray,intersection), depth + 1);
                     //then add it to the original color proportional to the reflectance factor 
-                    ray_col = (1 - intersection.surface->material.reflectance)* ray_col + intersection.surface->material.reflectance * reflected_color;
+                    ray_col += intersection.surface->material.reflectance * reflected_color;
+                }
+                //do refractance if surface transmitts
+                if(intersection.surface->material.transmittance > 0.0L) {
+                    //generate refracted ray and trace it to get refracted color
+                    Color refracted_color = trace(refract(ray,intersection), depth +1);
+                    //then add it to the original color proportional to the transmittance factor
+                    ray_col += intersection.surface->material.transmittance * refracted_color;
                 }
                 
                 return ray_col;
