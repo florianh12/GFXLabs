@@ -21,7 +21,12 @@ Material::Material(long double ka, long double kd, long double ks, long double e
 
         unsigned char* image = stbi_load(texture_file.c_str(), &width, &height, &channels, 0);
 
-        std::cout << texture_file << std::to_string(channels) << std::endl;
+        for(size_t i = 0; i < width * height * channels; i += 3) {
+            texture.push_back(Color((static_cast<long double>(image[i]) / 255.0L), 
+            (static_cast<long double>(image[i+1]) / 255.0L), 
+            (static_cast<long double>(image[i+2]) / 255.0L)));
+                
+        }
     }
 
 std::string Material::toString(std::string offset) const {
