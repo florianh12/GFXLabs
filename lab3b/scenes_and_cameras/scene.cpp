@@ -7,6 +7,7 @@
 #include "sphere.h"
 #include "mesh.h"
 #include "ray3d.h"
+#include "light.h"
 
 
 

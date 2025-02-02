@@ -3,6 +3,7 @@
 
 #include "color.h"
 #include "vec3.h"
+#include "point3d.h"
 
 //lib depenedencies
 #include <limits>
