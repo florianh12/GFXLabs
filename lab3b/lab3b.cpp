@@ -99,10 +99,8 @@ std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
 
         Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),
         std::stod(xml_col->Attribute("b")));
-        Point3D position = Point3D(std::stold(xml_pos->Attribute("x")),std::stold(xml_pos->Attribute("y")),
-        std::stold(xml_pos->Attribute("z")));
         
-        lights.push_back(std::make_unique<PointLight>(PointLight(color, position)));
+        lights.push_back(std::make_unique<PointLight>(PointLight(color, extractPosition(point_light,"position"))));
     }
 
     return lights;

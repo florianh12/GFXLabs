@@ -20,7 +20,7 @@ struct Color
     Color& operator*=(const long double scalar);
     Color operator*(const Color& other) const;
 
-    friend Color operator*(long double scalar, Color& col);
+    friend Color operator*(long double scalar, const Color& col);
 };
 
 std::ostream& operator<<(std::ostream& o, const Color& color);

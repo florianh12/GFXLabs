@@ -6,6 +6,8 @@
 #include "light.h"
 #include "point3d.h"
 
+#include <iostream>
+
 
 struct PointLight : public Light
 {
@@ -24,13 +26,22 @@ struct PointLight : public Light
 
     //stop shadow ray when reaching light source
     long double maxT(Point3D point) {
-        //return (point - position).vec_norm();
-        return std::numeric_limits<long double>::infinity();
+        return (point - position).vec_norm();
+    }
+
+    std::string toString() const {
+        return "PointLight{\n\tcolor: " + color.toString() + 
+        "\tposition: " + position.toString() + "}\n";
     }
 
     ~PointLight() {}
 };
 
+inline std::ostream& operator<<(std::ostream& o, const PointLight& light) {
+    o << light.toString();
+
+    return o;
+}
 
 
 #endif //POINTLIGHT_H

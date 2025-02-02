@@ -13,6 +13,10 @@
 #include <stdexcept>
 
 
+//debug
+#include <iostream>
+
+
 Mesh::Mesh() : Surface{Material(), Point3D()}, vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, 
 vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_coordinate_indices{std::vector<int>()} {}
 

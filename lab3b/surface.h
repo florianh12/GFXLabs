@@ -24,6 +24,8 @@ struct Surface {
 
     virtual RaySurfaceIntersection intersect(Ray3D& ray) = 0;
     virtual Vec3 getNormal(Point3D& point, int mesh_index=0) = 0;
+
+    virtual std::string toString() const;
     
     ~Surface() {}
 
@@ -56,5 +58,13 @@ struct RaySurfaceIntersection {
 inline Vec3 Surface::getNormal(Point3D& point,int mesh_index)  { return Vec3(); }
 
 inline RaySurfaceIntersection Surface::intersect(Ray3D& ray) { return RaySurfaceIntersection(); }
+
+inline std::string Surface::toString() const { return "";}
+
+inline std::ostream& operator<<(std::ostream& o, const Surface& surface) {
+    o << surface.toString();
+
+    return o;
+}
 
 #endif //SURFACE_H

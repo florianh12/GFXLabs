@@ -69,7 +69,7 @@ Color& Color::operator*=(const long double scalar) {
     return *this;
 }
 
-Color operator*(long double scalar, Color& col) {
+Color operator*(long double scalar, const Color& col) {
    return Color(scalar * col.r_normalized,
     scalar * col.g_normalized,
     scalar * col.b_normalized);

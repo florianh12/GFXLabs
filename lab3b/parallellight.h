@@ -22,10 +22,19 @@ struct ParallelLight : public Light
 
     long double maxT(Point3D point) { return std::numeric_limits<long double>::infinity();}
 
+    std::string toString() const {
+        return "ParallelLight{\n\tcolor: " + color.toString() + 
+        "\tdirection: " + direction.toString() + "}\n";
+    }
 
     ~ParallelLight() {}
 };
 
+inline std::ostream& operator<<(std::ostream& o, const ParallelLight& light) {
+    o << light.toString();
+
+    return o;
+}
 
 
 #endif //PARALLELLIGHT_H

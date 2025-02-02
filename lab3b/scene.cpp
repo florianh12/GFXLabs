@@ -30,6 +30,14 @@ Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::un
 
 void Scene::render() {
 
+    for(std::unique_ptr<Light>& light : lights) {
+        std::cout << *light;
+    }
+
+    for(std::shared_ptr<Surface>& surface : surfaces) {
+        std::cout << *surface;
+    }
+
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
         for (unsigned int v = 0; v < camera.resolution[1]; v++) {
             long double x_n = (u + 0.5) / camera.resolution[0];
@@ -44,9 +52,9 @@ void Scene::render() {
 
             //prepare picture array
             size_t index = (((camera.resolution[1] - v - 1) * camera.resolution[0]) + u) * 3;
-            picture[index] = static_cast<char>(ray_col.r_normalized*255.0L);
-            picture[index + 1] = static_cast<char>(ray_col.g_normalized*255.0L);
-            picture[index + 2] = static_cast<char>(ray_col.b_normalized*255.0L);
+            picture[index] = static_cast<char>(std::floor(ray_col.r_normalized*255.0L));
+            picture[index + 1] = static_cast<char>(std::floor(ray_col.g_normalized*255.0L));
+            picture[index + 2] = static_cast<char>(std::floor(ray_col.b_normalized*255.0L));
 
         }
 
@@ -55,22 +63,25 @@ void Scene::render() {
 }
 
 
+
 Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
     
     intersection.normal.normalize();
 
-    long double diffuse = intersection.surface->material.kd * 
+    long double diffuse = intersection.surface->material.kd *
     std::max(((light.getDirection(intersection.intersection_point)*(-1)) * intersection.normal),0.0L);
 
+    if(intersection.intersection_point[0] > 3 && intersection.intersection_point[1] > 7 && intersection.intersection_point[2] <= -10) {
+        std::cout << "Diffuse: " << diffuse << intersection.intersection_point;
+    }
     Vec3 reflection = 2 * (intersection.normal * (light.getDirection(intersection.intersection_point)*(-1)))
      * intersection.normal - (light.getDirection(intersection.intersection_point)*(-1));
 
     reflection.normalize();
     
-    Vec3 eye =  camera.position - intersection.intersection_point;
+    Vec3 eye = (-1) * intersection.ray.direction;
 
-    eye.normalize();
     
     long double specular = intersection.surface->material.ks * 
     std::pow(std::max((reflection * eye),0.0L),intersection.surface->material.exponent);
@@ -103,7 +114,7 @@ Color Scene::trace(Ray3D ray, int depth) {
 
             
             if(intersection.intersection) {
-               Color ray_col =  intersection.surface->material.ka * ambient * intersection.surface->material.color;
+               Color ray_col =  intersection.surface->material.ka * (ambient * intersection.surface->material.color);
                 
                 //lighting logic
                 for(std::unique_ptr<Light>& light : lights) {
@@ -130,15 +141,12 @@ Color Scene::trace(Ray3D ray, int depth) {
                 if (depth > camera.max_bounces)
                     return ray_col;
 
-                //Modulate object color intensity based on the reflectance (done) and refractance (WIP)
-                ray_col *= (1 - intersection.surface->material.reflectance);
-
                 //do reflectance if surface reflects
                 if(intersection.surface->material.reflectance > 0.0L) {
                     //generate reflected ray and trace it to get reflected color, 
                     Color reflected_color = trace(reflect(ray,intersection), depth + 1);
                     //then add it to the original color proportional to the reflectance factor 
-                    ray_col += intersection.surface->material.reflectance * reflected_color;
+                    ray_col = (1 - intersection.surface->material.reflectance)* ray_col + intersection.surface->material.reflectance * reflected_color;
                 }
                 
                 return ray_col;
