@@ -78,7 +78,7 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
     long double specular = intersection.surface->material.ks * 
     std::pow(std::max((reflection * eye),0.0L),intersection.surface->material.exponent);
 
-    return ((diffuse * intersection.surface->material.color) + (specular * light.color));
+    return ((diffuse * intersection.surface->material.color * light.color) + (specular * light.color));
 
 }
 

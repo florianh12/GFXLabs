@@ -23,7 +23,7 @@ While in the lab3a/build directory, some noteworthy filepaths are:
 
 
 ## Claim
-I did T1, T2 (although the pictures are too bright) and T3 (faulty transmittance) and started with T4 but didn't implement it yet.
+I did T1, T2 and T3 (faulty transmittance) and started with T4 but didn't implement it yet.
 
 ## Tested environments
 - Almighty (connect via: ssh username@almighty.cs.univie.ac.at)
