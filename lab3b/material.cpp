@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <stdexcept>
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -14,7 +15,7 @@ Material::Material(Color color, long double ka, long double kd, long double ks, 
     ks{ks}, exponent{exponent}, reflectance{reflectance}, transmittance{transmittance}, refraction{refraction}, uses_texture{false}, texture{std::vector<Color>()} {}
 
 Material::Material(long double ka, long double kd, long double ks, long double exponent, 
-    long double reflectance, long double transmittance, long double refraction, std::string texture_file) : color{Color()}, ka{ka}, kd{kd}, 
+    long double reflectance, long double transmittance, long double refraction, std::string texture_file) : color{Color(1,1,1)}, ka{ka}, kd{kd}, 
     ks{ks}, exponent{exponent}, reflectance{reflectance}, transmittance{transmittance}, refraction{refraction}, uses_texture{true}, texture{std::vector<Color>()} {
         int width, height, channels;
 

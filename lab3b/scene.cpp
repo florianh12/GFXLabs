@@ -30,14 +30,6 @@ Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::un
 
 void Scene::render() {
 
-    for(std::unique_ptr<Light>& light : lights) {
-        std::cout << *light;
-    }
-
-    for(std::shared_ptr<Surface>& surface : surfaces) {
-        std::cout << *surface;
-    }
-
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
         for (unsigned int v = 0; v < camera.resolution[1]; v++) {
             long double x_n = (u + 0.5) / camera.resolution[0];
