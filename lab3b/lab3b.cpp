@@ -78,9 +78,12 @@ Camera extractCamera(XMLElement* xml_scene) {
     XMLElement* h_fov = camera->FirstChildElement("horizontal_fov");
     XMLElement* res = camera->FirstChildElement("resolution");
     XMLElement* bounces = camera->FirstChildElement("max_bounces");
+    XMLElement* up = camera->FirstChildElement("up");
 
     return Camera(extractPosition(camera,"position"),
     extractPosition(camera,"lookat"), 
+    Vec3(std::stold(up->Attribute("x")), 
+    std::stold(up->Attribute("y")), std::stold(up->Attribute("z"))),
     static_cast<unsigned int>(std::stoul(h_fov->Attribute("angle"))), 
     static_cast<unsigned int>(std::stoul(res->Attribute("horizontal"))),
     static_cast<unsigned int>(std::stoul(res->Attribute("vertical"))),
