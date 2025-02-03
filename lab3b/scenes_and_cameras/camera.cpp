@@ -17,4 +17,15 @@ Camera::Camera(Point3D position, Point3D lookat, Vec3 up, unsigned int fov, unsi
     this->fov_y = fov * (height/width) * (M_PI / 180);
 }
 
+Mat3 Camera::getRotationMatrix() {
+    Vec3 Z = position - lookat;
+    Z.normalize();
+    Vec3 X = up % Z;
+    X.normalize();
+    Vec3 Y = Z % X;
+    Y.normalize();
+
+    return Mat3(X,Y,Z);
+}
+
 Camera::~Camera() {}

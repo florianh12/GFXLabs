@@ -18,11 +18,24 @@ class Mat3  {
         Mat3() {};
         //initialize with long double matrix[3][3]
         Mat3(long double* matrix) : matrix{*matrix} {}
+        Mat3(Vec3 X, Vec3 Y, Vec3 Z) {
+            matrix[0][0] = X[0];
+            matrix[1][0] = X[1];
+            matrix[2][0] = X[2];
+
+            matrix[0][1] = Y[0];
+            matrix[1][1] = Y[1];
+            matrix[2][1] = Y[2];
+
+            matrix[0][2] = Z[0];
+            matrix[1][2] = Z[1];
+            matrix[2][2] = Z[2];
+        }
         
-        //cross and dot product
-        long double dot(const Vec3& other) const;
-        long double dot(const Point3D& other) const;
-        long double dot(const Mat3& other) const;
+        // dot product
+        Vec3 dot(const Vec3& other) const;
+        Point3D dot(const Point3D& other) const;
+        Mat3 dot(const Mat3& other) const;
 
         //Print method
         std::string toString() const;
@@ -35,8 +48,8 @@ class Mat3  {
         Mat3& operator-=(const Mat3& other);
 
         Mat3 operator*(const Mat3& other) const; //will be the dot product
-        Mat3 operator*(const Vec3& other) const;
-        Mat3 operator*(const Point3D& other) const;
+        Vec3 operator*(const Vec3& other) const;
+        Point3D operator*(const Point3D& other) const;
         Mat3 operator*(long double scalar) const; //will be the scalar poduct left
 
         Mat3 operator/(long double scalar) const;
@@ -45,10 +58,10 @@ class Mat3  {
         bool operator==(const Mat3& other) const;
         
         long double& at(int row, int column);
-        long double& at(const int row, const int column) const;
 
         //will be the scalar poduct right
-        friend Mat3 operator*(long double scalar, const Mat3& vec);
+        friend Mat3 operator*(long double scalar, const Mat3& mat);
+        friend Mat3 operator/(long double scalar, const Mat3& mat);
         
         ~Mat3() {}
 };

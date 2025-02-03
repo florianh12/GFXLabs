@@ -31,6 +31,8 @@ Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::un
 
 void Scene::render() {
 
+    Mat3 rotation = camera.getRotationMatrix();
+
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
         for (unsigned int v = 0; v < camera.resolution[1]; v++) {
             long double x_n = (u + 0.5) / camera.resolution[0];
@@ -38,7 +40,7 @@ void Scene::render() {
             long double x_i = (2 * x_n - 1) * std::tan(camera.fov_x);
             long double y_i = (2 * y_n -1) * std::tan(camera.fov_y);
 
-            Ray3D ray = Ray3D(camera.position,Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
+            Ray3D ray = Ray3D(camera.position,rotation * Vec3(x_i,y_i,-1),0,std::numeric_limits<long double>::infinity());
 
             Color ray_col = trace(ray, 0);
 
@@ -103,7 +105,7 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
     } else {
         n1 = intersection.surface->material.refraction;
         nt = 1.0L;
-        n = (-1.0L) * n;
+        //n = (-1.0L) * n;
     }
 
     

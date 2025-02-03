@@ -3,6 +3,7 @@
 
 #include "point3d.h"
 #include "vec3.h"
+#include "mat3.h"
 
 struct Camera {
     Point3D position;
@@ -14,6 +15,8 @@ struct Camera {
     unsigned int max_bounces;
 
     Camera(Point3D position, Point3D lookat, Vec3 up, unsigned int fov, unsigned int width, unsigned int height, unsigned int max_bounces);
+
+    Mat3 getRotationMatrix();
     
     ~Camera();
 };
