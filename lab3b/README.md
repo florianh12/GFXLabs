@@ -19,12 +19,13 @@ While in the lab3a/build directory, some noteworthy filepaths are:
  - Example 4: ../xml/example4.xml
  - Example 5: ../xml/example5.xml
  - Example 6: ../xml/example6.xml
- - Example 6: ../xml/example7.xml
+ - Example 7: ../xml/example7.xml
+ - Example 8: ../xml/example8.xml
 
 
 
 ## Claim
-I did T1, T2 and T3 (faulty refraction) and did T4, T5 (faulty refraction) and T6 (but didn't test it yet due to lack of camera transformations and segmentation fault, I think in xml readin).
+I did T1 and T2 and did T3, T4, T5 and T6 (faulty refraction).
 
 ## Tested environments
 - Almighty (connect via: ssh username@almighty.cs.univie.ac.at)
