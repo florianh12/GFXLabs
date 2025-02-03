@@ -104,7 +104,6 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
         n1 = intersection.surface->material.refraction;
         nt = 1.0L;
         n = (-1.0L) * n;
-        vn = v * n;
     }
 
     
