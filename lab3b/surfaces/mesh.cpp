@@ -4,6 +4,7 @@
 #include "point2d.h"
 #include "vec3.h"
 #include "material.h"
+#include "color.h"
 
 //lib dependencies
 #include <vector>
@@ -123,6 +124,12 @@ vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_
     }
 }
 
+Point2D Mesh::getUV(Vec3 tab, size_t i) {
+    return ((1-(tab[1] + tab[2])) * texture_coordinates[texture_coordinate_indices[i]]+ 
+                        tab[1] * texture_coordinates[texture_coordinate_indices[i+1]] + 
+                        tab[2] * texture_coordinates[texture_coordinate_indices[i+2]]);
+}
+
 RaySurfaceIntersection Mesh::intersect(Ray3D& ray) {
     for (size_t i = 0; i < vertex_indices.size(); i += 3) {
         // o - v1
@@ -139,10 +146,24 @@ RaySurfaceIntersection Mesh::intersect(Ray3D& ray) {
             Vec3 normal = ((1-(tab[1] + tab[2])) * normals[normal_indices[i]] + 
                         tab[1] * normals[normal_indices[i+1]] + 
                         tab[2] * normals[normal_indices[i+2]]);
+            
             normal.normalize();
+            
             Point3D point = ray.calculatePoint(tab[0]);
+
+            Color color = material.color;
+
+            if(material.uses_texture) {
+                //change color to color from uv
+                //calculate normalized uv
+                Point2D uv = getUV(tab,i);
+                long double u_scaled = material.width * uv[0];
+                long double v_scaled = material.height * uv[1];
+                color = material.getColor(static_cast<int>(u_scaled), static_cast<int>(v_scaled));
+            }
+
             return RaySurfaceIntersection(shared_from_this(), 
-            ray, point, normal, tab[0], i);
+            ray, point, normal, color, tab[0], i);
         }
 
     }

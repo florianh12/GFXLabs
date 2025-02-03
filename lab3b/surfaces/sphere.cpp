@@ -43,9 +43,24 @@ RaySurfaceIntersection Sphere::intersect(Ray3D& ray) {
     if (t <= ray.min_dist || t >= ray.max_dist) {
         return RaySurfaceIntersection();
     }
-
+    
     Point3D point = ray.calculatePoint(t);
-    return RaySurfaceIntersection(shared_from_this(),ray, point, getNormal(point), t);
+    Vec3 normal = getNormal(point);
+
+    Color color = material.color;
+
+    if(material.uses_texture) {
+        //change color to color from uv
+        long double u = 0.5L + (std::atan2(normal[0], normal[2]) / (2 * M_PI));
+        long double v = 0.5L - (std::asin(normal[1]) / (M_PI));
+        long double u_scaled = u * material.width;
+        long double v_scaled = v * material.height;
+
+        color = material.getColor(static_cast<int>(u_scaled), static_cast<int>(v_scaled));
+    }
+    
+    return RaySurfaceIntersection(shared_from_this(),ray, point, 
+    normal, color, t);
 }
 
 Vec3 Sphere::getNormal(Point3D& point, int mesh_index) {

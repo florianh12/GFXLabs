@@ -12,9 +12,13 @@ class Point2D {
         std::string toString() const;
 
         //Operator Overrides
+        Point2D operator+(const Point2D& other) const; // for calculating uv for mesh
         bool operator==(const Point2D& other) const;
         long double& operator[](int index);
         const long double& operator[](int index) const; 
+
+        friend Point2D operator*(const long double scalar, const Point2D& point); // for calculating uv for mesh
+
 
         ~Point2D();
 };

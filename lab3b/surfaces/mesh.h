@@ -29,7 +29,9 @@ struct Mesh : Surface, public std::enable_shared_from_this<Mesh> {
 
     RaySurfaceIntersection intersect(Ray3D& ray);
 
-    Vec3 getNormal(Point3D& point, int mesh_index=0); 
+    Vec3 getNormal(Point3D& point, int mesh_index=0);
+
+    Point2D getUV(Vec3 tab, size_t i); 
 
     ~Mesh();
 };

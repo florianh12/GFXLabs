@@ -17,6 +17,12 @@ std::string Point2D::toString() const {
 
 // Operator Overrides
 
+//uv calculation
+Point2D Point2D::operator+(const Point2D& other) const {
+    return Point2D(coordinates[0] + other.coordinates[0],
+    coordinates[1] + other.coordinates[1]);
+}
+
 bool Point2D::operator==(const Point2D& other) const {
     return coordinates[0] == other.coordinates[0] 
     && coordinates[1] == other.coordinates[1];
@@ -51,6 +57,11 @@ const long double& Point2D::operator[](int index) const {
 
     return coordinates[index];
 } 
+
+//uv calculation
+Point2D operator*(const long double scalar, const Point2D& point) {
+    return Point2D(scalar * point.coordinates[0], scalar * point.coordinates[1]);
+}
 
 
 Point2D::~Point2D() {}

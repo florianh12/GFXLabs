@@ -17,7 +17,7 @@ Material::Material(Color color, long double ka, long double kd, long double ks, 
 Material::Material(long double ka, long double kd, long double ks, long double exponent, 
     long double reflectance, long double transmittance, long double refraction, std::string texture_file) : color{Color(1,1,1)}, ka{ka}, kd{kd}, 
     ks{ks}, exponent{exponent}, reflectance{reflectance}, transmittance{transmittance}, refraction{refraction}, uses_texture{true}, texture{std::vector<Color>()} {
-        int width, height, channels;
+        int channels;
 
         unsigned char* image = stbi_load(texture_file.c_str(), &width, &height, &channels, 0);
 
@@ -28,6 +28,15 @@ Material::Material(long double ka, long double kd, long double ks, long double e
                 
         }
     }
+
+Color Material::getColor(int u, int v) {
+    //return color at uv coordinates if object uses texture
+    if (uses_texture) {
+        return texture[((width*v) + u)];
+    }
+    
+    return color;
+}
 
 std::string Material::toString(std::string offset) const {
         return offset+"Material{\n"+offset+"\tcolor: "+color.toString()+offset+"\tka: "+

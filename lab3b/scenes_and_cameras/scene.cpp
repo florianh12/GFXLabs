@@ -79,7 +79,7 @@ Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
     long double specular = intersection.surface->material.ks * 
     std::pow(std::max((reflection * eye),0.0L),intersection.surface->material.exponent);
 
-    return ((diffuse * intersection.surface->material.color * light.color) + (specular * light.color));
+    return ((diffuse * intersection.surface_color * light.color) + (specular * light.color));
 
 }
 
@@ -93,31 +93,36 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
     long double n1, nt;
     //if smaller than 0, then ray hits from outside else inside, 
     //1.0L refraction index for air
-    if(ray.direction * intersection.normal < 0.0L) {
+    Vec3 v = (1.0L)* ray.direction;
+    Vec3 n = (1.0L) * intersection.normal;
+    long double vn = v * n;
+    if(v * n < 0.0L) {
         n1 = 1.0L;
         nt = intersection.surface->material.refraction;
+        vn = (-1.0L)*vn;
     } else {
         n1 = intersection.surface->material.refraction;
         nt = 1.0L;
+        n = (-1.0L) * n;
+        vn = v * n;
     }
 
     
 
-    long double vn = ray.direction * intersection.normal;
     long double n1_nt = n1/nt;
     //calculate frist part of t
-    Vec3 t = (n1_nt) * (ray.direction + intersection.normal * (vn));
+    Vec3 t = (n1_nt) * (v + n * (vn));
 
     //calculate value under root
     long double disc = 1.0L - ((n1_nt * n1_nt) * (1.0L - (vn * vn)));
 
     //Total internal refraction
-    if(disc < 0) {
+    if(disc <= 0.0L) {
         return reflect(ray,intersection);
     }
 
     //calculate second part of t (see tutorial slides)
-    t -= (intersection.normal * std::sqrt(disc));
+    t -= (n * std::sqrt(disc));
 
     t.normalize();
 
@@ -144,7 +149,7 @@ Color Scene::trace(Ray3D ray, int depth) {
 
             
             if(intersection.intersection) {
-               Color ray_col =  intersection.surface->material.ka * (ambient * intersection.surface->material.color);
+               Color ray_col =  intersection.surface->material.ka * (ambient * intersection.surface_color);
                 
                 //lighting logic
                 for(std::unique_ptr<Light>& light : lights) {

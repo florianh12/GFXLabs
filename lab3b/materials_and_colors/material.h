@@ -21,6 +21,9 @@ struct Material
 
     std::vector<Color> texture;
 
+    int width;
+    int height;
+
     //for no intersection in intersection class only
     Material();
 
@@ -30,6 +33,8 @@ struct Material
     Material(long double ka, long double kd, long double ks, long double exponent, 
     long double reflectance, long double transmittance, long double refraction, 
     std::string texture_file);
+
+    Color getColor(int u=0, int v=0);
 
     std::string toString(std::string offset = "") const;
 };
