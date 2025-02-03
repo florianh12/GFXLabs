@@ -42,6 +42,7 @@ Color extractColor(XMLElement* parent_element, const char* pos_element_name) {
 Material extractMaterial(XMLElement* parent_element, const char* pos_element_name, bool uses_texture=false, std::string dir=".") {
     XMLElement* material = parent_element->FirstChildElement(pos_element_name);
 
+    
     XMLElement* phong = material->FirstChildElement("phong");
     XMLElement* reflectance = material->FirstChildElement("reflectance");
     XMLElement* transmittance = material->FirstChildElement("transmittance");
@@ -61,7 +62,6 @@ Material extractMaterial(XMLElement* parent_element, const char* pos_element_nam
     } 
 
     XMLElement* texture = material->FirstChildElement("texture");
-    
     return Material(std::stold(phong->Attribute("ka")),
             std::stold(phong->Attribute("kd")),
             std::stold(phong->Attribute("ks")),
@@ -148,7 +148,7 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
     }
     
     //iterate over meshes
-    for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("sphere")) {
+    for (XMLElement* mesh = xml_surfaces->FirstChildElement("mesh"); mesh != nullptr; mesh = mesh->NextSiblingElement("mesh")) {
         Material material;
         
         if(mesh->FirstChildElement("material_solid") == nullptr) {
@@ -157,7 +157,9 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
             material = extractMaterial(mesh, "material_solid");
         }
         
+        
         surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), material)));
+        
     }
     
     return surfaces;

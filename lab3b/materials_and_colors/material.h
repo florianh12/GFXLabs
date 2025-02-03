@@ -39,7 +39,7 @@ struct Material
     std::string toString(std::string offset = "") const;
 };
 
-inline std::ostream& operator<<(std::ostream& o, const Material& material);
+std::ostream& operator<<(std::ostream& o, const Material& material);
 
 
 #endif //MATERIAL_H

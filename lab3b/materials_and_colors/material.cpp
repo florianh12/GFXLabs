@@ -45,7 +45,8 @@ std::string Material::toString(std::string offset) const {
         offset+"\treflectance: "+std::to_string(reflectance)+"\n"+
         offset+"\ttransmittance: "+std::to_string(transmittance)+"\n"+
         offset+"\trefraction: "+std::to_string(refraction)+"\n"+
-        offset+"\tuses_texture: "+std::to_string(uses_texture)+"\n"+offset+"}\n";
+        offset+"\tuses_texture: "+std::to_string(uses_texture)+"\n"+
+        offset+"\ttexture size: "+std::to_string(texture.size())+"\n"+offset+"}\n";
     }
 
 std::ostream& operator<<(std::ostream& o, const Material& material) {

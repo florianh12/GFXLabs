@@ -30,7 +30,6 @@ Scene::Scene(Camera camera, Color background, Color ambient, std::vector<std::un
     surfaces{surfaces}, picture{new char[camera.resolution[0] * camera.resolution[1] * 3]}, file_name{file_name} {} //3 because we always have alpha 1 and can therefore ignore it
 
 void Scene::render() {
-
     Mat3 rotation = camera.getRotationMatrix();
 
     for (unsigned int u = 0; u < camera.resolution[0]; u++) {
@@ -105,14 +104,14 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
     } else {
         n1 = intersection.surface->material.refraction;
         nt = 1.0L;
-        //n = (-1.0L) * n;
+        n = (-1.0L) * n;
     }
 
     
 
     long double n1_nt = n1/nt;
     //calculate frist part of t
-    Vec3 t = (n1_nt) * (v + n * (vn));
+    
 
     //calculate value under root
     long double disc = 1.0L - ((n1_nt * n1_nt) * (1.0L - (vn * vn)));
@@ -123,7 +122,7 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
     }
 
     //calculate second part of t (see tutorial slides)
-    t -= (n * std::sqrt(disc));
+    Vec3 t = (n1_nt) * (v + n * (vn)) - (n * std::sqrt(disc));
 
     t.normalize();
 
