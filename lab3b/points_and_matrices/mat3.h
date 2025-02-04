@@ -6,6 +6,7 @@
 
 //lib dependencies
 #include <string>
+#include <cmath>
 
 class Mat3  {
     long double matrix[3][3] = {
@@ -18,6 +19,7 @@ class Mat3  {
         Mat3() {};
         //initialize with long double matrix[3][3]
         Mat3(long double* matrix) : matrix{*matrix} {}
+        //lookat matrix
         Mat3(Vec3 X, Vec3 Y, Vec3 Z) {
             matrix[0][0] = X[0];
             matrix[1][0] = X[1];
@@ -31,11 +33,43 @@ class Mat3  {
             matrix[1][2] = Z[1];
             matrix[2][2] = Z[2];
         }
+        //rotation matrix
+        Mat3(char axis,long double angle) : Mat3()  {
+            if(axis == 'x') {
+
+                matrix[1][1] = std::cos(angle);
+                matrix[1][2] = -std::sin(angle);
+
+                matrix[2][1] = std::sin(angle);
+                matrix[2][2] = std::cos(angle);
+
+            } else if (axis == 'y') {
+
+                matrix[0][0] = std::cos(angle);
+                matrix[0][2] = std::sin(angle);
+
+                matrix[2][0] = -std::sin(angle);
+                matrix[2][2] = std::cos(angle);
+
+            } else if (axis == 'z') {
+               
+                matrix[0][0] = std::cos(angle);
+                matrix[0][1] = -std::sin(angle);
+
+                matrix[1][0] = std::sin(angle);
+                matrix[1][1] = std::cos(angle);
+ 
+            }
+        }
+
         
         // dot product
         Vec3 dot(const Vec3& other) const;
         Point3D dot(const Point3D& other) const;
         Mat3 dot(const Mat3& other) const;
+
+        //Transpose
+        Mat3 T();
 
         //Print method
         std::string toString() const;
@@ -66,6 +100,7 @@ class Mat3  {
         ~Mat3() {}
 };
 
+std::ostream& operator<<(std::ostream& o, const Mat3& mat3);
 
 
 

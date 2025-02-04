@@ -33,11 +33,21 @@ Mat3 Mat3::dot(const Mat3& other) const {
             });
 }
 
+
+//Transpose
+Mat3 Mat3::T()  {
+    return Mat3({
+        {matrix[0][0], matrix[0][1], matrix[0][2]},
+        {matrix[1][0], matrix[1][1], matrix[1][2] },
+        {matrix[2][0], matrix[2][1], matrix[2][2]}
+    });
+}
+
 //Print method
 std::string Mat3::toString() const {
     return "Mat3 [\n\t["+std::to_string(matrix[0][0])+", "+std::to_string(matrix[0][1])+", "+std::to_string(matrix[0][2])+"],"+
                 "\n\t["+std::to_string(matrix[1][0])+", "+std::to_string(matrix[1][1])+", "+std::to_string(matrix[1][2])+"],"+
-                "\n\t["+std::to_string(matrix[2][0])+", "+std::to_string(matrix[2][1])+", "+std::to_string(matrix[2][2])+"]\n]";
+                "\n\t["+std::to_string(matrix[2][0])+", "+std::to_string(matrix[2][1])+", "+std::to_string(matrix[2][2])+"]\n]\n";
 }
 
 //Operator Overrides
@@ -133,4 +143,10 @@ Mat3 operator*(long double scalar, const Mat3& mat) {
 }
 Mat3 operator/(long double scalar, const Mat3& mat) {
     return mat / scalar;
+}
+
+std::ostream& operator<<(std::ostream& o, const Mat3& mat3) {
+    o << mat3.toString();
+
+    return o;
 }
