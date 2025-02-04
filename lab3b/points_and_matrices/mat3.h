@@ -8,6 +8,10 @@
 #include <string>
 #include <cmath>
 
+inline long double degToRad(long double deg) {
+    return (deg * M_PI) / 180.0L;
+}
+
 class Mat3  {
     long double matrix[3][3] = {
         {1.0L,0.0L,0.0L},
@@ -35,6 +39,8 @@ class Mat3  {
         }
         //rotation matrix
         Mat3(char axis,long double angle) : Mat3()  {
+            angle = degToRad(angle);
+            
             if(axis == 'x') {
 
                 matrix[1][1] = std::cos(angle);

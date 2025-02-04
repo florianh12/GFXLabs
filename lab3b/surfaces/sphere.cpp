@@ -17,7 +17,8 @@
 //for no intersection in intersection class only
 Sphere::Sphere() {}
 
-Sphere::Sphere(Material material, Point3D position, long double radius) : Surface{material, position}, radius{radius} {
+Sphere::Sphere(Material material, Point3D position, long double radius, Vec3 scale, 
+    Mat3 rotation, Vec3 translation) : Surface{material, position,scale,rotation,translation}, radius{radius} {
     if (radius <= 0.0L) {
         throw std::runtime_error("Sphere radius is smaller orequal to 0!");
     }
@@ -25,41 +26,46 @@ Sphere::Sphere(Material material, Point3D position, long double radius) : Surfac
 }
 
 RaySurfaceIntersection Sphere::intersect(Ray3D& ray) {
-    Vec3 o = ray.origin - position;
-    long double b = ray.direction*(ray.origin - position);
-    long double c = (ray.direction * ray.direction) * ((o*o)-(radius*radius));
+    Ray3D transformed_ray = transform(ray);
+    Vec3 o = transformed_ray.origin - position;
+    long double b = transformed_ray.direction*(transformed_ray.origin - position);
+    long double c = (transformed_ray.direction * transformed_ray.direction) * ((o*o)-(radius*radius));
     long double disc = (b * b) - c;
     
     if (disc < 0.0L) {
         return RaySurfaceIntersection();
     }
 
-    long double t = -(ray.direction*(ray.origin-position));
+    long double t = -(transformed_ray.direction*(transformed_ray.origin-position));
     
     if (disc != 0.0L) {
 
             t -= std::sqrt(disc);
     } 
-    if (t <= ray.min_dist || t >= ray.max_dist) {
+    if (t <= transformed_ray.min_dist || t >= transformed_ray.max_dist) {
         return RaySurfaceIntersection();
     }
     
-    Point3D point = ray.calculatePoint(t);
-    Vec3 normal = getNormal(point);
+    Point3D point = transformed_ray.calculatePoint(t);
+    Vec3 normal = transformNormal(getNormal(point));
 
     Color color = material.color;
 
     if(material.uses_texture) {
         //change color to color from uv
         long double u = 0.5L + (std::atan2(normal[0], normal[2]) / (2 * M_PI));
+        //normalize u to 0 - 1
+        u -= std::floor(u); 
         long double v = 0.5L - (std::asin(normal[1]) / (M_PI));
+        //normalize v to 0 - 1
+        v -= std::floor(v);
         long double u_scaled = u * material.width;
         long double v_scaled = v * material.height;
 
         color = material.getColor(static_cast<int>(u_scaled), static_cast<int>(v_scaled));
     }
     
-    return RaySurfaceIntersection(shared_from_this(),ray, point, 
+    return RaySurfaceIntersection(shared_from_this(),transformed_ray, point, 
     normal, color, t);
 }
 

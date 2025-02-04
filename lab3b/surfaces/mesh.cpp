@@ -12,16 +12,18 @@
 #include <string>
 #include <sstream>
 #include <stdexcept>
+#include <cmath>
 
 
 //debug
 #include <iostream>
 
 
-Mesh::Mesh() : Surface{Material(), Point3D()}, vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, 
+Mesh::Mesh() : Surface{Material(), Point3D(), Vec3(1.0L,1.0L,1.0L), Mat3(), Vec3()}, vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, 
 vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_coordinate_indices{std::vector<int>()} {}
 
-Mesh::Mesh(std::string obj_file_path, Material material) : Surface{material, Point3D()}, 
+Mesh::Mesh(std::string obj_file_path, Material material, Vec3 scale, 
+    Mat3 rotation, Vec3 translation) : Surface{material, Point3D(), scale, rotation, translation}, 
 vertices{std::vector<Point3D>()}, normals{std::vector<Vec3>()}, texture_coordinates{std::vector<Point2D>()}, 
 vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_coordinate_indices{std::vector<int>()} {
     this->material = material;
@@ -125,31 +127,41 @@ vertex_indices{std::vector<int>()}, normal_indices{std::vector<int>()}, texture_
 }
 
 Point2D Mesh::getUV(Vec3 tab, size_t i) {
-    return ((1-(tab[1] + tab[2])) * texture_coordinates[texture_coordinate_indices[i]]+ 
+    Point2D uv = Point2D(((1-(tab[1] + tab[2])) * texture_coordinates[texture_coordinate_indices[i]]+ 
                         tab[1] * texture_coordinates[texture_coordinate_indices[i+1]] + 
-                        tab[2] * texture_coordinates[texture_coordinate_indices[i+2]]);
+                        tab[2] * texture_coordinates[texture_coordinate_indices[i+2]]));
+    //normalize to 0 - 1 interval
+    uv[0] -= std::floor(uv[0]);
+    uv[1] -= std::floor(uv[1]);
+    
+    return uv;
 }
 
 RaySurfaceIntersection Mesh::intersect(Ray3D& ray) {
+    Ray3D transformed_ray = transform(ray);
+    
     for (size_t i = 0; i < vertex_indices.size(); i += 3) {
         // o - v1
-        Vec3 s = ray.origin - vertices[vertex_indices[i]];
+        Vec3 s = transformed_ray.origin - vertices[vertex_indices[i]];
         // v2 - v1
         Vec3 e1 = vertices[vertex_indices[i+1]] - vertices[vertex_indices[i]];
         // v3 - v1
         Vec3 e2 = vertices[vertex_indices[i+2]] - vertices[vertex_indices[i]];
 
         // t is x, a is y, b is z -> tab
-        Vec3 tab = (1.0L/((ray.direction % e2) *e1)) * Vec3((s % e1) * e2,(ray.direction % e2) * s,(s % e1) * ray.direction); 
+        Vec3 tab = (1.0L/((transformed_ray.direction % e2) *e1)) * Vec3((s % e1) * e2,(transformed_ray.direction % e2) * s,(s % e1) * transformed_ray.direction); 
     
-        if (tab[0] > 0.0L && tab[0] > ray.min_dist && tab[0] < ray.max_dist && tab[1] >= 0.0L && tab[2] >= 0.0L && (tab[1] + tab[2]) <= 1.0L) {
+        if (tab[0] > 0.0L && tab[0] > transformed_ray.min_dist && tab[0] < transformed_ray.max_dist && tab[1] >= 0.0L && tab[2] >= 0.0L && (tab[1] + tab[2]) <= 1.0L) {
             Vec3 normal = ((1-(tab[1] + tab[2])) * normals[normal_indices[i]] + 
                         tab[1] * normals[normal_indices[i+1]] + 
                         tab[2] * normals[normal_indices[i+2]]);
             
             normal.normalize();
+
             
-            Point3D point = ray.calculatePoint(tab[0]);
+            normal = transformNormal(normal);
+            
+            Point3D point = transformed_ray.calculatePoint(tab[0]);
 
             Color color = material.color;
 

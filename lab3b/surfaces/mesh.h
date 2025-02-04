@@ -23,7 +23,8 @@ struct Mesh : Surface, public std::enable_shared_from_this<Mesh> {
     //for no intersection in intersection class only
     Mesh();
 
-    Mesh(std::string obj_file_path, Material material);
+    Mesh(std::string obj_file_path, Material material,Vec3 scale=Vec3(1.0L,1.0L,1.0L), 
+    Mat3 rotation=Mat3(), Vec3 translation=Vec3());
 
     std::string toString() const;
 

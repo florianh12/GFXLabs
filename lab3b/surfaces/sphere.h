@@ -16,7 +16,8 @@ struct Sphere : Surface, public std::enable_shared_from_this<Sphere> {
     //for no intersection in intersection class only
     Sphere();
 
-    Sphere(Material material, Point3D position, long double radius);
+    Sphere(Material material, Point3D position, long double radius, Vec3 scale=Vec3(1.0L,1.0L,1.0L), 
+    Mat3 rotation=Mat3(), Vec3 translation=Vec3());
 
     RaySurfaceIntersection intersect(Ray3D& ray);
 

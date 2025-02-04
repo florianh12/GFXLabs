@@ -18,8 +18,10 @@
 #include <filesystem>
 #include <memory>
 
+
 //debug
 #include <iostream>
+#include <chrono>
 
 using namespace tinyxml2;
 
@@ -27,6 +29,14 @@ Point3D extractPosition(XMLElement* parent_element, const char* pos_element_name
     XMLElement* pos = parent_element->FirstChildElement(pos_element_name);
 
     return Point3D(std::stold(pos->Attribute("x")), 
+    std::stold(pos->Attribute("y")), 
+    std::stold(pos->Attribute("z")));
+}
+
+Vec3 extractVec3(XMLElement* parent_element, const char* pos_element_name) {
+    XMLElement* pos = parent_element->FirstChildElement(pos_element_name);
+
+    return Vec3(std::stold(pos->Attribute("x")), 
     std::stold(pos->Attribute("y")), 
     std::stold(pos->Attribute("z")));
 }
@@ -78,12 +88,10 @@ Camera extractCamera(XMLElement* xml_scene) {
     XMLElement* h_fov = camera->FirstChildElement("horizontal_fov");
     XMLElement* res = camera->FirstChildElement("resolution");
     XMLElement* bounces = camera->FirstChildElement("max_bounces");
-    XMLElement* up = camera->FirstChildElement("up");
 
     return Camera(extractPosition(camera,"position"),
     extractPosition(camera,"lookat"), 
-    Vec3(std::stold(up->Attribute("x")), 
-    std::stold(up->Attribute("y")), std::stold(up->Attribute("z"))),
+    extractVec3(camera,"up"),
     static_cast<unsigned int>(std::stoul(h_fov->Attribute("angle"))), 
     static_cast<unsigned int>(std::stoul(res->Attribute("horizontal"))),
     static_cast<unsigned int>(std::stoul(res->Attribute("vertical"))),
@@ -104,8 +112,7 @@ std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
 
         Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),
         std::stod(xml_col->Attribute("b")));
-        Vec3 direction = Vec3(std::stold(xml_dir->Attribute("x")),std::stold(xml_dir->Attribute("y")),
-        std::stold(xml_dir->Attribute("z")));
+        Vec3 direction = extractVec3(parallel_light, "direction");
         
         lights.push_back(std::make_unique<ParallelLight>(ParallelLight(color, direction)));
     }
@@ -113,14 +120,9 @@ std::vector<std::unique_ptr<Light>> extractLights(XMLElement* xml_scene) {
     //iterate over and extract point lights
     for (XMLElement* point_light = xml_lights->FirstChildElement("point_light"); point_light != nullptr; 
     point_light = point_light->NextSiblingElement("point_light")) {
-
-        XMLElement* xml_col = point_light->FirstChildElement("color");
-        XMLElement* xml_pos = point_light->FirstChildElement("position");
-
-        Color color = Color(std::stod(xml_col->Attribute("r")),std::stod(xml_col->Attribute("g")),
-        std::stod(xml_col->Attribute("b")));
         
-        lights.push_back(std::make_unique<PointLight>(PointLight(color, extractPosition(point_light,"position"))));
+        lights.push_back(std::make_unique<PointLight>(PointLight(extractColor(point_light,"color"), 
+        extractPosition(point_light,"position"))));
     }
 
     return lights;
@@ -141,10 +143,43 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
             material = extractMaterial(sphere, "material_solid");
         }
         
+        Vec3 scale = Vec3(1.0L,1.0L,1.0L);
+        Mat3 rotation = Mat3();
+        Vec3 translation = Vec3();
+
+        XMLElement* transformations = sphere->FirstChildElement("transform");
+
+        if(transformations != nullptr) {
+            XMLElement* xml_scale = transformations->FirstChildElement("scale");
+            XMLElement* xml_rot_x = transformations->FirstChildElement("rotateX");
+            XMLElement* xml_rot_y = transformations->FirstChildElement("rotateY");
+            XMLElement* xml_rot_z = transformations->FirstChildElement("rotateZ");
+            XMLElement* xml_translate = transformations->FirstChildElement("translate");
+            
+            if(xml_scale != nullptr) {
+                scale = extractVec3(transformations,"scale");
+            }
+
+            
+            if(xml_rot_y != nullptr) {
+                rotation = rotation * Mat3('y',std::stold(xml_rot_y->Attribute("theta")));
+            }
+            if(xml_rot_x != nullptr) {
+                rotation = rotation * Mat3('x',std::stold(xml_rot_x->Attribute("theta")));
+            }
+            if(xml_rot_z != nullptr) {
+                rotation = rotation * Mat3('z',std::stold(xml_rot_z->Attribute("theta")));
+            }
+
+            if(xml_translate != nullptr) {
+                translation = extractVec3(transformations, "translate");
+            }
+        }
+
         surfaces.push_back(std::make_shared<Sphere>(Sphere(
             material,
         extractPosition(sphere, "position"), 
-        std::stold(sphere->Attribute("radius")))));
+        std::stold(sphere->Attribute("radius")), scale, rotation, translation)));
     }
     
     //iterate over meshes
@@ -156,9 +191,43 @@ std::vector<std::shared_ptr<Surface>> extractSurfaces(XMLElement* xml_scene, std
         } else {
             material = extractMaterial(mesh, "material_solid");
         }
+
+        Vec3 scale = Vec3(1.0L,1.0L,1.0L);
+        Mat3 rotation = Mat3();
+        Vec3 translation = Vec3();
+
+        XMLElement* transformations = mesh->FirstChildElement("transform");
+
+        if(transformations != nullptr) {
+            XMLElement* xml_scale = transformations->FirstChildElement("scale");
+            XMLElement* xml_rot_x = transformations->FirstChildElement("rotateX");
+            XMLElement* xml_rot_y = transformations->FirstChildElement("rotateY");
+            XMLElement* xml_rot_z = transformations->FirstChildElement("rotateZ");
+            XMLElement* xml_translate = transformations->FirstChildElement("translate");
+            
+            if(xml_scale != nullptr) {
+                scale = extractVec3(transformations,"scale");
+            }
+
+            
+            if(xml_rot_y != nullptr) {
+                rotation = rotation * Mat3('y',std::stold(xml_rot_y->Attribute("theta")));
+            }
+            if(xml_rot_x != nullptr) {
+                rotation = rotation * Mat3('x',std::stold(xml_rot_x->Attribute("theta")));
+            }
+            if(xml_rot_z != nullptr) {
+                rotation = rotation * Mat3('z',std::stold(xml_rot_z->Attribute("theta")));
+            }
+
+            if(xml_translate != nullptr) {
+                translation = extractVec3(transformations, "translate");
+            }
+        }
         
         
-        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), material)));
+        surfaces.push_back(std::make_shared<Mesh>(Mesh(dir+"/"+mesh->Attribute("name"), material, 
+        scale, rotation, translation)));
         
     }
     
@@ -176,6 +245,8 @@ Scene extractScene(XMLElement* xml_scene, std::string dir) {
 }
 
 int main(int argc, char *argv[]) {
+   auto start = std::chrono::high_resolution_clock::now();
+
    XMLDocument doc;
    const XMLError err = doc.LoadFile(argv[1]);
 
@@ -196,4 +267,7 @@ int main(int argc, char *argv[]) {
     Scene scene = extractScene(xml_scene, dir);
 
     scene.render();
+    auto stop = std::chrono::high_resolution_clock::now();
+
+    std::cout << "Duration: " << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() * 0.001 << " seconds" << std::endl;
 }

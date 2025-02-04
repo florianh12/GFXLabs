@@ -61,7 +61,7 @@ void Scene::render() {
 Color Scene::illuminate(RaySurfaceIntersection& intersection, Light& light) {
 
     
-    intersection.normal.normalize();
+    //intersection.normal.normalize();
 
     long double diffuse = intersection.surface->material.kd *
     std::max(((light.getDirection(intersection.intersection_point)*(-1)) * intersection.normal),0.0L);
@@ -199,7 +199,6 @@ Color Scene::trace(Ray3D ray, int depth) {
                 return background;
             }
 
-            //needs reflectance and transmittance components
 }
 
 
