@@ -25,3 +25,19 @@ Point3D Ray3D::calculatePoint(const long double t) const {
     return origin + t * direction;
 }
 
+bool Ray3D::operator==(const Ray3D& other) const {
+    return origin == other.origin && direction == other.direction 
+    && min_dist == other.min_dist && max_dist == other.max_dist;
+}
+
+std::string Ray3D::toString() const {
+    return "Ray3D{\n\torigin: " + origin.toString() + 
+    "\tdirection: "+direction.toString()+"\tmin_dist: "+ std::to_string(min_dist)+"\n"+
+    "\tmax_dist: "+ std::to_string(max_dist)+"\n}\n";
+}
+
+std::ostream& operator<<(std::ostream& o, const Ray3D other) {
+    o << other.toString();
+
+    return o;
+}

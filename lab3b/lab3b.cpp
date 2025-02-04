@@ -270,4 +270,14 @@ int main(int argc, char *argv[]) {
     auto stop = std::chrono::high_resolution_clock::now();
 
     std::cout << "Duration: " << std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count() * 0.001 << " seconds" << std::endl;
+    Ray3D ray = Ray3D(Point3D(0,0.5,-2),Vec3(0,0,1),0,10000.0L);
+    std::shared_ptr<Surface> sphere = std::make_shared<Sphere>(Sphere(Material(Color(1,1,1),0.4,0.8,0.9,200,0.0,0.7,2.0),Point3D(),1.0L));
+    RaySurfaceIntersection test_intersection = sphere->intersect(ray);
+    
+
+    Ray3D refracted = scene.refract(test_intersection);
+
+    RaySurfaceIntersection test_intersection_2 = sphere->intersect(refracted);
+
+    std::cout << test_intersection_2.intersection;
 }

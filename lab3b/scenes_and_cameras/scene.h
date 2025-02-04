@@ -35,7 +35,7 @@ public:
     Color illuminate(RaySurfaceIntersection& intersection, Light& light);
     Color trace(Ray3D ray, int depth);
     Ray3D reflect(Ray3D ray, RaySurfaceIntersection intersection);
-    Ray3D refract(Ray3D ray, RaySurfaceIntersection intersection);
+    Ray3D refract(RaySurfaceIntersection intersection);
 
     unsigned int* getResolution();
     char* getPicture();

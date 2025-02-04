@@ -90,27 +90,24 @@ Ray3D Scene::reflect(Ray3D ray, RaySurfaceIntersection intersection) {
 }
 
 
-Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
+Ray3D Scene::refract(RaySurfaceIntersection intersection) {
     long double n1, nt;
     //if smaller than 0, then ray hits from outside else inside, 
     //1.0L refraction index for air
-    Vec3 v = (1.0L)* ray.direction;
+    Vec3 v = (1.0L)* intersection.ray.direction;
     Vec3 n = (1.0L) * intersection.normal;
     long double vn = v * n;
+    long double n1_nt = 1;
     if(v * n < 0.0L) {
-        n1 = 1.0L;
-        nt = intersection.surface->material.refraction;
+        n1_nt = 1.0L / intersection.surface->material.refraction;
         vn = (-1.0L)*vn;
+        
     } else {
-        n1 = intersection.surface->material.refraction;
-        nt = 1.0L;
+        n1_nt = intersection.surface->material.refraction;
         n = (-1.0L) * n;
+        n.normalize();
     }
-
-    
-
-    long double n1_nt = n1/nt;
-    //calculate frist part of t
+    //std::cout << (ray == intersection.ray) << std::endl;
     
 
     //calculate value under root
@@ -118,16 +115,16 @@ Ray3D Scene::refract(Ray3D ray, RaySurfaceIntersection intersection) {
 
     //Total internal refraction
     if(disc <= 0.0L) {
-        return reflect(ray,intersection);
+        return reflect(intersection.ray,intersection);
     }
 
-    //calculate second part of t (see tutorial slides)
+    //calculate  t (see tutorial slides)
     Vec3 t = (n1_nt) * (v + n * (vn)) - (n * std::sqrt(disc));
 
     t.normalize();
 
     //shadow acne bias prevents surface acne
-    return Ray3D(intersection.intersection_point, t,SHADOW_ACNE_BIAS,ray.max_dist);
+    return Ray3D(intersection.intersection_point, t,SHADOW_ACNE_BIAS,intersection.ray.max_dist);
 }
 
 Color Scene::trace(Ray3D ray, int depth) {
@@ -188,7 +185,7 @@ Color Scene::trace(Ray3D ray, int depth) {
                 //do refractance if surface transmitts
                 if(intersection.surface->material.transmittance > 0.0L) {
                     //generate refracted ray and trace it to get refracted color
-                    Color refracted_color = trace(refract(ray,intersection), depth +1);
+                    Color refracted_color = trace(refract(intersection), depth +1);
                     //then add it to the original color proportional to the transmittance factor
                     ray_col += intersection.surface->material.transmittance * refracted_color;
                 }
