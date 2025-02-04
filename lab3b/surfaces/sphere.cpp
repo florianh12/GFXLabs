@@ -27,27 +27,33 @@ Sphere::Sphere(Material material, Point3D position, long double radius, Vec3 sca
 
 RaySurfaceIntersection Sphere::intersect(Ray3D& ray) {
     Ray3D transformed_ray = transform(ray);
+    long double a = transformed_ray.direction * transformed_ray.direction;
     Vec3 o = transformed_ray.origin - position;
-    long double b = transformed_ray.direction*(transformed_ray.origin - position);
-    long double c = (transformed_ray.direction * transformed_ray.direction) * ((o*o)-(radius*radius));
-    long double disc = (b * b) - c;
+    long double b = transformed_ray.direction*(o);
+    long double c = (o * o) - (radius*radius);
+    long double disc = (b * b) - a * c;
     
     if (disc < 0.0L) {
         return RaySurfaceIntersection();
     }
 
-    long double t = -(transformed_ray.direction*(transformed_ray.origin-position));
-    
-    if (disc != 0.0L) {
+    long double closer = (-b - std::sqrt(disc)) / a; 
+    long double t = 0;
 
-            t -= std::sqrt(disc);
-    } 
+    //take closer if bigger than min_dist
+    if(closer < ray.min_dist) {
+        t = (-b + std::sqrt(disc)) / a;
+    } else {
+        t = closer;
+    }
+    
+    //check if t value fits requirements after picking value more fitting
     if (t <= transformed_ray.min_dist || t >= transformed_ray.max_dist) {
         return RaySurfaceIntersection();
     }
     
     Point3D point = transformed_ray.calculatePoint(t);
-    Vec3 normal = transformNormal(getNormal(point));
+    Vec3 normal = transformNormal(point - position);
 
     Color color = material.color;
 

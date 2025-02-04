@@ -26,7 +26,7 @@ While in the lab3a/build directory, some noteworthy filepaths are:
 
 
 ## Claim
-I did T1 and T2 and did T3, T4, T5 and T6 (faulty refraction) as well as T7 (15 min!! runtime and faulty).
+I did T1 and T2 and did T3, T4, T5 and T6 as well as T7 (15 min!! runtime and faulty).
 
 ## Tested environments
 - Almighty (connect via: ssh username@almighty.cs.univie.ac.at)
